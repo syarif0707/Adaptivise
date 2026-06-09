@@ -1,0 +1,5 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-f', 'DockerFile', '-t', 'gcr.io/myfirst-a32e1/adaptivise-engine', '.']
+images:
+  - 'gcr.io/myfirst-a32e1/adaptivise-engine'

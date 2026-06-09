@@ -1,0 +1,21 @@
+# Ignore Python bytecode and cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore local environment files and virtual environments
+.env
+venv/
+env/
+.python-version
+
+# Ignore IDE and System files
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# Ignore git metadata
+.git/
+.gitignore

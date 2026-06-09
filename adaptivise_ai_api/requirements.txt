@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+gunicorn
+python-multipart
+google-generativeai
+sumy
+pydantic
+rank_bm25
+numpy
+PyPDF2
+supabase
+python-docx
+python-pptx
+nltk
+python-dotenv

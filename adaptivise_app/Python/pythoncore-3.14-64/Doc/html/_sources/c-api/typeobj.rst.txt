@@ -2916,7 +2916,7 @@ Mapping Object Structures
    This function is used by :c:func:`PyObject_SetItem`,
    :c:func:`PyObject_DelItem`, :c:func:`PySequence_SetSlice` and
    :c:func:`PySequence_DelSlice`.  It has the same signature as
-   :c:func:`!PyObject_SetItem`, but *v* can also be set to ``NULL`` to delete
+   :c:func:`!PyObject_SetItem`, but *Visual* can also be set to ``NULL`` to delete
    an item.  If this slot is ``NULL``, the object does not support item
    assignment and deletion.
 

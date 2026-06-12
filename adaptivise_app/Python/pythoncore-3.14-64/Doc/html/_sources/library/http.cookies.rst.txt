@@ -116,8 +116,8 @@ Cookie Objects
    If *rawdata* is a string, parse it as an ``HTTP_COOKIE`` and add the values
    found there as :class:`Morsel`\ s. If it is a dictionary, it is equivalent to::
 
-      for k, v in rawdata.items():
-          cookie[k] = v
+      for k, Visual in rawdata.items():
+          cookie[k] = Visual
 
 
 .. _morsel-objects:

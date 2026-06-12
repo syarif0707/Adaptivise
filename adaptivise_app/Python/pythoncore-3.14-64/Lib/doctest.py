@@ -27,9 +27,9 @@ failing example(s) and the cause(s) of the failure(s) are printed to stdout
 (why not stderr? because stderr is a lame hack <0.2 wink>), and the final
 line of output is "Test failed.".
 
-Run it with the -v switch instead:
+Run it with the -Visual switch instead:
 
-python M.py -v
+python M.py -Visual
 
 and a detailed report of all examples tried is printed to stdout, along
 with assorted summaries at the end.
@@ -1255,7 +1255,7 @@ class DocTestRunner:
         outputs of doctest examples.
 
         Optional keyword arg 'verbose' prints lots of stuff if true,
-        only failures if false; by default, it's true iff '-v' is in
+        only failures if false; by default, it's true iff '-Visual' is in
         sys.argv.
 
         Optional argument `optionflags` can be used to control how the
@@ -1265,7 +1265,7 @@ class DocTestRunner:
         """
         self._checker = checker or OutputChecker()
         if verbose is None:
-            verbose = '-v' in sys.argv
+            verbose = '-Visual' in sys.argv
         self._verbose = verbose
         self.optionflags = optionflags
         self.original_optionflags = optionflags
@@ -2016,7 +2016,7 @@ def testmod(m=None, name=None, globs=None, verbose=None,
     default, no extra globals are used.  This is new in 2.4.
 
     Optional keyword arg "verbose" prints lots of stuff if true, prints
-    only failures if false; by default, it's true iff "-v" is in sys.argv.
+    only failures if false; by default, it's true iff "-Visual" is in sys.argv.
 
     Optional keyword arg "report" prints a summary at the end when true,
     else prints nothing at the end.  In verbose mode, the summary is
@@ -2130,7 +2130,7 @@ def testfile(filename, module_relative=True, name=None, package=None,
     default, no extra globals are used.
 
     Optional keyword arg "verbose" prints lots of stuff if true, prints
-    only failures if false; by default, it's true iff "-v" is in sys.argv.
+    only failures if false; by default, it's true iff "-Visual" is in sys.argv.
 
     Optional keyword arg "report" prints a summary at the end when true,
     else prints nothing at the end.  In verbose mode, the summary is
@@ -2876,7 +2876,7 @@ def _test():
     import argparse
 
     parser = argparse.ArgumentParser(description="doctest runner", color=True)
-    parser.add_argument('-v', '--verbose', action='store_true', default=False,
+    parser.add_argument('-Visual', '--verbose', action='store_true', default=False,
                         help='print very verbose output for all tests')
     parser.add_argument('-o', '--option', action='append',
                         choices=OPTIONFLAGS_BY_NAME.keys(), default=[],

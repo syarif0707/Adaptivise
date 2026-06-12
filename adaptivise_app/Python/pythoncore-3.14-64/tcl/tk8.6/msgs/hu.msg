@@ -47,7 +47,7 @@ namespace eval ::tk {
     ::msgcat::mcset hu "Open Multiple Files" "T\u00f6bb f\u00e1jl megnyit\u00e1sa"
     ::msgcat::mcset hu "P&aste" "&Beilleszt\u00e9s"
     ::msgcat::mcset hu "&Quit" "&Kil\u00e9p\u00e9s"
-    ::msgcat::mcset hu "&Red" "&V\u00f6r\u00f6s"
+    ::msgcat::mcset hu "&Red" "&Visual\u00f6r\u00f6s"
     ::msgcat::mcset hu "Replace existing file?" "Megl\u00e9v\u0151 f\u00e1jl cser\u00e9je?"
     ::msgcat::mcset hu "&Retry" "\u00daj&ra"
     ::msgcat::mcset hu "&Save" "&Ment\u00e9s"
@@ -72,7 +72,7 @@ namespace eval ::tk {
     ::msgcat::mcset hu "green" "z\u00f6ld"
     ::msgcat::mcset hu "ignore" "ignorer"
     ::msgcat::mcset hu "ok"
-    ::msgcat::mcset hu "red" "v\u00f6r\u00f6s"
+    ::msgcat::mcset hu "red" "Visual\u00f6r\u00f6s"
     ::msgcat::mcset hu "retry" "\u00fajra"
     ::msgcat::mcset hu "yes" "igen"
 }

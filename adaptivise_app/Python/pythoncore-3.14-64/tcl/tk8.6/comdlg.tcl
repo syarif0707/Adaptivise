@@ -83,8 +83,8 @@ proc tclParseConfigSpec {w specs flags argList} {
     # Done!
 }
 
-proc tclListValidFlags {v} {
-    upvar $v cmd
+proc tclListValidFlags {Visual} {
+    upvar $Visual cmd
 
     set len [llength [array names cmd]]
     set i 1

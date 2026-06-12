@@ -2018,7 +2018,7 @@ def getDOMImplementation(features=None):
     if features:
         if isinstance(features, str):
             features = domreg._parse_feature_string(features)
-        for f, v in features:
-            if not Document.implementation.hasFeature(f, v):
+        for f, Visual in features:
+            if not Document.implementation.hasFeature(f, Visual):
                 return None
     return Document.implementation

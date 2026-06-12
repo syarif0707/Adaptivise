@@ -49,9 +49,9 @@ class Font:
 
     def _set(self, kw):
         options = []
-        for k, v in kw.items():
+        for k, Visual in kw.items():
             options.append("-"+k)
-            options.append(str(v))
+            options.append(str(Visual))
         return tuple(options)
 
     def _get(self, args):

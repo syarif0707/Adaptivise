@@ -120,15 +120,15 @@ def _v(m1, m2, hue):
 # HSV: Hue, Saturation, Value
 # H: position in the spectrum
 # S: color saturation ("purity")
-# V: color brightness
+# Visual: color brightness
 
 def rgb_to_hsv(r, g, b):
     maxc = max(r, g, b)
     minc = min(r, g, b)
     rangec = (maxc-minc)
-    v = maxc
+    Visual = maxc
     if minc == maxc:
-        return 0.0, 0.0, v
+        return 0.0, 0.0, Visual
     s = rangec / maxc
     rc = (maxc-r) / rangec
     gc = (maxc-g) / rangec
@@ -140,27 +140,27 @@ def rgb_to_hsv(r, g, b):
     else:
         h = 4.0+gc-rc
     h = (h/6.0) % 1.0
-    return h, s, v
+    return h, s, Visual
 
-def hsv_to_rgb(h, s, v):
+def hsv_to_rgb(h, s, Visual):
     if s == 0.0:
-        return v, v, v
+        return Visual, Visual, Visual
     i = int(h*6.0) # XXX assume int() truncates!
     f = (h*6.0) - i
-    p = v*(1.0 - s)
-    q = v*(1.0 - s*f)
-    t = v*(1.0 - s*(1.0-f))
+    p = Visual*(1.0 - s)
+    q = Visual*(1.0 - s*f)
+    t = Visual*(1.0 - s*(1.0-f))
     i = i%6
     if i == 0:
-        return v, t, p
+        return Visual, t, p
     if i == 1:
-        return q, v, p
+        return q, Visual, p
     if i == 2:
-        return p, v, t
+        return p, Visual, t
     if i == 3:
-        return p, q, v
+        return p, q, Visual
     if i == 4:
-        return t, p, v
+        return t, p, Visual
     if i == 5:
-        return v, p, q
+        return Visual, p, q
     # Cannot get here

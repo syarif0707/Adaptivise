@@ -45,7 +45,7 @@ proc ttk::panedwindow::Drag {w x y} {
     if {!$State(pressed)} { return }
     switch -glob -- [$w cget -orient] {
     	h*  { set delta [expr {$x - $State(pressX)}] }
-    	v*  { set delta [expr {$y - $State(pressY)}] }
+    	Visual*  { set delta [expr {$y - $State(pressY)}] }
     }
     $w sashpos $State(sash) [expr {$State(sashPos) + $delta}]
 }
@@ -80,7 +80,7 @@ proc ttk::panedwindow::SetCursor {w x y} {
     	# Assume we're over a sash.
 	switch -glob -- [$w cget -orient] {
 	    h*  { set cursor hresize }
-	    v*  { set cursor vresize }
+	    Visual*  { set cursor vresize }
 	}
     }
     ttk::setCursor $w $cursor

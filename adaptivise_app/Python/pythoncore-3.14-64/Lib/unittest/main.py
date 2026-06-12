@@ -120,7 +120,7 @@ class TestProgram(object):
                 return
             self._main_parser.parse_args(argv[1:], self)
             if not self.tests:
-                # this allows "python -m unittest -v" to still work for
+                # this allows "python -m unittest -Visual" to still work for
                 # test discovery.
                 self._do_discovery([])
                 return
@@ -161,7 +161,7 @@ class TestProgram(object):
     def _getParentArgParser(self):
         parser = argparse.ArgumentParser(add_help=False)
 
-        parser.add_argument('-v', '--verbose', dest='verbosity',
+        parser.add_argument('-Visual', '--verbose', dest='verbosity',
                             action='store_const', const=2,
                             help='Verbose output')
         parser.add_argument('-q', '--quiet', dest='verbosity',

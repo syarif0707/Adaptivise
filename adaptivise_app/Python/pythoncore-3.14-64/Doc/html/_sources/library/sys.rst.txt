@@ -568,7 +568,7 @@ always available. Unless explicitly noted otherwise, all variables are read-only
         - :option:`-E`
 
       * - .. attribute:: flags.verbose
-        - :option:`-v`
+        - :option:`-Visual`
 
       * - .. attribute:: flags.bytes_warning
         - :option:`-b`

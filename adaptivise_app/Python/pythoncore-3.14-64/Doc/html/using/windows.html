@@ -18,14 +18,14 @@
 
     <title>4. Using Python on Windows &#8212; Python 3.14.4 documentation</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
-    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=82640b3f" />
-    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?Visual=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?Visual=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?Visual=82640b3f" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?Visual=5349f25f" />
     
-    <script src="../_static/documentation_options.js?v=1885ab2e"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?Visual=1885ab2e"></script>
+    <script src="../_static/doctools.js?Visual=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?Visual=dc90522c"></script>
     
     <script src="../_static/sidebar.js"></script>
     
@@ -379,14 +379,14 @@ $&gt; py -m this
 <p>The default runtime can be overridden with the <span class="target" id="index-3"></span><a class="reference internal" href="#envvar-PYTHON_MANAGER_DEFAULT"><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PYTHON_MANAGER_DEFAULT</span></code></a>
 environment variable, or a configuration file. See <a class="reference internal" href="#pymanager-config"><span class="std std-ref">Configuration</span></a> for
 information about configuration settings.</p>
-<p>To launch a specific runtime, the <code class="docutils literal notranslate"><span class="pre">py</span></code> command accepts a <code class="docutils literal notranslate"><span class="pre">-V:&lt;TAG&gt;</span></code> option.
+<p>To launch a specific runtime, the <code class="docutils literal notranslate"><span class="pre">py</span></code> command accepts a <code class="docutils literal notranslate"><span class="pre">-Visual:&lt;TAG&gt;</span></code> option.
 This option must be specified before any others. The tag is part or all of the
 identifier for the runtime; for those from the CPython team, it looks like the
-version, potentially with the platform. For compatibility, the <code class="docutils literal notranslate"><span class="pre">V:</span></code> may be
+version, potentially with the platform. For compatibility, the <code class="docutils literal notranslate"><span class="pre">Visual:</span></code> may be
 omitted in cases where the tag refers to an official release and starts with
 <code class="docutils literal notranslate"><span class="pre">3</span></code>.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$&gt; py -V:3.14 ...
-$&gt; py -V:3-arm64 ...
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$&gt; py -Visual:3.14 ...
+$&gt; py -Visual:3-arm64 ...
 </pre></div>
 </div>
 <p>Runtimes from other distributors may require the <em>company</em> to be included as
@@ -394,8 +394,8 @@ well. This should be separated from the tag by a slash, and may be a prefix.
 Specifying the company is optional when it is <code class="docutils literal notranslate"><span class="pre">PythonCore</span></code>, and specifying the
 tag is optional (but not the slash) when you want the latest release from a
 specific company.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$&gt; py -V:Distributor\1.0 ...
-$&gt; py -V:distrib/ ...
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$&gt; py -Visual:Distributor\1.0 ...
+$&gt; py -Visual:distrib/ ...
 </pre></div>
 </div>
 <p>If no version is specified, but a script file is passed, the script will be
@@ -425,7 +425,7 @@ $&gt; py install /?
 </pre></div>
 </div>
 <p>All commands support some common options, which will be shown by <code class="docutils literal notranslate"><span class="pre">py</span> <span class="pre">help</span></code>.
-These options must be specified after any subcommand. Specifying <code class="docutils literal notranslate"><span class="pre">-v</span></code> or
+These options must be specified after any subcommand. Specifying <code class="docutils literal notranslate"><span class="pre">-Visual</span></code> or
 <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> will increase the amount of output shown, and <code class="docutils literal notranslate"><span class="pre">-vv</span></code> will
 increase it further for debugging purposes. Passing <code class="docutils literal notranslate"><span class="pre">-q</span></code> or <code class="docutils literal notranslate"><span class="pre">--quiet</span></code> will
 reduce output, and <code class="docutils literal notranslate"><span class="pre">-qq</span></code> will reduce it further.</p>
@@ -450,7 +450,7 @@ prefix path).</p>
 runtime is included, it will be the one. Otherwise, the “best” result is shown
 (“best” is deliberately vaguely defined, but will usually be the most recent
 version). The result shown by <code class="docutils literal notranslate"><span class="pre">py</span> <span class="pre">list</span> <span class="pre">--one</span> <span class="pre">&lt;TAG&gt;</span></code> will match the runtime
-that would be launched by <code class="docutils literal notranslate"><span class="pre">py</span> <span class="pre">-V:&lt;TAG&gt;</span></code>.</p>
+that would be launched by <code class="docutils literal notranslate"><span class="pre">py</span> <span class="pre">-Visual:&lt;TAG&gt;</span></code>.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">--only-managed</span></code> option excludes results that were not installed by the
 Python install manager. This is useful when determining which runtimes may be
 updated or uninstalled through the <code class="docutils literal notranslate"><span class="pre">py</span></code> command.</p>
@@ -601,7 +601,7 @@ from the CPython team.</p></td>
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">default_platform</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">PYTHON_MANAGER_DEFAULT_PLATFORM</span></code></p></td>
 <td><p>The preferred default platform to launch or install.
-This is treated as a suffix to the specified tag, such that <code class="docutils literal notranslate"><span class="pre">py</span> <span class="pre">-V:3.14</span></code>
+This is treated as a suffix to the specified tag, such that <code class="docutils literal notranslate"><span class="pre">py</span> <span class="pre">-Visual:3.14</span></code>
 would prefer an install for <code class="docutils literal notranslate"><span class="pre">3.14-64</span></code> if it exists
 (and <code class="docutils literal notranslate"><span class="pre">default_platform</span></code> is <code class="docutils literal notranslate"><span class="pre">-64</span></code>),
 but will use <code class="docutils literal notranslate"><span class="pre">3.14</span></code> if no tagged install exists.</p></td>
@@ -931,7 +931,7 @@ $&gt; py install 3.14t-32
 </div>
 <p>This will install and register as normal. If you have no other runtimes
 installed, then <code class="docutils literal notranslate"><span class="pre">python</span></code> will launch this one. Otherwise, you will need to use
-<code class="docutils literal notranslate"><span class="pre">py</span> <span class="pre">-V:3.14t</span> <span class="pre">...</span></code> or, if you have added the global aliases directory to your
+<code class="docutils literal notranslate"><span class="pre">py</span> <span class="pre">-Visual:3.14t</span> <span class="pre">...</span></code> or, if you have added the global aliases directory to your
 <span class="target" id="index-12"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PATH</span></code> environment variable, the <code class="docutils literal notranslate"><span class="pre">python3.14t.exe</span></code> commands.</p>
 </section>
 <section id="troubleshooting">
@@ -1168,11 +1168,11 @@ and without the <code class="docutils literal notranslate"><span class="pre">-Ex
 version installed. Inside the subdirectory is a <code class="docutils literal notranslate"><span class="pre">tools</span></code> directory that
 contains the Python installation:</p>
 <div class="highlight-doscon notranslate"><div class="highlight"><pre><span></span><span class="go"># Without -ExcludeVersion</span>
-<span class="gp">&gt;</span> .\python.3.5.2\tools\python.exe -V
+<span class="gp">&gt;</span> .\python.3.5.2\tools\python.exe -Visual
 <span class="go">Python 3.5.2</span>
 
 <span class="go"># With -ExcludeVersion</span>
-<span class="gp">&gt;</span> .\python\tools\python.exe -V
+<span class="gp">&gt;</span> .\python\tools\python.exe -Visual
 <span class="go">Python 3.5.2</span>
 </pre></div>
 </div>
@@ -1796,32 +1796,32 @@ operable program or batch file.
 </pre></div>
 </div>
 <p>displays the currently installed version(s) of Python.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">-x.y</span></code> argument is the short form of the <code class="docutils literal notranslate"><span class="pre">-V:Company/Tag</span></code> argument,
+<p>The <code class="docutils literal notranslate"><span class="pre">-x.y</span></code> argument is the short form of the <code class="docutils literal notranslate"><span class="pre">-Visual:Company/Tag</span></code> argument,
 which allows selecting a specific Python runtime, including those that may have
 come from somewhere other than python.org. Any runtime registered by following
 <span class="target" id="index-38"></span><a class="pep reference external" href="https://peps.python.org/pep-0514/"><strong>PEP 514</strong></a> will be discoverable. The <code class="docutils literal notranslate"><span class="pre">--list</span></code> command lists all available
-runtimes using the <code class="docutils literal notranslate"><span class="pre">-V:</span></code> format.</p>
-<p>When using the <code class="docutils literal notranslate"><span class="pre">-V:</span></code> argument, specifying the Company will limit selection to
+runtimes using the <code class="docutils literal notranslate"><span class="pre">-Visual:</span></code> format.</p>
+<p>When using the <code class="docutils literal notranslate"><span class="pre">-Visual:</span></code> argument, specifying the Company will limit selection to
 runtimes from that provider, while specifying only the Tag will select from all
 providers. Note that omitting the slash implies a tag:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span># Select any &#39;3.*&#39; tagged runtime
-py -V:3
+py -Visual:3
 
 # Select any &#39;PythonCore&#39; released runtime
-py -V:PythonCore/
+py -Visual:PythonCore/
 
 # Select PythonCore&#39;s latest Python 3 runtime
-py -V:PythonCore/3
+py -Visual:PythonCore/3
 </pre></div>
 </div>
 <p>The short form of the argument (<code class="docutils literal notranslate"><span class="pre">-3</span></code>) only ever selects from core Python
-releases, and not other distributions. However, the longer form (<code class="docutils literal notranslate"><span class="pre">-V:3</span></code>) will
+releases, and not other distributions. However, the longer form (<code class="docutils literal notranslate"><span class="pre">-Visual:3</span></code>) will
 select from any.</p>
 <p>The Company is matched on the full string, case-insensitive. The Tag is matched
 on either the full string, or a prefix, provided the next character is a dot or a
-hyphen. This allows <code class="docutils literal notranslate"><span class="pre">-V:3.1</span></code> to match <code class="docutils literal notranslate"><span class="pre">3.1-32</span></code>, but not <code class="docutils literal notranslate"><span class="pre">3.10</span></code>. Tags are
+hyphen. This allows <code class="docutils literal notranslate"><span class="pre">-Visual:3.1</span></code> to match <code class="docutils literal notranslate"><span class="pre">3.1-32</span></code>, but not <code class="docutils literal notranslate"><span class="pre">3.10</span></code>. Tags are
 sorted using numerical ordering (<code class="docutils literal notranslate"><span class="pre">3.10</span></code> is newer than <code class="docutils literal notranslate"><span class="pre">3.1</span></code>), but are
-compared using text (<code class="docutils literal notranslate"><span class="pre">-V:3.01</span></code> does not match <code class="docutils literal notranslate"><span class="pre">3.1</span></code>).</p>
+compared using text (<code class="docutils literal notranslate"><span class="pre">-Visual:3.01</span></code> does not match <code class="docutils literal notranslate"><span class="pre">3.1</span></code>).</p>
 </section>
 <section id="virtual-environments">
 <h4><span class="section-number">4.12.1.2. </span>Virtual environments<a class="headerlink" href="#virtual-environments" title="Link to this heading">¶</a></h4>
@@ -1914,7 +1914,7 @@ architecture without minor (i.e. <code class="docutils literal notranslate"><spa
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 3.11: </span>The “-64” suffix is deprecated, and now implies “any architecture that is
 not provably i386/32-bit”. To request a specific environment, use the new
-<code class="samp docutils literal notranslate"><span class="pre">-V:</span><em><span class="pre">TAG</span></em></code> argument with the complete tag.</p>
+<code class="samp docutils literal notranslate"><span class="pre">-Visual:</span><em><span class="pre">TAG</span></em></code> argument with the complete tag.</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 3.13: </span>Virtual commands referencing <code class="docutils literal notranslate"><span class="pre">python</span></code> now prefer an active virtual
@@ -1954,10 +1954,10 @@ path to the script and any additional arguments will be appended.</p>
 <h3><span class="section-number">4.12.3. </span>Arguments in shebang lines<a class="headerlink" href="#arguments-in-shebang-lines" title="Link to this heading">¶</a></h3>
 <p>The shebang lines can also specify additional options to be passed to the
 Python interpreter.  For example, if you have a shebang line:</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="ch">#! /usr/bin/python -v</span>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="ch">#! /usr/bin/python -Visual</span>
 </pre></div>
 </div>
-<p>Then Python will be started with the <code class="docutils literal notranslate"><span class="pre">-v</span></code> option</p>
+<p>Then Python will be started with the <code class="docutils literal notranslate"><span class="pre">-Visual</span></code> option</p>
 </section>
 <section id="customization">
 <h3><span class="section-number">4.12.4. </span>Customization<a class="headerlink" href="#customization" title="Link to this heading">¶</a></h3>

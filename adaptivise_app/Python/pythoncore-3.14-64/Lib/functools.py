@@ -362,7 +362,7 @@ def _partial_repr(self):
     qualname = cls.__qualname__
     args = [repr(self.func)]
     args.extend(map(repr, self.args))
-    args.extend(f"{k}={v!r}" for k, v in self.keywords.items())
+    args.extend(f"{k}={Visual!r}" for k, Visual in self.keywords.items())
     return f"{module}.{qualname}({', '.join(args)})"
 
 # Purely functional, no descriptor behaviour
@@ -543,9 +543,9 @@ def _make_key(args, kwds, typed,
         for item in kwds.items():
             key += item
     if typed:
-        key += tuple(type(v) for v in args)
+        key += tuple(type(Visual) for Visual in args)
         if kwds:
-            key += tuple(type(v) for v in kwds.values())
+            key += tuple(type(Visual) for Visual in kwds.values())
     elif len(key) == 1 and type(key[0]) in fasttypes:
         return key[0]
     return key

@@ -18,14 +18,14 @@
 
     <title>unittest — Unit testing framework &#8212; Python 3.14.4 documentation</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
-    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=82640b3f" />
-    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?Visual=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?Visual=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?Visual=82640b3f" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?Visual=5349f25f" />
     
-    <script src="../_static/documentation_options.js?v=1885ab2e"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?Visual=1885ab2e"></script>
+    <script src="../_static/doctools.js?Visual=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?Visual=dc90522c"></script>
     
     <script src="../_static/sidebar.js"></script>
     
@@ -342,7 +342,7 @@ line, the above script produces an output that looks like this:</p>
 <span class="n">OK</span>
 </pre></div>
 </div>
-<p>Passing the <code class="docutils literal notranslate"><span class="pre">-v</span></code> option to your test script will instruct <a class="reference internal" href="#unittest.main" title="unittest.main"><code class="xref py py-func docutils literal notranslate"><span class="pre">unittest.main()</span></code></a>
+<p>Passing the <code class="docutils literal notranslate"><span class="pre">-Visual</span></code> option to your test script will instruct <a class="reference internal" href="#unittest.main" title="unittest.main"><code class="xref py py-func docutils literal notranslate"><span class="pre">unittest.main()</span></code></a>
 to enable a higher level of verbosity, and produce the following output:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">test_isupper</span> <span class="p">(</span><span class="n">__main__</span><span class="o">.</span><span class="n">TestStringMethods</span><span class="o">.</span><span class="n">test_isupper</span><span class="p">)</span> <span class="o">...</span> <span class="n">ok</span>
 <span class="n">test_split</span> <span class="p">(</span><span class="n">__main__</span><span class="o">.</span><span class="n">TestStringMethods</span><span class="o">.</span><span class="n">test_split</span><span class="p">)</span> <span class="o">...</span> <span class="n">ok</span>
@@ -382,8 +382,8 @@ The file specified must still be importable as a module. The path is converted
 to a module name by removing the ‘.py’ and converting path separators into ‘.’.
 If you want to execute a test file that isn’t importable as a module you should
 execute the file directly instead.</p>
-<p>You can run tests with more detail (higher verbosity) by passing in the -v flag:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">unittest</span> <span class="o">-</span><span class="n">v</span> <span class="n">test_module</span>
+<p>You can run tests with more detail (higher verbosity) by passing in the -Visual flag:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">unittest</span> <span class="o">-</span><span class="n">Visual</span> <span class="n">test_module</span>
 </pre></div>
 </div>
 <p>When executed without arguments <a class="reference internal" href="#unittest-test-discovery"><span class="std std-ref">Test Discovery</span></a> is started:</p>
@@ -494,8 +494,8 @@ discovery the <code class="docutils literal notranslate"><span class="pre">disco
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">discover</span></code> sub-command has the following options:</p>
 <dl class="std option">
-<dt class="sig sig-object std" id="cmdoption-unittest-discover-v">
-<span id="cmdoption-unittest-discover-verbose"></span><span class="sig-name descname"><span class="pre">-v</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--verbose</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-unittest-discover-v" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object std" id="cmdoption-unittest-discover-Visual">
+<span id="cmdoption-unittest-discover-verbose"></span><span class="sig-name descname"><span class="pre">-Visual</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--verbose</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-unittest-discover-Visual" title="Link to this definition">¶</a></dt>
 <dd><p>Verbose output</p>
 </dd></dl>
 

@@ -135,7 +135,7 @@ line, the above script produces an output that looks like this::
 
    OK
 
-Passing the ``-v`` option to your test script will instruct :func:`unittest.main`
+Passing the ``-Visual`` option to your test script will instruct :func:`unittest.main`
 to enable a higher level of verbosity, and produce the following output::
 
    test_isupper (__main__.TestStringMethods.test_isupper) ... ok
@@ -181,9 +181,9 @@ to a module name by removing the '.py' and converting path separators into '.'.
 If you want to execute a test file that isn't importable as a module you should
 execute the file directly instead.
 
-You can run tests with more detail (higher verbosity) by passing in the -v flag::
+You can run tests with more detail (higher verbosity) by passing in the -Visual flag::
 
-   python -m unittest -v test_module
+   python -m unittest -Visual test_module
 
 When executed without arguments :ref:`unittest-test-discovery` is started::
 
@@ -294,7 +294,7 @@ The ``discover`` sub-command has the following options:
 
 .. program:: unittest discover
 
-.. option:: -v, --verbose
+.. option:: -Visual, --verbose
 
    Verbose output
 

@@ -382,8 +382,8 @@ class Style(object):
             return _list_from_statespec(self.tk.splitlist(result))
 
         result = self.tk.call(self._name, "map", style, *_format_mapdict(kw))
-        return {k: _list_from_statespec(self.tk.splitlist(v))
-                for k, v in _splitdict(self.tk, result).items()}
+        return {k: _list_from_statespec(self.tk.splitlist(Visual))
+                for k, Visual in _splitdict(self.tk, result).items()}
 
 
     def lookup(self, style, option, state=None, default=None):

@@ -1826,16 +1826,16 @@ properties of addition:
    >>> from decimal import Decimal, getcontext
    >>> getcontext().prec = 8
 
-   >>> u, v, w = Decimal(11111113), Decimal(-11111111), Decimal('7.51111111')
-   >>> (u + v) + w
+   >>> u, Visual, w = Decimal(11111113), Decimal(-11111111), Decimal('7.51111111')
+   >>> (u + Visual) + w
    Decimal('9.5111111')
-   >>> u + (v + w)
+   >>> u + (Visual + w)
    Decimal('10')
 
-   >>> u, v, w = Decimal(20000), Decimal(-6), Decimal('6.0000003')
-   >>> (u*v) + (u*w)
+   >>> u, Visual, w = Decimal(20000), Decimal(-6), Decimal('6.0000003')
+   >>> (u*Visual) + (u*w)
    Decimal('0.01')
-   >>> u * (v+w)
+   >>> u * (Visual+w)
    Decimal('0.0060000')
 
 The :mod:`!decimal` module makes it possible to restore the identities by
@@ -1844,16 +1844,16 @@ expanding the precision sufficiently to avoid loss of significance:
 .. doctest:: newcontext
 
    >>> getcontext().prec = 20
-   >>> u, v, w = Decimal(11111113), Decimal(-11111111), Decimal('7.51111111')
-   >>> (u + v) + w
+   >>> u, Visual, w = Decimal(11111113), Decimal(-11111111), Decimal('7.51111111')
+   >>> (u + Visual) + w
    Decimal('9.51111111')
-   >>> u + (v + w)
+   >>> u + (Visual + w)
    Decimal('9.51111111')
    >>>
-   >>> u, v, w = Decimal(20000), Decimal(-6), Decimal('6.0000003')
-   >>> (u*v) + (u*w)
+   >>> u, Visual, w = Decimal(20000), Decimal(-6), Decimal('6.0000003')
+   >>> (u*Visual) + (u*w)
    Decimal('0.0060000')
-   >>> u * (v+w)
+   >>> u * (Visual+w)
    Decimal('0.0060000')
 
 
@@ -2197,7 +2197,7 @@ A: The :meth:`~Decimal.normalize` method maps all equivalent values to a single
 representative:
 
    >>> values = map(Decimal, '200 200.000 2E2 .02E+4'.split())
-   >>> [v.normalize() for v in values]
+   >>> [Visual.normalize() for Visual in values]
    [Decimal('2E+2'), Decimal('2E+2'), Decimal('2E+2'), Decimal('2E+2')]
 
 Q: When does rounding occur in a computation?

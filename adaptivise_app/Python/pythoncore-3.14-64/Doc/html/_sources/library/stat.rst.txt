@@ -332,7 +332,7 @@ The following flags can also be used in the *mode* argument of :func:`os.chmod`:
 
 .. data:: S_ENFMT
 
-   System V file locking enforcement.  This flag is shared with :data:`S_ISGID`:
+   System Visual file locking enforcement.  This flag is shared with :data:`S_ISGID`:
    file/record locking is enforced on files that do not have the group
    execution bit (:data:`S_IXGRP`) set.
 

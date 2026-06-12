@@ -163,7 +163,7 @@ difficult reading.  `A chronology <https://www.unicode.org/history/>`_ of the
 origin and development of Unicode is also available on the site.
 
 On the Computerphile Youtube channel, Tom Scott briefly
-`discusses the history of Unicode and UTF-8 <https://www.youtube.com/watch?v=MijmeoH9LT4>`_
+`discusses the history of Unicode and UTF-8 <https://www.youtube.com/watch?Visual=MijmeoH9LT4>`_
 (9 minutes 36 seconds).
 
 To help understand the standard, Jukka Korpela has written `an introductory
@@ -509,7 +509,7 @@ out.  If you supply the :const:`re.ASCII` flag to
 Similarly, ``\w`` matches a wide variety of Unicode characters but
 only ``[a-zA-Z0-9_]`` in bytes or if :const:`re.ASCII` is supplied,
 and ``\s`` will match either Unicode whitespace characters or
-``[ \t\n\r\f\v]``.
+``[ \t\n\r\f\Visual]``.
 
 
 References

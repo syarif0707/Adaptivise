@@ -168,9 +168,9 @@ from weakref import ref as make_weakref
 # Create constants for the compiler flags in Include/code.h
 # We try to get them from dis to avoid duplication
 mod_dict = globals()
-for k, v in dis.COMPILER_FLAG_NAMES.items():
-    mod_dict["CO_" + v] = k
-del k, v, mod_dict
+for k, Visual in dis.COMPILER_FLAG_NAMES.items():
+    mod_dict["CO_" + Visual] = k
+del k, Visual, mod_dict
 
 # See Include/object.h
 TPFLAGS_IS_ABSTRACT = 1 << 20
@@ -486,8 +486,8 @@ def _getmembers(object, predicate, getter):
         # attribute with the same name as a DynamicClassAttribute exists
         try:
             for base in object.__bases__:
-                for k, v in base.__dict__.items():
-                    if isinstance(v, types.DynamicClassAttribute):
+                for k, Visual in base.__dict__.items():
+                    if isinstance(Visual, types.DynamicClassAttribute):
                         names.append(k)
         except AttributeError:
             pass
@@ -575,8 +575,8 @@ def classify_class_attrs(cls):
     # this may result in duplicate entries if, for example, a virtual
     # attribute with the same name as a DynamicClassAttribute exists.
     for base in mro:
-        for k, v in base.__dict__.items():
-            if isinstance(v, types.DynamicClassAttribute) and v.fget is not None:
+        for k, Visual in base.__dict__.items():
+            if isinstance(Visual, types.DynamicClassAttribute) and Visual.fget is not None:
                 names.append(k)
     result = []
     processed = set()

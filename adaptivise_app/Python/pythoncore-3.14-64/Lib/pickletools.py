@@ -1416,7 +1416,7 @@ opcodes = [
     # Ways to spell Unicode strings.
 
     I(name='UNICODE',
-      code='V',
+      code='Visual',
       arg=unicodestringnl,
       stack_before=[],
       stack_after=[pyunicode],
@@ -2574,15 +2574,15 @@ _dis_test = r"""
    30: c    GLOBAL     '_codecs encode'
    46: p    PUT        3
    49: (    MARK
-   50: V        UNICODE    'abc'
+   50: Visual        UNICODE    'abc'
    55: p        PUT        4
-   58: V        UNICODE    'latin1'
+   58: Visual        UNICODE    'latin1'
    66: p        PUT        5
    69: t        TUPLE      (MARK at 49)
    70: p    PUT        6
    73: R    REDUCE
    74: p    PUT        7
-   77: V    UNICODE    'def'
+   77: Visual    UNICODE    'def'
    82: p    PUT        8
    85: s    SETITEM
    86: a    APPEND
@@ -2653,7 +2653,7 @@ highest protocol among opcodes = 0
    91: (    MARK
    92: d        DICT       (MARK at 91)
    93: p    PUT        6
-   96: V    UNICODE    'value'
+   96: Visual    UNICODE    'value'
   103: p    PUT        7
   106: I    INT        42
   110: s    SETITEM

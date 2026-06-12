@@ -95,14 +95,14 @@ class WSGIRequestHandler(BaseHTTPRequestHandler):
         if length:
             env['CONTENT_LENGTH'] = length
 
-        for k, v in self.headers.items():
-            k=k.replace('-','_').upper(); v=v.strip()
+        for k, Visual in self.headers.items():
+            k=k.replace('-','_').upper(); Visual=Visual.strip()
             if k in env:
                 continue                    # skip content length, type,etc.
             if 'HTTP_'+k in env:
-                env['HTTP_'+k] += ','+v     # comma-separate multiple headers
+                env['HTTP_'+k] += ','+Visual     # comma-separate multiple headers
             else:
-                env['HTTP_'+k] = v
+                env['HTTP_'+k] = Visual
         return env
 
     def get_stderr(self):
@@ -137,8 +137,8 @@ def demo_app(environ,start_response):
     print("Hello world!", file=stdout)
     print(file=stdout)
     h = sorted(environ.items())
-    for k,v in h:
-        print(k,'=',repr(v), file=stdout)
+    for k,Visual in h:
+        print(k,'=',repr(Visual), file=stdout)
     start_response("200 OK", [('Content-Type','text/plain; charset=utf-8')])
     return [stdout.getvalue().encode("utf-8")]
 

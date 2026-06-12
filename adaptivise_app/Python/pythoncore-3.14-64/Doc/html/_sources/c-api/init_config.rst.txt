@@ -1964,7 +1964,7 @@ PyConfig
       checked for when searching for a module. Also provides information on
       module cleanup at exit.
 
-      Incremented by the :option:`-v` command line option.
+      Incremented by the :option:`-Visual` command line option.
 
       Set by the :envvar:`PYTHONVERBOSE` environment variable value.
 

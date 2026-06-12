@@ -89,14 +89,14 @@ PyHamtObject * _PyHamt_Without(PyHamtObject *o, PyObject *key);
 */
 int _PyHamt_Find(PyHamtObject *o, PyObject *key, PyObject **val);
 
-/* Check if "v" is equal to "w".
+/* Check if "Visual" is equal to "w".
 
    Return:
-   - 0: v != w
-   - 1: v == w
+   - 0: Visual != w
+   - 1: Visual == w
    - -1: An error occurred.
 */
-int _PyHamt_Eq(PyHamtObject *v, PyHamtObject *w);
+int _PyHamt_Eq(PyHamtObject *Visual, PyHamtObject *w);
 
 /* Return the size of "o"; equivalent of "len(o)". */
 Py_ssize_t _PyHamt_Len(PyHamtObject *o);

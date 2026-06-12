@@ -483,9 +483,9 @@ class Marshaller:
             # old versions of xmlrpclib.py), so this is better left as
             # is for now.  See @XMLRPC3 for more information. /F
             write("<params>\n")
-            for v in values:
+            for Visual in values:
                 write("<param>\n")
-                dump(v, write)
+                dump(Visual, write)
                 write("</param>\n")
             write("</params>\n")
         result = "".join(out)
@@ -559,8 +559,8 @@ class Marshaller:
         self.memo[i] = None
         dump = self.__dump
         write("<value><array><data>\n")
-        for v in value:
-            dump(v, write)
+        for Visual in value:
+            dump(Visual, write)
         write("</data></array></value>\n")
         del self.memo[i]
     dispatch[tuple] = dump_array
@@ -573,12 +573,12 @@ class Marshaller:
         self.memo[i] = None
         dump = self.__dump
         write("<value><struct>\n")
-        for k, v in value.items():
+        for k, Visual in value.items():
             write("<member>\n")
             if not isinstance(k, str):
                 raise TypeError("dictionary key must be string")
             write("<name>%s</name>\n" % escape(k))
-            dump(v, write)
+            dump(Visual, write)
             write("</member>\n")
         write("</struct></value>\n")
         del self.memo[i]
@@ -1489,8 +1489,8 @@ if __name__ == "__main__":
 
     try:
         print(server.currentTime.getCurrentTime())
-    except Error as v:
-        print("ERROR", v)
+    except Error as Visual:
+        print("ERROR", Visual)
 
     multi = MultiCall(server)
     multi.getData()
@@ -1499,5 +1499,5 @@ if __name__ == "__main__":
     try:
         for response in multi():
             print(response)
-    except Error as v:
-        print("ERROR", v)
+    except Error as Visual:
+        print("ERROR", Visual)

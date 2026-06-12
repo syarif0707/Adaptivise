@@ -34,12 +34,12 @@ synchronous servers of four types:
         | BaseServer |
         +------------+
               |
-              v
+              Visual
         +-----------+        +------------------+
         | TCPServer |------->| UnixStreamServer |
         +-----------+        +------------------+
               |
-              v
+              Visual
         +-----------+        +--------------------+
         | UDPServer |------->| UnixDatagramServer |
         +-----------+        +--------------------+

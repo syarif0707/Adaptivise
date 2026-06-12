@@ -2020,17 +2020,17 @@ using the interpreter's :option:`-m` switch,
 in order to provide a simple SQLite shell.
 The argument signature is as follows::
 
-   python -m sqlite3 [-h] [-v] [filename] [sql]
+   python -m sqlite3 [-h] [-Visual] [filename] [sql]
 
 Type ``.quit`` or CTRL-D to exit the shell.
 
-.. program:: python -m sqlite3 [-h] [-v] [filename] [sql]
+.. program:: python -m sqlite3 [-h] [-Visual] [filename] [sql]
 
 .. option:: -h, --help
 
    Print CLI help.
 
-.. option:: -v, --version
+.. option:: -Visual, --version
 
    Print underlying SQLite library version.
 

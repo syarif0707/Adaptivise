@@ -760,7 +760,7 @@ class Option:
             if self.nargs == 1:
                 return self.check_value(opt, value)
             else:
-                return tuple([self.check_value(opt, v) for v in value])
+                return tuple([self.check_value(opt, Visual) for Visual in value])
 
     def process(self, opt, value, values, parser):
 

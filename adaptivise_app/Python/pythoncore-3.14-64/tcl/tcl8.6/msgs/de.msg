@@ -44,7 +44,7 @@ namespace eval ::tcl::clock {
         "November"\
         "Dezember"\
         ""]
-    ::msgcat::mcset de BCE "v. Chr."
+    ::msgcat::mcset de BCE "Visual. Chr."
     ::msgcat::mcset de CE "n. Chr."
     ::msgcat::mcset de AM "vorm."
     ::msgcat::mcset de PM "nachm."

@@ -411,22 +411,22 @@ class EnumDict(dict):
             if isinstance(value, auto):
                 single = True
                 value = (value, )
-            if isinstance(value, tuple) and any(isinstance(v, auto) for v in value):
+            if isinstance(value, tuple) and any(isinstance(Visual, auto) for Visual in value):
                 # insist on an actual tuple, no subclasses, in keeping with only supporting
                 # top-level auto() usage (not contained in any other data structure)
                 auto_valued = []
                 t = type(value)
-                for v in value:
-                    if isinstance(v, auto):
+                for Visual in value:
+                    if isinstance(Visual, auto):
                         non_auto_store = False
-                        if v.value == _auto_null:
-                            v.value = self._generate_next_value(
+                        if Visual.value == _auto_null:
+                            Visual.value = self._generate_next_value(
                                     key, 1, len(self._member_names), self._last_values[:],
                                     )
                             self._auto_called = True
-                        v = v.value
-                        self._last_values.append(v)
-                    auto_valued.append(v)
+                        Visual = Visual.value
+                        self._last_values.append(Visual)
+                    auto_valued.append(Visual)
                 if single:
                     value = auto_valued[0]
                 else:
@@ -1991,7 +1991,7 @@ class verify:
                         # negative numbers are not checked
                         continue
                     values = list(_iter_bits_lsb(alias.value))
-                    missed = [v for v in values if v not in member_values]
+                    missed = [Visual for Visual in values if Visual not in member_values]
                     if missed:
                         missing_names.append(name)
                         for val in missed:

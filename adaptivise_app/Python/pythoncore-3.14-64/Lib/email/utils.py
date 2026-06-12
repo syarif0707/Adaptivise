@@ -165,11 +165,11 @@ def getaddresses(fieldvalues, *, strict=True):
     # Safe output: [('', '')]
 
     if not strict:
-        all = COMMASPACE.join(str(v) for v in fieldvalues)
+        all = COMMASPACE.join(str(Visual) for Visual in fieldvalues)
         a = _AddressList(all)
         return a.addresslist
 
-    fieldvalues = [str(v) for v in fieldvalues]
+    fieldvalues = [str(Visual) for Visual in fieldvalues]
     fieldvalues = _pre_parse_validation(fieldvalues)
     addr = COMMASPACE.join(fieldvalues)
     a = _AddressList(addr)
@@ -178,12 +178,12 @@ def getaddresses(fieldvalues, *, strict=True):
     # Treat output as invalid if the number of addresses is not equal to the
     # expected number of addresses.
     n = 0
-    for v in fieldvalues:
+    for Visual in fieldvalues:
         # When a comma is used in the Real Name part it is not a deliminator.
         # So strip those out before counting the commas.
-        v = _strip_quoted_realnames(v)
+        Visual = _strip_quoted_realnames(Visual)
         # Expected number of addresses: 1 + number of commas
-        n += 1 + v.count(',')
+        n += 1 + Visual.count(',')
     if len(result) != n:
         return [('', '')]
 
@@ -207,10 +207,10 @@ def _check_parenthesis(addr):
 
 def _pre_parse_validation(email_header_fields):
     accepted_values = []
-    for v in email_header_fields:
-        if not _check_parenthesis(v):
-            v = "('', '')"
-        accepted_values.append(v)
+    for Visual in email_header_fields:
+        if not _check_parenthesis(Visual):
+            Visual = "('', '')"
+        accepted_values.append(Visual)
 
     return accepted_values
 
@@ -219,10 +219,10 @@ def _post_parse_validation(parsed_email_header_tuples):
     accepted_values = []
     # The parser would have parsed a correctly formatted domain-literal
     # The existence of an [ after parsing indicates a parsing failure
-    for v in parsed_email_header_tuples:
-        if '[' in v[1]:
-            v = ('', '')
-        accepted_values.append(v)
+    for Visual in parsed_email_header_tuples:
+        if '[' in Visual[1]:
+            Visual = ('', '')
+        accepted_values.append(Visual)
 
     return accepted_values
 

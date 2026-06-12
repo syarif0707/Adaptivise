@@ -410,11 +410,11 @@ class Sniffer:
             # minimum consistency threshold
             threshold = 0.9
             while len(delims) == 0 and consistency >= threshold:
-                for k, v in modeList:
-                    if v[0] > 0 and v[1] > 0:
-                        if ((v[1]/total) >= consistency and
+                for k, Visual in modeList:
+                    if Visual[0] > 0 and Visual[1] > 0:
+                        if ((Visual[1]/total) >= consistency and
                             (delimiters is None or k in delimiters)):
-                            delims[k] = v
+                            delims[k] = Visual
                 consistency -= 0.01
 
             if len(delims) == 1:
@@ -440,7 +440,7 @@ class Sniffer:
 
         # nothing else indicates a preference, pick the character that
         # dominates(?)
-        items = [(v,k) for (k,v) in delims.items()]
+        items = [(Visual,k) for (k,Visual) in delims.items()]
         items.sort()
         delim = items[-1][1]
 

@@ -73,7 +73,7 @@ proc ::tk::ConsoleInit {} {
 	    -command {event generate .console <<Cut>>}
     AmpMenuArgs	.menubar.edit add command -label [mc &Copy]  -accel "$mod+C"\
 	    -command {event generate .console <<Copy>>}
-    AmpMenuArgs	.menubar.edit add command -label [mc P&aste] -accel "$mod+V"\
+    AmpMenuArgs	.menubar.edit add command -label [mc P&aste] -accel "$mod+Visual"\
 	    -command {event generate .console <<Paste>>}
 
     if {[tk windowingsystem] ne "win32"} {
@@ -417,8 +417,8 @@ proc ::tk::ConsoleBind {w} {
     }
     ## We really didn't want the newline insertion...
     bind Console <Control-o> {}
-    ## ...or any Control-v binding (would block <<Paste>>)
-    bind Console <Control-v> {}
+    ## ...or any Control-Visual binding (would block <<Paste>>)
+    bind Console <Control-Visual> {}
 
     # For the moment, transpose isn't enabled until the console
     # gets and overhaul of how it handles input -- hobbs
@@ -447,7 +447,7 @@ proc ::tk::ConsoleBind {w} {
 	<<Console_Expand>>		<Escape>
 	<<Console_ExpandFile>>		<Control-Shift-F>
 	<<Console_ExpandProc>>		<Control-Shift-P>
-	<<Console_ExpandVar>>		<Control-Shift-V>
+	<<Console_ExpandVar>>		<Control-Shift-Visual>
 	<<Console_Tab>>			<Control-i>
 	<<Console_Tab>>			<Meta-i>
 	<<Console_Eval>>		<Return>

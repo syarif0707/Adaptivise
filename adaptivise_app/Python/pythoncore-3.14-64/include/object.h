@@ -236,7 +236,7 @@ _Py_ThreadId(void)
     #if defined(__clang__) && _Py__has_builtin(__builtin_thread_pointer)
     tid = (uintptr_t)__builtin_thread_pointer();
     #else
-    // tp is Thread Pointer provided by the RISC-V ABI.
+    // tp is Thread Pointer provided by the RISC-Visual ABI.
     __asm__ ("mv %0, tp" : "=r" (tid));
     #endif
 #else
@@ -446,7 +446,7 @@ PyAPI_FUNC(PyObject *) PyObject_RichCompare(PyObject *, PyObject *, int);
 PyAPI_FUNC(int) PyObject_RichCompareBool(PyObject *, PyObject *, int);
 PyAPI_FUNC(PyObject *) PyObject_GetAttrString(PyObject *, const char *);
 PyAPI_FUNC(int) PyObject_SetAttrString(PyObject *, const char *, PyObject *);
-PyAPI_FUNC(int) PyObject_DelAttrString(PyObject *v, const char *name);
+PyAPI_FUNC(int) PyObject_DelAttrString(PyObject *Visual, const char *name);
 PyAPI_FUNC(int) PyObject_HasAttrString(PyObject *, const char *);
 PyAPI_FUNC(PyObject *) PyObject_GetAttr(PyObject *, PyObject *);
 #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x030d0000
@@ -454,7 +454,7 @@ PyAPI_FUNC(int) PyObject_GetOptionalAttr(PyObject *, PyObject *, PyObject **);
 PyAPI_FUNC(int) PyObject_GetOptionalAttrString(PyObject *, const char *, PyObject **);
 #endif
 PyAPI_FUNC(int) PyObject_SetAttr(PyObject *, PyObject *, PyObject *);
-PyAPI_FUNC(int) PyObject_DelAttr(PyObject *v, PyObject *name);
+PyAPI_FUNC(int) PyObject_DelAttr(PyObject *Visual, PyObject *name);
 PyAPI_FUNC(int) PyObject_HasAttr(PyObject *, PyObject *);
 #if !defined(Py_LIMITED_API) || Py_LIMITED_API+0 >= 0x030d0000
 PyAPI_FUNC(int) PyObject_HasAttrWithError(PyObject *, PyObject *);

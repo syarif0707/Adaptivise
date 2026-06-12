@@ -18,13 +18,13 @@ package require Tk
 # x, y -	Coordinates at which to create the tab stop.
 
 proc rulerMkTab {c x y} {
-    upvar #0 demo_rulerInfo v
+    upvar #0 demo_rulerInfo Visual
     set newTab [$c create polygon $x $y \
-	    [expr {$x+$v(size)}] [expr {$y+$v(size)}] \
-	    [expr {$x-$v(size)}] [expr {$y+$v(size)}]]
+	    [expr {$x+$Visual(size)}] [expr {$y+$Visual(size)}] \
+	    [expr {$x-$Visual(size)}] [expr {$y+$Visual(size)}]]
     set fill [$c itemcget $newTab -outline]
     $c itemconfigure $newTab -fill $fill -outline {}
-    set v(normalStyle) "-fill $fill"
+    set Visual(normalStyle) "-fill $fill"
     return $newTab
 }
 
@@ -91,11 +91,11 @@ bind $c <ButtonRelease-1> "rulerReleaseTab $c"
 # x, y -	The coordinates of the tab stop.
 
 proc rulerNewTab {c x y} {
-    upvar #0 demo_rulerInfo v
+    upvar #0 demo_rulerInfo Visual
     $c addtag active withtag [rulerMkTab $c $x $y]
     $c addtag tab withtag active
-    set v(x) $x
-    set v(y) $y
+    set Visual(x) $x
+    set Visual(y) $y
     rulerMoveTab $c $x $y
 }
 
@@ -110,11 +110,11 @@ proc rulerNewTab {c x y} {
 #		which the tab was picked up for dragging).
 
 proc rulerSelectTab {c x y} {
-    upvar #0 demo_rulerInfo v
-    set v(x) [$c canvasx $x $v(grid)]
-    set v(y) [expr {$v(top)+2}]
+    upvar #0 demo_rulerInfo Visual
+    set Visual(x) [$c canvasx $x $Visual(grid)]
+    set Visual(y) [expr {$Visual(top)+2}]
     $c addtag active withtag current
-    eval "$c itemconf active $v(activeStyle)"
+    eval "$c itemconf active $Visual(activeStyle)"
     $c raise active
 }
 
@@ -128,28 +128,28 @@ proc rulerSelectTab {c x y} {
 # x, y -	The coordinates of the mouse.
 
 proc rulerMoveTab {c x y} {
-    upvar #0 demo_rulerInfo v
+    upvar #0 demo_rulerInfo Visual
     if {[$c find withtag active] == ""} {
 	return
     }
-    set cx [$c canvasx $x $v(grid)]
+    set cx [$c canvasx $x $Visual(grid)]
     set cy [$c canvasy $y]
-    if {$cx < $v(left)} {
-	set cx $v(left)
+    if {$cx < $Visual(left)} {
+	set cx $Visual(left)
     }
-    if {$cx > $v(right)} {
-	set cx $v(right)
+    if {$cx > $Visual(right)} {
+	set cx $Visual(right)
     }
-    if {($cy >= $v(top)) && ($cy <= $v(bottom))} {
-	set cy [expr {$v(top)+2}]
-	eval "$c itemconf active $v(activeStyle)"
+    if {($cy >= $Visual(top)) && ($cy <= $Visual(bottom))} {
+	set cy [expr {$Visual(top)+2}]
+	eval "$c itemconf active $Visual(activeStyle)"
     } else {
-	set cy [expr {$cy-$v(size)-2}]
-	eval "$c itemconf active $v(deleteStyle)"
+	set cy [expr {$cy-$Visual(size)-2}]
+	eval "$c itemconf active $Visual(deleteStyle)"
     }
-    $c move active [expr {$cx-$v(x)}] [expr {$cy-$v(y)}]
-    set v(x) $cx
-    set v(y) $cy
+    $c move active [expr {$cx-$Visual(x)}] [expr {$cy-$Visual(y)}]
+    set Visual(x) $cx
+    set Visual(y) $cy
 }
 
 # rulerReleaseTab --
@@ -162,14 +162,14 @@ proc rulerMoveTab {c x y} {
 # x, y -	The coordinates of the mouse.
 
 proc rulerReleaseTab c {
-    upvar #0 demo_rulerInfo v
+    upvar #0 demo_rulerInfo Visual
     if {[$c find withtag active] == {}} {
 	return
     }
-    if {$v(y) != $v(top)+2} {
+    if {$Visual(y) != $Visual(top)+2} {
 	$c delete active
     } else {
-	eval "$c itemconf active $v(normalStyle)"
+	eval "$c itemconf active $Visual(normalStyle)"
 	$c dtag active
     }
 }

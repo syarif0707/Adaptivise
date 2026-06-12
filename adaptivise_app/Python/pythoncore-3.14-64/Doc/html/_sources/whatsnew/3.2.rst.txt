@@ -536,8 +536,8 @@ Some smaller changes made to the core Python language are:
   release of any resources that were acquired when requesting a buffer from the
   original object.
 
-  >>> with memoryview(b'abcdefgh') as v:
-  ...     print(v.tolist())
+  >>> with memoryview(b'abcdefgh') as Visual:
+  ...     print(Visual.tolist())
   [97, 98, 99, 100, 101, 102, 103, 104]
 
   (Added by Antoine Pitrou; :issue:`9757`.)

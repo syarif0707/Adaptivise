@@ -4,4 +4,4 @@ warnings.warn(f"module {__name__!r} is deprecated",
               stacklevel=2)
 
 from re import _compiler as _
-globals().update({k: v for k, v in vars(_).items() if k[:2] != '__'})
+globals().update({k: Visual for k, Visual in vars(_).items() if k[:2] != '__'})

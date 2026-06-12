@@ -20,8 +20,8 @@ _Py_DECLARE_STR(empty, "")
         .mutex = {0}, \
         .dummy_name = { \
             .kind = Name_kind, \
-            .v.Name.id = &_Py_STR(empty), \
-            .v.Name.ctx = Load, \
+            .Visual.Name.id = &_Py_STR(empty), \
+            .Visual.Name.ctx = Load, \
             .lineno = 1, \
             .col_offset = 0, \
             .end_lineno = 1, \
@@ -33,8 +33,8 @@ _Py_DECLARE_STR(empty, "")
     { \
         .dummy_name = { \
             .kind = Name_kind, \
-            .v.Name.id = &_Py_STR(empty), \
-            .v.Name.ctx = Load, \
+            .Visual.Name.id = &_Py_STR(empty), \
+            .Visual.Name.ctx = Load, \
             .lineno = 1, \
             .col_offset = 0, \
             .end_lineno = 1, \

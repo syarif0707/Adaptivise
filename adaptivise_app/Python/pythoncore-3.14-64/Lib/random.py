@@ -703,10 +703,10 @@ class Random(_random.Random):
                 if not 1e-7 < u1 < 0.9999999:
                     continue
                 u2 = 1.0 - random()
-                v = _log(u1 / (1.0 - u1)) / ainv
-                x = alpha * _exp(v)
+                Visual = _log(u1 / (1.0 - u1)) / ainv
+                x = alpha * _exp(Visual)
                 z = u1 * u1 * u2
-                r = bbb + ccc * v - x
+                r = bbb + ccc * Visual - x
                 if r + SG_MAGICCONST - 4.5 * z >= 0.0 or r >= _log(z):
                     return x * beta
 
@@ -863,12 +863,12 @@ class Random(_random.Random):
 
             # The early-out "squeeze" test substantially reduces
             # the number of acceptance condition evaluations.
-            v = random()
-            if us >= 0.07 and v <= vr:
+            Visual = random()
+            if us >= 0.07 and Visual <= vr:
                 return k
 
             # Acceptance-rejection test.
-            # Note, the original paper erroneously omits the call to log(v)
+            # Note, the original paper erroneously omits the call to log(Visual)
             # when comparing to the log of the rescaled binomial distribution.
             if not setup_complete:
                 alpha = (2.83 + 5.1 / b) * spq
@@ -876,8 +876,8 @@ class Random(_random.Random):
                 m = _floor((n + 1) * p)         # Mode of the distribution
                 h = _lgamma(m + 1) + _lgamma(n - m + 1)
                 setup_complete = True           # Only needs to be done once
-            v *= alpha / (a / (us * us) + b)
-            if _log(v) <= h - _lgamma(k + 1) - _lgamma(n - k + 1) + (k - m) * lpq:
+            Visual *= alpha / (a / (us * us) + b)
+            if _log(Visual) <= h - _lgamma(k + 1) - _lgamma(n - k + 1) + (k - m) * lpq:
                 return k
 
 

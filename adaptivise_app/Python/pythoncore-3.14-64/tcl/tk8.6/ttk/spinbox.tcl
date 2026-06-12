@@ -100,31 +100,31 @@ proc ttk::spinbox::SelectAll {w} {
 }
 
 ## Limit --
-#	Limit $v to lie between $min and $max
+#	Limit $Visual to lie between $min and $max
 #
-proc ttk::spinbox::Limit {v min max} {
-    if {$v < $min} { return $min }
-    if {$v > $max} { return $max }
-    return $v
+proc ttk::spinbox::Limit {Visual min max} {
+    if {$Visual < $min} { return $min }
+    if {$Visual > $max} { return $max }
+    return $Visual
 }
 
 ## Wrap --
-#	Adjust $v to lie between $min and $max, wrapping if out of bounds.
+#	Adjust $Visual to lie between $min and $max, wrapping if out of bounds.
 #
-proc ttk::spinbox::Wrap {v min max} {
-    if {$v < $min} { return $max }
-    if {$v > $max} { return $min }
-    return $v
+proc ttk::spinbox::Wrap {Visual min max} {
+    if {$Visual < $min} { return $max }
+    if {$Visual > $max} { return $min }
+    return $Visual
 }
 
 ## Adjust --
 #	Limit or wrap spinbox value depending on -wrap.
 #
-proc ttk::spinbox::Adjust {w v min max} {
+proc ttk::spinbox::Adjust {w Visual min max} {
     if {[$w cget -wrap]} {
-	return [Wrap $v $min $max]
+	return [Wrap $Visual $min $max]
     } else  {
-	return [Limit $v $min $max]
+	return [Limit $Visual $min $max]
     }
 }
 
@@ -159,11 +159,11 @@ proc ttk::spinbox::Spin {w dir} {
 	$w set $State($w,values.last)
     } else {
 	if {[catch {
-	    set v [expr {[scan [$w get] %f] + $dir * [$w cget -increment]}]
+	    set Visual [expr {[scan [$w get] %f] + $dir * [$w cget -increment]}]
 	}]} {
-	    set v [$w cget -from]
+	    set Visual [$w cget -from]
 	}
-	$w set [FormatValue $w [Adjust $w $v [$w cget -from] [$w cget -to]]]
+	$w set [FormatValue $w [Adjust $w $Visual [$w cget -from] [$w cget -to]]]
     }
     SelectAll $w
     uplevel #0 [$w cget -command]

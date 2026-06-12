@@ -140,7 +140,7 @@ there are several major differences:
 
   * On Android, creating subprocesses is possible but `officially unsupported
     <https://issuetracker.google.com/issues/128554619#comment4>`__.
-    In particular, Android does not support any part of the System V IPC API,
+    In particular, Android does not support any part of the System Visual IPC API,
     so :mod:`multiprocessing` is not available.
 
   * An iOS app cannot use any form of subprocessing, multiprocessing, or

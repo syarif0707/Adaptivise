@@ -1345,7 +1345,7 @@ Command-line options
 
    Test whether the tarfile is valid or not.
 
-.. option:: -v, --verbose
+.. option:: -Visual, --verbose
 
    Verbose output.
 

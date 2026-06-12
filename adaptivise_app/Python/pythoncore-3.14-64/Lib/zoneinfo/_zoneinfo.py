@@ -737,7 +737,7 @@ def _parse_transition_time(time_str):
     if match is None:
         raise ValueError(f"Invalid time: {time_str}")
 
-    h, m, s = (int(v or 0) for v in match.group("h", "m", "s"))
+    h, m, s = (int(Visual or 0) for Visual in match.group("h", "m", "s"))
 
     if h > 167:
         raise ValueError(
@@ -760,7 +760,7 @@ def _parse_tz_delta(tz_delta):
     # regular expression to find the section to parse.
     assert match is not None, tz_delta
 
-    h, m, s = (int(v or 0) for v in match.group("h", "m", "s"))
+    h, m, s = (int(Visual or 0) for Visual in match.group("h", "m", "s"))
 
     total = h * 3600 + m * 60 + s
 

@@ -496,9 +496,9 @@ MULTIPLATFORM_INSTALL = 0
 #------------------------------------------------------------
 # Figure out the *host* architecture by reading the registry
 
-!if ![reg query HKLM\Hardware\Description\System\CentralProcessor\0 /v Identifier | findstr /i x86]
+!if ![reg query HKLM\Hardware\Description\System\CentralProcessor\0 /Visual Identifier | findstr /i x86]
 NATIVE_ARCH=IX86
-!elseif ![reg query HKLM\Hardware\Description\System\CentralProcessor\0 /v Identifier | findstr /i ARM | findstr /i 64-bit]
+!elseif ![reg query HKLM\Hardware\Description\System\CentralProcessor\0 /Visual Identifier | findstr /i ARM | findstr /i 64-bit]
 NATIVE_ARCH=ARM64
 !else
 NATIVE_ARCH=AMD64
@@ -694,30 +694,30 @@ LINKERFLAGS     = $(LINKERFLAGS) -ltcg
 !if [echo REM = This file is generated from rules.vc > versions.vc]
 !endif
 !if [echo TCL_MAJOR_VERSION = \>> versions.vc] \
-   && [nmakehlp -V "$(_TCL_H)" "define TCL_MAJOR_VERSION" >> versions.vc]
+   && [nmakehlp -Visual "$(_TCL_H)" "define TCL_MAJOR_VERSION" >> versions.vc]
 !endif
 !if [echo TCL_MINOR_VERSION = \>> versions.vc] \
-   && [nmakehlp -V "$(_TCL_H)" TCL_MINOR_VERSION >> versions.vc]
+   && [nmakehlp -Visual "$(_TCL_H)" TCL_MINOR_VERSION >> versions.vc]
 !endif
 !if [echo TCL_RELEASE_SERIAL = \>> versions.vc] \
-   && [nmakehlp -V "$(_TCL_H)" TCL_RELEASE_SERIAL >> versions.vc]
+   && [nmakehlp -Visual "$(_TCL_H)" TCL_RELEASE_SERIAL >> versions.vc]
 !endif
 !if [echo TCL_PATCH_LEVEL = \>> versions.vc] \
-   && [nmakehlp -V "$(_TCL_H)" TCL_PATCH_LEVEL >> versions.vc]
+   && [nmakehlp -Visual "$(_TCL_H)" TCL_PATCH_LEVEL >> versions.vc]
 !endif
 
 !if defined(_TK_H)
 !if [echo TK_MAJOR_VERSION = \>> versions.vc] \
-   && [nmakehlp -V $(_TK_H) "define TK_MAJOR_VERSION" >> versions.vc]
+   && [nmakehlp -Visual $(_TK_H) "define TK_MAJOR_VERSION" >> versions.vc]
 !endif
 !if [echo TK_MINOR_VERSION = \>> versions.vc] \
-   && [nmakehlp -V $(_TK_H) TK_MINOR_VERSION >> versions.vc]
+   && [nmakehlp -Visual $(_TK_H) TK_MINOR_VERSION >> versions.vc]
 !endif
 !if [echo TK_RELEASE_SERIAL = \>> versions.vc] \
-   && [nmakehlp -V "$(_TK_H)" TK_RELEASE_SERIAL >> versions.vc]
+   && [nmakehlp -Visual "$(_TK_H)" TK_RELEASE_SERIAL >> versions.vc]
 !endif
 !if [echo TK_PATCH_LEVEL = \>> versions.vc] \
-   && [nmakehlp -V $(_TK_H) TK_PATCH_LEVEL >> versions.vc]
+   && [nmakehlp -Visual $(_TK_H) TK_PATCH_LEVEL >> versions.vc]
 !endif
 !endif # _TK_H
 
@@ -764,9 +764,9 @@ VERSION = $(TK_VERSION)
 # first from a configure.in file, and then from configure.ac
 !ifndef DOTVERSION
 !if [echo DOTVERSION = \> versions.vc] \
-   || [nmakehlp -V $(ROOT)\configure.in ^[$(PROJECT)^] >> versions.vc]
+   || [nmakehlp -Visual $(ROOT)\configure.in ^[$(PROJECT)^] >> versions.vc]
 !if [echo DOTVERSION = \> versions.vc] \
-   || [nmakehlp -V $(ROOT)\configure.ac ^[$(PROJECT)^] >> versions.vc]
+   || [nmakehlp -Visual $(ROOT)\configure.ac ^[$(PROJECT)^] >> versions.vc]
 !error *** Could not figure out extension version. Please define DOTVERSION in parent makefile before including rules.vc.
 !endif
 !endif

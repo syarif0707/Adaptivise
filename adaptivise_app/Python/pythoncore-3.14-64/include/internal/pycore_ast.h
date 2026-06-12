@@ -181,7 +181,7 @@ struct _mod {
             expr_ty returns;
         } FunctionType;
 
-    } v;
+    } Visual;
 };
 
 enum _stmt_kind {FunctionDef_kind=1, AsyncFunctionDef_kind=2, ClassDef_kind=3,
@@ -349,7 +349,7 @@ struct _stmt {
             expr_ty value;
         } Expr;
 
-    } v;
+    } Visual;
     int lineno;
     int col_offset;
     int end_lineno;
@@ -518,7 +518,7 @@ struct _expr {
             expr_ty step;
         } Slice;
 
-    } v;
+    } Visual;
     int lineno;
     int col_offset;
     int end_lineno;
@@ -542,7 +542,7 @@ struct _excepthandler {
             asdl_stmt_seq *body;
         } ExceptHandler;
 
-    } v;
+    } Visual;
     int lineno;
     int col_offset;
     int end_lineno;
@@ -643,7 +643,7 @@ struct _pattern {
             asdl_pattern_seq *patterns;
         } MatchOr;
 
-    } v;
+    } Visual;
     int lineno;
     int col_offset;
     int end_lineno;
@@ -659,7 +659,7 @@ struct _type_ignore {
             string tag;
         } TypeIgnore;
 
-    } v;
+    } Visual;
 };
 
 enum _type_param_kind {TypeVar_kind=1, ParamSpec_kind=2, TypeVarTuple_kind=3};
@@ -682,7 +682,7 @@ struct _type_param {
             expr_ty default_value;
         } TypeVarTuple;
 
-    } v;
+    } Visual;
     int lineno;
     int col_offset;
     int end_lineno;

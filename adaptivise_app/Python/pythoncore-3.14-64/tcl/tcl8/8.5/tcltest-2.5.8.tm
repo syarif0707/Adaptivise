@@ -642,9 +642,9 @@ namespace eval tcltest {
 	    }
 	}
 	set valid [list]
-	foreach v $level {
-	    if {[regexp $levelRegexp $v]} {
-		lappend valid $v
+	foreach Visual $level {
+	    if {[regexp $levelRegexp $Visual]} {
+		lappend valid $Visual
 	    }
 	}
 	return $valid

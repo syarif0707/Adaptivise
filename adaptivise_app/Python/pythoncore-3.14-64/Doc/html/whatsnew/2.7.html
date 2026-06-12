@@ -18,14 +18,14 @@
 
     <title>What’s New in Python 2.7 &#8212; Python 3.14.4 documentation</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
-    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=82640b3f" />
-    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?Visual=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?Visual=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?Visual=82640b3f" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?Visual=5349f25f" />
     
-    <script src="../_static/documentation_options.js?v=1885ab2e"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?Visual=1885ab2e"></script>
+    <script src="../_static/doctools.js?Visual=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?Visual=dc90522c"></script>
     
     <script src="../_static/sidebar.js"></script>
     
@@ -546,7 +546,7 @@ about compatibility with earlier versions of Python, use
 <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;Command-line example.&#39;</span><span class="p">)</span>
 
 <span class="c1"># Add optional switches</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-v&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;is_verbose&#39;</span><span class="p">,</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-Visual&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;is_verbose&#39;</span><span class="p">,</span>
                     <span class="n">help</span><span class="o">=</span><span class="s1">&#39;produce verbose output&#39;</span><span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;output&#39;</span><span class="p">,</span>
                     <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;FILE&#39;</span><span class="p">,</span>
@@ -566,7 +566,7 @@ about compatibility with earlier versions of Python, use
 <p>Unless you override it, <code class="xref std std-option docutils literal notranslate"><span class="pre">-h</span></code> and <code class="xref std std-option docutils literal notranslate"><span class="pre">--help</span></code> switches
 are automatically added, and produce neatly formatted output:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="o">-&gt;</span> <span class="o">./</span><span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">argparse</span><span class="o">-</span><span class="n">example</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
-<span class="n">usage</span><span class="p">:</span> <span class="n">argparse</span><span class="o">-</span><span class="n">example</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">o</span> <span class="n">FILE</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">C</span> <span class="n">NUM</span><span class="p">]</span> <span class="p">[</span><span class="n">inputs</span> <span class="p">[</span><span class="n">inputs</span> <span class="o">...</span><span class="p">]]</span>
+<span class="n">usage</span><span class="p">:</span> <span class="n">argparse</span><span class="o">-</span><span class="n">example</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">Visual</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">o</span> <span class="n">FILE</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">C</span> <span class="n">NUM</span><span class="p">]</span> <span class="p">[</span><span class="n">inputs</span> <span class="p">[</span><span class="n">inputs</span> <span class="o">...</span><span class="p">]]</span>
 
 <span class="n">Command</span><span class="o">-</span><span class="n">line</span> <span class="n">example</span><span class="o">.</span>
 
@@ -575,20 +575,20 @@ are automatically added, and produce neatly formatted output:</p>
 
 <span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
   <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>  <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
-  <span class="o">-</span><span class="n">v</span>          <span class="n">produce</span> <span class="n">verbose</span> <span class="n">output</span>
+  <span class="o">-</span><span class="n">Visual</span>          <span class="n">produce</span> <span class="n">verbose</span> <span class="n">output</span>
   <span class="o">-</span><span class="n">o</span> <span class="n">FILE</span>     <span class="n">direct</span> <span class="n">output</span> <span class="n">to</span> <span class="n">FILE</span> <span class="n">instead</span> <span class="n">of</span> <span class="n">stdout</span>
   <span class="o">-</span><span class="n">C</span> <span class="n">NUM</span>      <span class="n">display</span> <span class="n">NUM</span> <span class="n">lines</span> <span class="n">of</span> <span class="n">added</span> <span class="n">context</span>
 </pre></div>
 </div>
 <p>As with <a class="reference internal" href="../library/optparse.html#module-optparse" title="optparse: Command-line option parsing library."><code class="xref py py-mod docutils literal notranslate"><span class="pre">optparse</span></code></a>, the command-line switches and arguments
 are returned as an object with attributes named by the <em>dest</em> parameters:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="o">-&gt;</span> <span class="o">./</span><span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">argparse</span><span class="o">-</span><span class="n">example</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">v</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="o">-&gt;</span> <span class="o">./</span><span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">argparse</span><span class="o">-</span><span class="n">example</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">Visual</span>
 <span class="p">{</span><span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span>
  <span class="s1">&#39;is_verbose&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
  <span class="s1">&#39;context&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
  <span class="s1">&#39;inputs&#39;</span><span class="p">:</span> <span class="p">[]}</span>
 
-<span class="o">-&gt;</span> <span class="o">./</span><span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">argparse</span><span class="o">-</span><span class="n">example</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">v</span> <span class="o">-</span><span class="n">o</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">output</span> <span class="o">-</span><span class="n">C</span> <span class="mi">4</span> <span class="n">file1</span> <span class="n">file2</span>
+<span class="o">-&gt;</span> <span class="o">./</span><span class="n">python</span><span class="o">.</span><span class="n">exe</span> <span class="n">argparse</span><span class="o">-</span><span class="n">example</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">Visual</span> <span class="o">-</span><span class="n">o</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">output</span> <span class="o">-</span><span class="n">C</span> <span class="mi">4</span> <span class="n">file1</span> <span class="n">file2</span>
 <span class="p">{</span><span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="s1">&#39;/tmp/output&#39;</span><span class="p">,</span>
  <span class="s1">&#39;is_verbose&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
  <span class="s1">&#39;context&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>

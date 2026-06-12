@@ -729,13 +729,13 @@ class _BinaryPlistWriter (object):
             if self._sort_keys:
                 items = sorted(items)
 
-            for k, v in items:
+            for k, Visual in items:
                 if not isinstance(k, str):
                     if self._skipkeys:
                         continue
                     raise TypeError("keys must be strings")
                 keys.append(k)
-                values.append(v)
+                values.append(Visual)
 
             for o in itertools.chain(keys, values):
                 self._flatten(o)
@@ -851,13 +851,13 @@ class _BinaryPlistWriter (object):
             else:
                 rootItems = value.items()
 
-            for k, v in rootItems:
+            for k, Visual in rootItems:
                 if not isinstance(k, str):
                     if self._skipkeys:
                         continue
                     raise TypeError("keys must be strings")
                 keyRefs.append(self._getrefnum(k))
-                valRefs.append(self._getrefnum(v))
+                valRefs.append(self._getrefnum(Visual))
 
             s = len(keyRefs)
             self._write_size(0xD0, s)

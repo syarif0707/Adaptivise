@@ -5,7 +5,7 @@
 // A data structure that can be used to run initialization code once in a
 // thread-safe manner. The C++11 equivalent is std::call_once.
 typedef struct {
-    uint8_t v;
+    uint8_t Visual;
 } _PyOnceFlag;
 
 typedef struct _PyArg_Parser {

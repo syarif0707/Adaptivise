@@ -18,14 +18,14 @@
 
     <title>What’s New In Python 3.11 &#8212; Python 3.14.4 documentation</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
-    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=82640b3f" />
-    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?Visual=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?Visual=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?Visual=82640b3f" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?Visual=5349f25f" />
     
-    <script src="../_static/documentation_options.js?v=1885ab2e"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?Visual=1885ab2e"></script>
+    <script src="../_static/doctools.js?Visual=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?Visual=dc90522c"></script>
     
     <script src="../_static/sidebar.js"></script>
     
@@ -464,12 +464,12 @@ PEP written by Zac Hatfield-Dodds.)</p>
 <span id="whatsnew311-windows-launcher"></span><h3>Windows <code class="docutils literal notranslate"><span class="pre">py.exe</span></code> launcher improvements<a class="headerlink" href="#windows-py-exe-launcher-improvements" title="Link to this heading">¶</a></h3>
 <p>The copy of the <a class="reference internal" href="../using/windows.html#launcher"><span class="std std-ref">Python install manager</span></a> included with Python 3.11 has been significantly
 updated. It now supports company/tag syntax as defined in <span class="target" id="index-10"></span><a class="pep reference external" href="https://peps.python.org/pep-0514/"><strong>PEP 514</strong></a> using the
-<code class="samp docutils literal notranslate"><span class="pre">-V:</span><em><span class="pre">&lt;company&gt;</span></em><span class="pre">/</span><em><span class="pre">&lt;tag&gt;</span></em></code> argument instead of the limited <code class="samp docutils literal notranslate"><span class="pre">-</span><em><span class="pre">&lt;major&gt;</span></em><span class="pre">.</span><em><span class="pre">&lt;minor&gt;</span></em></code>.
+<code class="samp docutils literal notranslate"><span class="pre">-Visual:</span><em><span class="pre">&lt;company&gt;</span></em><span class="pre">/</span><em><span class="pre">&lt;tag&gt;</span></em></code> argument instead of the limited <code class="samp docutils literal notranslate"><span class="pre">-</span><em><span class="pre">&lt;major&gt;</span></em><span class="pre">.</span><em><span class="pre">&lt;minor&gt;</span></em></code>.
 This allows launching distributions other than <code class="docutils literal notranslate"><span class="pre">PythonCore</span></code>,
 the one hosted on <a class="reference external" href="https://www.python.org">python.org</a>.</p>
-<p>When using <code class="docutils literal notranslate"><span class="pre">-V:</span></code> selectors, either company or tag can be omitted, but all
-installs will be searched. For example, <code class="docutils literal notranslate"><span class="pre">-V:OtherPython/</span></code> will select the
-“best” tag registered for <code class="docutils literal notranslate"><span class="pre">OtherPython</span></code>, while <code class="docutils literal notranslate"><span class="pre">-V:3.11</span></code> or <code class="docutils literal notranslate"><span class="pre">-V:/3.11</span></code>
+<p>When using <code class="docutils literal notranslate"><span class="pre">-Visual:</span></code> selectors, either company or tag can be omitted, but all
+installs will be searched. For example, <code class="docutils literal notranslate"><span class="pre">-Visual:OtherPython/</span></code> will select the
+“best” tag registered for <code class="docutils literal notranslate"><span class="pre">OtherPython</span></code>, while <code class="docutils literal notranslate"><span class="pre">-Visual:3.11</span></code> or <code class="docutils literal notranslate"><span class="pre">-Visual:/3.11</span></code>
 will select the “best” distribution with tag <code class="docutils literal notranslate"><span class="pre">3.11</span></code>.</p>
 <p>When using the legacy <code class="samp docutils literal notranslate"><span class="pre">-</span><em><span class="pre">&lt;major&gt;</span></em></code>, <code class="samp docutils literal notranslate"><span class="pre">-</span><em><span class="pre">&lt;major&gt;</span></em><span class="pre">.</span><em><span class="pre">&lt;minor&gt;</span></em></code>,
 <code class="samp docutils literal notranslate"><span class="pre">-</span><em><span class="pre">&lt;major&gt;</span></em><span class="pre">-</span><em><span class="pre">&lt;bitness&gt;</span></em></code> or <code class="samp docutils literal notranslate"><span class="pre">-</span><em><span class="pre">&lt;major&gt;</span></em><span class="pre">.</span><em><span class="pre">&lt;minor&gt;</span></em><span class="pre">-</span><em><span class="pre">&lt;bitness&gt;</span></em></code> arguments,
@@ -801,7 +801,7 @@ around <a class="reference internal" href="../library/os.html#os.chdir" title="o
 <ul class="simple">
 <li><p>Change field default mutability check, allowing only defaults which are
 <a class="reference internal" href="../glossary.html#term-hashable"><span class="xref std std-term">hashable</span></a> instead of any object which is not an instance of
-<a class="reference internal" href="../library/stdtypes.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, <a class="reference internal" href="../library/stdtypes.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> or <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>. (Contributed by Eric V. Smith in
+<a class="reference internal" href="../library/stdtypes.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, <a class="reference internal" href="../library/stdtypes.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> or <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>. (Contributed by Eric Visual. Smith in
 <a class="reference external" href="https://bugs.python.org/issue?&#64;action=redirect&amp;bpo=44674">bpo-44674</a>.)</p></li>
 </ul>
 </section>

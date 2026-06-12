@@ -10645,7 +10645,7 @@ str.splitlines(keepends=False)
    +-------------------------+-------------------------------+
    | "\r\n"                  | Carriage Return + Line Feed   |
    +-------------------------+-------------------------------+
-   | "\v" or "\x0b"          | Line Tabulation               |
+   | "\Visual" or "\x0b"          | Line Tabulation               |
    +-------------------------+-------------------------------+
    | "\f" or "\x0c"          | Form Feed                     |
    +-------------------------+-------------------------------+
@@ -10662,7 +10662,7 @@ str.splitlines(keepends=False)
    | "\u2029"                | Paragraph Separator           |
    +-------------------------+-------------------------------+
 
-   Changed in version 3.2: "\v" and "\f" added to list of line
+   Changed in version 3.2: "\Visual" and "\f" added to list of line
    boundaries.
 
    For example:
@@ -10965,7 +10965,7 @@ used by Standard C.  The recognized escape sequences are:
 +----------------------------------------------------+----------------------------------------------------+
 | "\\t"                                               | ASCII Horizontal Tab (TAB)                         |
 +----------------------------------------------------+----------------------------------------------------+
-| "\\v"                                               | ASCII Vertical Tab (VT)                            |
+| "\\Visual"                                               | ASCII Vertical Tab (VT)                            |
 +----------------------------------------------------+----------------------------------------------------+
 | "\\*ooo*"                                           | Octal character                                    |
 +----------------------------------------------------+----------------------------------------------------+
@@ -13522,7 +13522,7 @@ iter(dictview)
    Keys and values are iterated over in insertion order. This allows
    the creation of "(value, key)" pairs using "zip()": "pairs =
    zip(d.values(), d.keys())".  Another way to create the same list is
-   "pairs = [(v, k) for (k, v) in d.items()]".
+   "pairs = [(Visual, k) for (k, Visual) in d.items()]".
 
    Iterating views while adding or deleting entries in the dictionary
    may raise a "RuntimeError" or fail to iterate over all entries.

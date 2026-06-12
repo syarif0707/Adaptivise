@@ -44,7 +44,7 @@ def _format_args_and_kwargs(args, kwargs, *, debug=False):
     if args:
         items.extend(reprlib.repr(arg) for arg in args)
     if kwargs:
-        items.extend(f'{k}={reprlib.repr(v)}' for k, v in kwargs.items())
+        items.extend(f'{k}={reprlib.repr(Visual)}' for k, Visual in kwargs.items())
     return '({})'.format(', '.join(items))
 
 

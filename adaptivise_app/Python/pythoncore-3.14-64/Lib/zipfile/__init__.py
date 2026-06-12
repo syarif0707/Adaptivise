@@ -81,7 +81,7 @@ MAX_EXTRACT_VERSION = 63
 # (URL valid as of January 2008)
 
 # The "end of central directory" structure, magic number, size, and indices
-# (section V.I in the format document)
+# (section Visual.I in the format document)
 structEndArchive = b"<4s4H2LH"
 stringEndArchive = b"PK\005\006"
 sizeEndCentDir = struct.calcsize(structEndArchive)
@@ -100,7 +100,7 @@ _ECD_COMMENT = 8
 _ECD_LOCATION = 9
 
 # The "central directory" structure, magic number, size, and indices
-# of entries in the structure (section V.F in the format document)
+# of entries in the structure (section Visual.F in the format document)
 structCentralDir = "<4s4B4HL2L5H2L"
 stringCentralDir = b"PK\001\002"
 sizeCentralDir = struct.calcsize(structCentralDir)
@@ -153,7 +153,7 @@ _MASK_UTF_FILENAME = 1 << 11
 # _MASK_RESERVED_BIT_15 = 1 << 15
 
 # The "local file header" structure, magic number, size, and indices
-# (section V.A in the format document)
+# (section Visual.A in the format document)
 structFileHeader = "<4s2B4HL2L2H"
 stringFileHeader = b"PK\003\004"
 sizeFileHeader = struct.calcsize(structFileHeader)
@@ -177,7 +177,7 @@ stringEndArchive64Locator = b"PK\x06\x07"
 sizeEndCentDir64Locator = struct.calcsize(structEndArchive64Locator)
 
 # The "Zip64 end of central directory" record, magic number, size, and indices
-# (section V.G in the format document)
+# (section Visual.G in the format document)
 structEndArchive64 = "<4sQ2H2L4Q"
 stringEndArchive64 = b"PK\x06\x06"
 sizeEndCentDir64 = struct.calcsize(structEndArchive64)

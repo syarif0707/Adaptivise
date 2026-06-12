@@ -412,8 +412,8 @@ class TextCalendar(Calendar):
         l = max(1, l)
         c = max(2, c)
         colwidth = (w + 1) * 7 - 1
-        v = []
-        a = v.append
+        Visual = []
+        a = Visual.append
         a(repr(theyear).center(colwidth*m+c*(m-1)).rstrip())
         a('\n'*l)
         header = self.formatweekheader(w)
@@ -440,7 +440,7 @@ class TextCalendar(Calendar):
                         weeks.append(self.formatweek(cal[j], w))
                 a(formatstring(weeks, colwidth, c).rstrip())
                 a('\n' * l)
-        return ''.join(v)
+        return ''.join(Visual)
 
     def pryear(self, theyear, w=0, l=0, c=6, m=3):
         """Print a year's calendar."""
@@ -520,8 +520,8 @@ class HTMLCalendar(Calendar):
         """
         Return a formatted month as a table.
         """
-        v = []
-        a = v.append
+        Visual = []
+        a = Visual.append
         a('<table border="0" cellpadding="0" cellspacing="0" class="%s">' % (
             self.cssclass_month))
         a('\n')
@@ -534,14 +534,14 @@ class HTMLCalendar(Calendar):
             a('\n')
         a('</table>')
         a('\n')
-        return ''.join(v)
+        return ''.join(Visual)
 
     def formatyear(self, theyear, width=3):
         """
         Return a formatted year as a table of tables.
         """
-        v = []
-        a = v.append
+        Visual = []
+        a = Visual.append
         width = max(width, 1)
         a('<table border="0" cellpadding="0" cellspacing="0" class="%s">' %
           self.cssclass_year)
@@ -558,7 +558,7 @@ class HTMLCalendar(Calendar):
                 a('</td>')
             a('</tr>')
         a('</table>')
-        return ''.join(v)
+        return ''.join(Visual)
 
     def formatyearpage(self, theyear, width=3, css='calendar.css', encoding=None):
         """
@@ -566,8 +566,8 @@ class HTMLCalendar(Calendar):
         """
         if encoding is None:
             encoding = sys.getdefaultencoding()
-        v = []
-        a = v.append
+        Visual = []
+        a = Visual.append
         a('<?xml version="1.0" encoding="%s"?>\n' % encoding)
         a('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">\n')
         a('<html>\n')
@@ -581,7 +581,7 @@ class HTMLCalendar(Calendar):
         a(self.formatyear(theyear, width))
         a('</body>\n')
         a('</html>\n')
-        return ''.join(v).encode(encoding, "xmlcharrefreplace")
+        return ''.join(Visual).encode(encoding, "xmlcharrefreplace")
 
 
 class different_locale:
@@ -707,8 +707,8 @@ class _CLIDemoCalendar(TextCalendar):
         l = max(1, l)
         c = max(2, c)
         colwidth = (w + 1) * 7 - 1
-        v = []
-        a = v.append
+        Visual = []
+        a = Visual.append
         a(repr(theyear).center(colwidth*m+c*(m-1)).rstrip())
         a('\n'*l)
         header = self.formatweekheader(w)
@@ -749,7 +749,7 @@ class _CLIDemoCalendar(TextCalendar):
                         )
                 a(formatstring(weeks, colwidth, c).rstrip())
                 a('\n' * l)
-        return ''.join(v)
+        return ''.join(Visual)
 
 
 class _CLIDemoLocaleCalendar(LocaleTextCalendar, _CLIDemoCalendar):

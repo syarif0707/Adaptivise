@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:adaptivise_prototype/presentation/adaptive_content/kinesthetic_quiz_screen.dart';
 import 'package:adaptivise_prototype/presentation/adaptive_content/readwrite_summary_screen.dart';
 
-class AdaptiveNoteContainer extends StatelessWidget {
+class AdaptiveNoteContainer extends StatefulWidget {
   final Map<String, dynamic> note;
   final String initialStyle;
 
@@ -15,11 +15,16 @@ class AdaptiveNoteContainer extends StatelessWidget {
   });
 
   @override
+  State<AdaptiveNoteContainer> createState() => _AdaptiveNoteContainerState();
+}
+
+class _AdaptiveNoteContainerState extends State<AdaptiveNoteContainer> {
+  @override
   Widget build(BuildContext context) {
     // Determine which tab to show first based on their style
     // Tab 0 = Summary, Tab 1 = Quiz
     int startingTab = 0; 
-    final styleLower = initialStyle.toLowerCase();
+    final styleLower = widget.initialStyle.toLowerCase();
     
     // If they are Kinesthetic, open the Quiz tab first!
     if (styleLower.contains('kinesthetic') || styleLower == 'k') {
@@ -32,7 +37,7 @@ class AdaptiveNoteContainer extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            note['file_name'] ?? 'Adaptive Note', 
+            widget.note['file_name'] ?? 'Adaptive Note', 
             style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 18),
           ),
           backgroundColor: Colors.white,
@@ -53,10 +58,10 @@ class AdaptiveNoteContainer extends StatelessWidget {
         body: TabBarView(
           children: [
             // Tab 0: Summary Screen
-            SummaryModeScreen(summary: note['summary'] ?? "No summary available."),
+            SummaryModeScreen(summary: widget.note['summary'] ?? "No summary available."),
             
             // Tab 1: Quiz Screen (Includes the ?? [] fallback so it never crashes!)
-            KinestheticQuizScreen(quizData: note['quiz_content'] ?? []),
+            KinestheticQuizScreen(quizData: widget.note['quiz_content'] ?? []),
           ],
         ),
       ),

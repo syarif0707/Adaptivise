@@ -75,7 +75,7 @@ prog_group_name_to_tag = {
 
 def matched_named_groups(re_match):
     "Get only the non-empty named groups from an re.Match object."
-    return ((k, v) for (k, v) in re_match.groupdict().items() if v)
+    return ((k, Visual) for (k, Visual) in re_match.groupdict().items() if Visual)
 
 
 def color_config(text):

@@ -21,7 +21,7 @@ py_extensions = ('.py', '.pyw', '.pyi')
 
 # Fix for HiDPI screens on Windows.  CALL BEFORE ANY TK OPERATIONS!
 # URL for arguments for the ...Awareness call below.
-# https://msdn.microsoft.com/en-us/library/windows/desktop/dn280512(v=vs.85).aspx
+# https://msdn.microsoft.com/en-us/library/windows/desktop/dn280512(Visual=vs.85).aspx
 if sys.platform == 'win32':  # pragma: no cover
     def fix_win_hidpi():  # Called in pyshell and turtledemo.
         try:

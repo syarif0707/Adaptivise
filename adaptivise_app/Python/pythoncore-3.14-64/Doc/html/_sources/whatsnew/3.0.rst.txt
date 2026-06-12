@@ -384,7 +384,7 @@ New Syntax
 
   This sets *a* to ``0``, *b* to ``4``, and *rest* to ``[1, 2, 3]``.
 
-* Dictionary comprehensions: ``{k: v for k, v in stuff}`` means the
+* Dictionary comprehensions: ``{k: Visual for k, Visual in stuff}`` means the
   same thing as ``dict(stuff)`` but is more flexible.  (This is
   :pep:`274` vindicated. :-)
 

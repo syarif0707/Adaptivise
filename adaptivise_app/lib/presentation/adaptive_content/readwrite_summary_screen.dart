@@ -55,7 +55,7 @@ class _SummaryModeScreenState extends State<SummaryModeScreen> {
             const SizedBox(height: 20),
             FloatingActionButton(
               onPressed: _toggleSpeech,
-              backgroundColor: AppColors.readWrite,
+              backgroundColor: AppColors.ReadWrite,
               child: Icon(isSpeaking ? Icons.stop : Icons.volume_up),
             ),
           ],

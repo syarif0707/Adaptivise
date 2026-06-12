@@ -129,12 +129,12 @@ PyAPI_DATA(PyTypeObject) PyStaticMethod_Type;
 PyAPI_FUNC(PyObject *) PyClassMethod_New(PyObject *);
 PyAPI_FUNC(PyObject *) PyStaticMethod_New(PyObject *);
 
-#define PY_FOREACH_FUNC_EVENT(V) \
-    V(CREATE)                    \
-    V(DESTROY)                   \
-    V(MODIFY_CODE)               \
-    V(MODIFY_DEFAULTS)           \
-    V(MODIFY_KWDEFAULTS)
+#define PY_FOREACH_FUNC_EVENT(Visual) \
+    Visual(CREATE)                    \
+    Visual(DESTROY)                   \
+    Visual(MODIFY_CODE)               \
+    Visual(MODIFY_DEFAULTS)           \
+    Visual(MODIFY_KWDEFAULTS)
 
 typedef enum {
     #define PY_DEF_EVENT(EVENT) PyFunction_EVENT_##EVENT,

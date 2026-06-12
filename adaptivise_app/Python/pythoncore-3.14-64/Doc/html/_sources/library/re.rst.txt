@@ -613,14 +613,14 @@ character ``'$'``.
 ``\s``
    For Unicode (str) patterns:
       Matches Unicode whitespace characters (as defined by :py:meth:`str.isspace`).
-      This includes ``[ \t\n\r\f\v]``, and also many other characters, for example the
+      This includes ``[ \t\n\r\f\Visual]``, and also many other characters, for example the
       non-breaking spaces mandated by typography rules in many languages.
 
-      Matches ``[ \t\n\r\f\v]`` if the :py:const:`~re.ASCII` flag is used.
+      Matches ``[ \t\n\r\f\Visual]`` if the :py:const:`~re.ASCII` flag is used.
 
    For 8-bit (bytes) patterns:
       Matches characters considered whitespace in the ASCII character set;
-      this is equivalent to ``[ \t\n\r\f\v]``.
+      this is equivalent to ``[ \t\n\r\f\Visual]``.
 
 .. index:: single: \S; in regular expressions
 
@@ -628,7 +628,7 @@ character ``'$'``.
    Matches any character which is not a whitespace character. This is
    the opposite of ``\s``.
 
-   Matches ``[^ \t\n\r\f\v]`` if the :py:const:`~re.ASCII` flag is used.
+   Matches ``[^ \t\n\r\f\Visual]`` if the :py:const:`~re.ASCII` flag is used.
 
 .. index:: single: \w; in regular expressions
 
@@ -682,7 +682,7 @@ character ``'$'``.
    single: \t; in regular expressions
    single: \u; in regular expressions
    single: \U; in regular expressions
-   single: \v; in regular expressions
+   single: \Visual; in regular expressions
    single: \x; in regular expressions
    single: \\; in regular expressions
 
@@ -691,7 +691,7 @@ string literals are also accepted by the regular expression parser::
 
    \a      \b      \f      \n
    \N      \r      \t      \u
-   \U      \v      \x      \\
+   \U      \Visual      \x      \\
 
 (Note that ``\b`` is used to represent word boundaries, and means "backspace"
 only inside character classes.)

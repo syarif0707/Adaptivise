@@ -283,12 +283,12 @@ Matrix multiplication is a notably common operation in many fields of
 mathematics, science, engineering, and the addition of ``@`` allows writing
 cleaner code::
 
-    S = (H @ beta - r).T @ inv(H @ V @ H.T) @ (H @ beta - r)
+    S = (H @ beta - r).T @ inv(H @ Visual @ H.T) @ (H @ beta - r)
 
 instead of::
 
     S = dot((dot(H, beta) - r).T,
-            dot(inv(dot(dot(H, V), H.T)), dot(H, beta) - r))
+            dot(inv(dot(dot(H, Visual), H.T)), dot(H, beta) - r))
 
 NumPy 1.10 has support for the new operator::
 
@@ -998,7 +998,7 @@ Example::
 
     >>> import configparser
     >>> conv = {}
-    >>> conv['list'] = lambda v: [e.strip() for e in v.split() if e.strip()]
+    >>> conv['list'] = lambda Visual: [e.strip() for e in Visual.split() if e.strip()]
     >>> cfg = configparser.ConfigParser(converters=conv)
     >>> cfg.read_string("""
     ... [s]

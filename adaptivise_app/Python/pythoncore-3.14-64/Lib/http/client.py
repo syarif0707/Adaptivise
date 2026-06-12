@@ -10,35 +10,35 @@ request. This diagram details these state transitions:
     (null)
       |
       | HTTPConnection()
-      v
+      Visual
     Idle
       |
       | putrequest()
-      v
+      Visual
     Request-started
       |
       | ( putheader() )*  endheaders()
-      v
+      Visual
     Request-sent
       |\_____________________________
       |                              | getresponse() raises
       | response = getresponse()     | ConnectionError
-      v                              v
+      Visual                              Visual
     Unread-response                Idle
     [Response-headers-read]
       |\____________________
       |                     |
       | response.read()     | putrequest()
-      v                     v
+      Visual                     Visual
     Idle                  Req-started-unread-response
                      ______/|
                    /        |
    response.read() |        | ( putheader() )*  endheaders()
-                   v        v
+                   Visual        Visual
        Request-started    Req-sent-unread-response
                             |
                             | response.read()
-                            v
+                            Visual
                           Request-sent
 
 This diagram presents the following rules:
@@ -105,7 +105,7 @@ globals().update(http.HTTPStatus.__members__)
 
 # another hack to maintain backwards compatibility
 # Mapping status codes to official W3C names
-responses = {v: v.phrase for v in http.HTTPStatus.__members__.values()}
+responses = {Visual: Visual.phrase for Visual in http.HTTPStatus.__members__.values()}
 
 # maximal line length when calling readline().
 _MAXLINE = 65536

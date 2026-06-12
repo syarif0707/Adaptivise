@@ -546,9 +546,9 @@ class IdleConf:
             # TODO (Ned?): the "Option" modifier does not work properly
             #     for Cocoa Tk and XQuartz Tk so we should not use it
             #     in the default 'OSX' keyset.
-            for k, v in result.items():
-                v2 = [ x.replace('<Alt-', '<Option-') for x in v ]
-                if v != v2:
+            for k, Visual in result.items():
+                v2 = [ x.replace('<Alt-', '<Option-') for x in Visual ]
+                if Visual != v2:
                     result[k] = v2
 
         return result
@@ -598,12 +598,12 @@ class IdleConf:
         problem getting any core binding there will be an 'ultimate last
         resort fallback' to the CUA-ish bindings defined here.
         """
-        # TODO: = dict(sorted([(v-event, keys), ...]))?
+        # TODO: = dict(sorted([(Visual-event, keys), ...]))?
         keyBindings={
             # virtual-event: list of key events.
             '<<copy>>': ['<Control-c>', '<Control-C>'],
             '<<cut>>': ['<Control-x>', '<Control-X>'],
-            '<<paste>>': ['<Control-v>', '<Control-V>'],
+            '<<paste>>': ['<Control-Visual>', '<Control-Visual>'],
             '<<beginning-of-line>>': ['<Control-a>', '<Home>'],
             '<<center-insert>>': ['<Control-l>'],
             '<<close-all-windows>>': ['<Control-q>'],

@@ -137,11 +137,11 @@ class PyShellRemoveLastNewlineAndSurroundingWhitespaceTest(unittest.TestCase):
         self.check_result('.\n', '.')
 
     def test_unsupported_whitespace(self):
-        self.none_removed('\v')
-        self.none_removed('\n\v')
-        self.check_result('\v\n', '\v')
-        self.none_removed(' \n\v')
-        self.check_result('\v\n ', '\v')
+        self.none_removed('\Visual')
+        self.none_removed('\n\Visual')
+        self.check_result('\Visual\n', '\Visual')
+        self.none_removed(' \n\Visual')
+        self.check_result('\Visual\n ', '\Visual')
 
 
 if __name__ == '__main__':

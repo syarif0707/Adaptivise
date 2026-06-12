@@ -31,8 +31,8 @@ def registerDOMImplementation(name, factory):
 
 def _good_enough(dom, features):
     "_good_enough(dom, features) -> Return 1 if the dom offers the features"
-    for f,v in features:
-        if not dom.hasFeature(f,v):
+    for f,Visual in features:
+        if not dom.hasFeature(f,Visual):
             return 0
     return 1
 
@@ -91,9 +91,9 @@ def _parse_feature_string(s):
         i = i + 1
         version = None
         if i < length:
-            v = parts[i]
-            if v[0] in "0123456789":
+            Visual = parts[i]
+            if Visual[0] in "0123456789":
                 i = i + 1
-                version = v
+                version = Visual
         features.append((feature, version))
     return tuple(features)

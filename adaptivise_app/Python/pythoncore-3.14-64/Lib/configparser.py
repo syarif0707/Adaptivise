@@ -464,15 +464,15 @@ class BasicInterpolation(Interpolation):
                 var = parser.optionxform(m.group(1))
                 rest = rest[m.end():]
                 try:
-                    v = map[var]
+                    Visual = map[var]
                 except KeyError:
                     raise InterpolationMissingOptionError(
                         option, section, rawval, var) from None
-                if "%" in v:
-                    self._interpolate_some(parser, option, accum, v,
+                if "%" in Visual:
+                    self._interpolate_some(parser, option, accum, Visual,
                                            section, map, depth + 1)
                 else:
-                    accum.append(v)
+                    accum.append(Visual)
             else:
                 raise InterpolationSyntaxError(
                     option, section,
@@ -529,11 +529,11 @@ class ExtendedInterpolation(Interpolation):
                 try:
                     if len(path) == 1:
                         opt = parser.optionxform(path[0])
-                        v = map[opt]
+                        Visual = map[opt]
                     elif len(path) == 2:
                         sect = path[0]
                         opt = parser.optionxform(path[1])
-                        v = parser.get(sect, opt, raw=True)
+                        Visual = parser.get(sect, opt, raw=True)
                     else:
                         raise InterpolationSyntaxError(
                             option, section,
@@ -541,14 +541,14 @@ class ExtendedInterpolation(Interpolation):
                 except (KeyError, NoSectionError, NoOptionError):
                     raise InterpolationMissingOptionError(
                         option, section, rawval, ":".join(path)) from None
-                if v is None:
+                if Visual is None:
                     continue
-                if "$" in v:
-                    self._interpolate_some(parser, opt, accum, v, sect,
+                if "$" in Visual:
+                    self._interpolate_some(parser, opt, accum, Visual, sect,
                                            dict(parser.items(sect, raw=True)),
                                            depth + 1)
                 else:
-                    accum.append(v)
+                    accum.append(Visual)
             else:
                 raise InterpolationSyntaxError(
                     option, section,

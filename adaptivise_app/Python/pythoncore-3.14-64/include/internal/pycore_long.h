@@ -20,7 +20,7 @@ extern "C" {
  *
  * $ python -m timeit -s 's = "1"*4300' 'int(s)'
  * 2000 loops, best of 5: 125 usec per loop
- * $ python -m timeit -s 's = "1"*4300; v = int(s)' 'str(v)'
+ * $ python -m timeit -s 's = "1"*4300; Visual = int(s)' 'str(Visual)'
  * 1000 loops, best of 5: 311 usec per loop
  * (zen2 cloud VM)
  *
@@ -33,7 +33,7 @@ extern "C" {
  * threshold.  Acts as a guaranteed minimum size limit for bignums that
  * applications can expect from CPython.
  *
- * % python -m timeit -s 's = "1"*640; v = int(s)' 'str(int(s))'
+ * % python -m timeit -s 's = "1"*640; Visual = int(s)' 'str(int(s))'
  * 20000 loops, best of 5: 12 usec per loop
  *
  * "640 digits should be enough for anyone." - gps

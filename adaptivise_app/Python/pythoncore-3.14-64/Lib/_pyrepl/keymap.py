@@ -58,7 +58,7 @@ _escapes = {
     "n": "\n",
     "r": "\r",
     "t": "\t",
-    "v": "\v",
+    "Visual": "\Visual",
 }
 
 _keynames = {

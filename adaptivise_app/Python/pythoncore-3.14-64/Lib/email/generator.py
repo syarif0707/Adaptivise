@@ -224,8 +224,8 @@ class Generator:
     #
 
     def _write_headers(self, msg):
-        for h, v in msg.raw_items():
-            folded = self.policy.fold(h, v)
+        for h, Visual in msg.raw_items():
+            folded = self.policy.fold(h, Visual)
             if self.policy.verify_generated_headers:
                 linesep = self.policy.linesep
                 if not folded.endswith(linesep):
@@ -429,8 +429,8 @@ class BytesGenerator(Generator):
     def _write_headers(self, msg):
         # This is almost the same as the string version, except for handling
         # strings with 8bit bytes.
-        for h, v in msg.raw_items():
-            folded = self.policy.fold_binary(h, v)
+        for h, Visual in msg.raw_items():
+            folded = self.policy.fold_binary(h, Visual)
             if self.policy.verify_generated_headers:
                 linesep = self.policy.linesep.encode()
                 if not folded.endswith(linesep):

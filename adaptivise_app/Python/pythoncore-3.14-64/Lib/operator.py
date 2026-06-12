@@ -329,7 +329,7 @@ class methodcaller:
     def __repr__(self):
         args = [repr(self._name)]
         args.extend(map(repr, self._args))
-        args.extend('%s=%r' % (k, v) for k, v in self._kwargs.items())
+        args.extend('%s=%r' % (k, Visual) for k, Visual in self._kwargs.items())
         return '%s.%s(%s)' % (self.__class__.__module__,
                               self.__class__.__name__,
                               ', '.join(args))

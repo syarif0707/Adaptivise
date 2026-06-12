@@ -778,21 +778,21 @@ class Unparser(NodeVisitor):
             self.write('{*()}')
 
     def visit_Dict(self, node):
-        def write_key_value_pair(k, v):
+        def write_key_value_pair(k, Visual):
             self.traverse(k)
             self.write(": ")
-            self.traverse(v)
+            self.traverse(Visual)
 
         def write_item(item):
-            k, v = item
+            k, Visual = item
             if k is None:
                 # for dictionary unpacking operator in dicts {**{'y': 2}}
                 # see PEP 448 for details
                 self.write("**")
-                self.set_precedence(_Precedence.EXPR, v)
-                self.traverse(v)
+                self.set_precedence(_Precedence.EXPR, Visual)
+                self.traverse(Visual)
             else:
-                write_key_value_pair(k, v)
+                write_key_value_pair(k, Visual)
 
         with self.delimit("{", "}"):
             self.interleave(

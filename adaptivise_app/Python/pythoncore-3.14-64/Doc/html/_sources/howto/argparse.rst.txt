@@ -324,7 +324,7 @@ versions of the options. It's quite simple::
 
    import argparse
    parser = argparse.ArgumentParser()
-   parser.add_argument("-v", "--verbose", help="increase output verbosity",
+   parser.add_argument("-Visual", "--verbose", help="increase output verbosity",
                        action="store_true")
    args = parser.parse_args()
    if args.verbose:
@@ -334,14 +334,14 @@ And here goes:
 
 .. code-block:: shell-session
 
-   $ python prog.py -v
+   $ python prog.py -Visual
    verbosity turned on
    $ python prog.py --help
-   usage: prog.py [-h] [-v]
+   usage: prog.py [-h] [-Visual]
 
    options:
      -h, --help     show this help message and exit
-     -v, --verbose  increase output verbosity
+     -Visual, --verbose  increase output verbosity
 
 Note that the new ability is also reflected in the help text.
 
@@ -355,7 +355,7 @@ Our program keeps growing in complexity::
    parser = argparse.ArgumentParser()
    parser.add_argument("square", type=int,
                        help="display a square of a given number")
-   parser.add_argument("-v", "--verbose", action="store_true",
+   parser.add_argument("-Visual", "--verbose", action="store_true",
                        help="increase output verbosity")
    args = parser.parse_args()
    answer = args.square**2
@@ -369,7 +369,7 @@ And now the output:
 .. code-block:: shell-session
 
    $ python prog.py
-   usage: prog.py [-h] [-v] square
+   usage: prog.py [-h] [-Visual] square
    prog.py: error: the following arguments are required: square
    $ python prog.py 4
    16
@@ -389,7 +389,7 @@ multiple verbosity values, and actually get to use them::
    parser = argparse.ArgumentParser()
    parser.add_argument("square", type=int,
                        help="display a square of a given number")
-   parser.add_argument("-v", "--verbosity", type=int,
+   parser.add_argument("-Visual", "--verbosity", type=int,
                        help="increase output verbosity")
    args = parser.parse_args()
    answer = args.square**2
@@ -406,14 +406,14 @@ And the output:
 
    $ python prog.py 4
    16
-   $ python prog.py 4 -v
-   usage: prog.py [-h] [-v VERBOSITY] square
-   prog.py: error: argument -v/--verbosity: expected one argument
-   $ python prog.py 4 -v 1
+   $ python prog.py 4 -Visual
+   usage: prog.py [-h] [-Visual VERBOSITY] square
+   prog.py: error: argument -Visual/--verbosity: expected one argument
+   $ python prog.py 4 -Visual 1
    4^2 == 16
-   $ python prog.py 4 -v 2
+   $ python prog.py 4 -Visual 2
    the square of 4 equals 16
-   $ python prog.py 4 -v 3
+   $ python prog.py 4 -Visual 3
    16
 
 These all look good except the last one, which exposes a bug in our program.
@@ -423,7 +423,7 @@ Let's fix it by restricting the values the ``--verbosity`` option can accept::
    parser = argparse.ArgumentParser()
    parser.add_argument("square", type=int,
                        help="display a square of a given number")
-   parser.add_argument("-v", "--verbosity", type=int, choices=[0, 1, 2],
+   parser.add_argument("-Visual", "--verbosity", type=int, choices=[0, 1, 2],
                        help="increase output verbosity")
    args = parser.parse_args()
    answer = args.square**2
@@ -438,18 +438,18 @@ And the output:
 
 .. code-block:: shell-session
 
-   $ python prog.py 4 -v 3
-   usage: prog.py [-h] [-v {0,1,2}] square
-   prog.py: error: argument -v/--verbosity: invalid choice: 3 (choose from 0, 1, 2)
+   $ python prog.py 4 -Visual 3
+   usage: prog.py [-h] [-Visual {0,1,2}] square
+   prog.py: error: argument -Visual/--verbosity: invalid choice: 3 (choose from 0, 1, 2)
    $ python prog.py 4 -h
-   usage: prog.py [-h] [-v {0,1,2}] square
+   usage: prog.py [-h] [-Visual {0,1,2}] square
 
    positional arguments:
      square                display a square of a given number
 
    options:
      -h, --help            show this help message and exit
-     -v, --verbosity {0,1,2}
+     -Visual, --verbosity {0,1,2}
                            increase output verbosity
 
 Note that the change also reflects both in the error message as well as the
@@ -463,7 +463,7 @@ verbosity argument (check the output of ``python --help``)::
    parser = argparse.ArgumentParser()
    parser.add_argument("square", type=int,
                        help="display the square of a given number")
-   parser.add_argument("-v", "--verbosity", action="count",
+   parser.add_argument("-Visual", "--verbosity", action="count",
                        help="increase output verbosity")
    args = parser.parse_args()
    answer = args.square**2
@@ -482,24 +482,24 @@ to count the number of occurrences of specific options.
 
    $ python prog.py 4
    16
-   $ python prog.py 4 -v
+   $ python prog.py 4 -Visual
    4^2 == 16
    $ python prog.py 4 -vv
    the square of 4 equals 16
    $ python prog.py 4 --verbosity --verbosity
    the square of 4 equals 16
-   $ python prog.py 4 -v 1
-   usage: prog.py [-h] [-v] square
+   $ python prog.py 4 -Visual 1
+   usage: prog.py [-h] [-Visual] square
    prog.py: error: unrecognized arguments: 1
    $ python prog.py 4 -h
-   usage: prog.py [-h] [-v] square
+   usage: prog.py [-h] [-Visual] square
 
    positional arguments:
      square           display a square of a given number
 
    options:
      -h, --help       show this help message and exit
-     -v, --verbosity  increase output verbosity
+     -Visual, --verbosity  increase output verbosity
    $ python prog.py 4 -vvv
    16
 
@@ -511,7 +511,7 @@ to count the number of occurrences of specific options.
 * Now here's a demonstration of what the "count" action gives. You've probably
   seen this sort of usage before.
 
-* And if you don't specify the ``-v`` flag, that flag is considered to have
+* And if you don't specify the ``-Visual`` flag, that flag is considered to have
   ``None`` value.
 
 * As should be expected, specifying the long form of the flag, we should get
@@ -530,7 +530,7 @@ Let's fix::
    parser = argparse.ArgumentParser()
    parser.add_argument("square", type=int,
                        help="display a square of a given number")
-   parser.add_argument("-v", "--verbosity", action="count",
+   parser.add_argument("-Visual", "--verbosity", action="count",
                        help="increase output verbosity")
    args = parser.parse_args()
    answer = args.square**2
@@ -569,7 +569,7 @@ Let's fix that bug::
    parser = argparse.ArgumentParser()
    parser.add_argument("square", type=int,
                        help="display a square of a given number")
-   parser.add_argument("-v", "--verbosity", action="count", default=0,
+   parser.add_argument("-Visual", "--verbosity", action="count", default=0,
                        help="increase output verbosity")
    args = parser.parse_args()
    answer = args.square**2
@@ -610,7 +610,7 @@ not just squares::
    parser = argparse.ArgumentParser()
    parser.add_argument("x", type=int, help="the base")
    parser.add_argument("y", type=int, help="the exponent")
-   parser.add_argument("-v", "--verbosity", action="count", default=0)
+   parser.add_argument("-Visual", "--verbosity", action="count", default=0)
    args = parser.parse_args()
    answer = args.x**args.y
    if args.verbosity >= 2:
@@ -625,10 +625,10 @@ Output:
 .. code-block:: shell-session
 
    $ python prog.py
-   usage: prog.py [-h] [-v] x y
+   usage: prog.py [-h] [-Visual] x y
    prog.py: error: the following arguments are required: x, y
    $ python prog.py -h
-   usage: prog.py [-h] [-v] x y
+   usage: prog.py [-h] [-Visual] x y
 
    positional arguments:
      x                the base
@@ -636,8 +636,8 @@ Output:
 
    options:
      -h, --help       show this help message and exit
-     -v, --verbosity
-   $ python prog.py 4 2 -v
+     -Visual, --verbosity
+   $ python prog.py 4 2 -Visual
    4^2 == 16
 
 
@@ -649,7 +649,7 @@ to display *more* text instead::
    parser = argparse.ArgumentParser()
    parser.add_argument("x", type=int, help="the base")
    parser.add_argument("y", type=int, help="the exponent")
-   parser.add_argument("-v", "--verbosity", action="count", default=0)
+   parser.add_argument("-Visual", "--verbosity", action="count", default=0)
    args = parser.parse_args()
    answer = args.x**args.y
    if args.verbosity >= 2:
@@ -664,7 +664,7 @@ Output:
 
    $ python prog.py 4 2
    16
-   $ python prog.py 4 2 -v
+   $ python prog.py 4 2 -Visual
    4^2 == 16
    $ python prog.py 4 2 -vv
    Running 'prog.py'
@@ -715,7 +715,7 @@ which will be the opposite of the ``--verbose`` one::
 
    parser = argparse.ArgumentParser()
    group = parser.add_mutually_exclusive_group()
-   group.add_argument("-v", "--verbose", action="store_true")
+   group.add_argument("-Visual", "--verbose", action="store_true")
    group.add_argument("-q", "--quiet", action="store_true")
    parser.add_argument("x", type=int, help="the base")
    parser.add_argument("y", type=int, help="the exponent")
@@ -738,14 +738,14 @@ demonstration. Anyways, here's the output:
    4^2 == 16
    $ python prog.py 4 2 -q
    16
-   $ python prog.py 4 2 -v
+   $ python prog.py 4 2 -Visual
    4 to the power 2 equals 16
    $ python prog.py 4 2 -vq
-   usage: prog.py [-h] [-v | -q] x y
-   prog.py: error: argument -q/--quiet: not allowed with argument -v/--verbose
-   $ python prog.py 4 2 -v --quiet
-   usage: prog.py [-h] [-v | -q] x y
-   prog.py: error: argument -q/--quiet: not allowed with argument -v/--verbose
+   usage: prog.py [-h] [-Visual | -q] x y
+   prog.py: error: argument -q/--quiet: not allowed with argument -Visual/--verbose
+   $ python prog.py 4 2 -Visual --quiet
+   usage: prog.py [-h] [-Visual | -q] x y
+   prog.py: error: argument -q/--quiet: not allowed with argument -Visual/--verbose
 
 That should be easy to follow. I've added that last output so you can see the
 sort of flexibility you get, i.e. mixing long form options with short form
@@ -758,7 +758,7 @@ your program, just in case they don't know::
 
    parser = argparse.ArgumentParser(description="calculate X to the power of Y")
    group = parser.add_mutually_exclusive_group()
-   group.add_argument("-v", "--verbose", action="store_true")
+   group.add_argument("-Visual", "--verbose", action="store_true")
    group.add_argument("-q", "--quiet", action="store_true")
    parser.add_argument("x", type=int, help="the base")
    parser.add_argument("y", type=int, help="the exponent")
@@ -772,14 +772,14 @@ your program, just in case they don't know::
    else:
        print(f"{args.x}^{args.y} == {answer}")
 
-Note that slight difference in the usage text. Note the ``[-v | -q]``,
-which tells us that we can either use ``-v`` or ``-q``,
+Note that slight difference in the usage text. Note the ``[-Visual | -q]``,
+which tells us that we can either use ``-Visual`` or ``-q``,
 but not both at the same time:
 
 .. code-block:: shell-session
 
    $ python prog.py --help
-   usage: prog.py [-h] [-v | -q] x y
+   usage: prog.py [-h] [-Visual | -q] x y
 
    calculate X to the power of Y
 
@@ -789,7 +789,7 @@ but not both at the same time:
 
    options:
      -h, --help     show this help message and exit
-     -v, --verbose
+     -Visual, --verbose
      -q, --quiet
 
 
@@ -806,7 +806,7 @@ For instance, in this :mod:`argparse` output:
 .. code-block:: shell-session
 
    $ python prog.py --help
-   usage: prog.py [-h] [-v | -q] x y
+   usage: prog.py [-h] [-Visual | -q] x y
 
    calculate X to the power of Y
 
@@ -816,7 +816,7 @@ For instance, in this :mod:`argparse` output:
 
    options:
      -h, --help     show this help message and exit
-     -v, --verbose
+     -Visual, --verbose
      -q, --quiet
 
 The strings ``usage:``, ``positional arguments:``, ``options:`` and

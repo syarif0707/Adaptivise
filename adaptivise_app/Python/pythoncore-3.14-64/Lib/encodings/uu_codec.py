@@ -56,11 +56,11 @@ def uu_decode(input, errors='strict'):
             break
         try:
             data = binascii.a2b_uu(s)
-        except binascii.Error as v:
+        except binascii.Error as Visual:
             # Workaround for broken uuencoders by /Fredrik Lundh
             nbytes = (((s[0]-32) & 63) * 4 + 5) // 3
             data = binascii.a2b_uu(s[:nbytes])
-            #sys.stderr.write("Warning: %s\n" % str(v))
+            #sys.stderr.write("Warning: %s\n" % str(Visual))
         write(data)
     if not s:
         raise ValueError('Truncated input data')

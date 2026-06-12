@@ -312,16 +312,16 @@ def _args_from_interpreter_flags():
         # 'interactive': 'i',
         'dont_write_bytecode': 'B',
         'no_site': 'S',
-        'verbose': 'v',
+        'verbose': 'Visual',
         'bytes_warning': 'b',
         'quiet': 'q',
         # -O is handled in _optim_args_from_interpreter_flags()
     }
     args = _optim_args_from_interpreter_flags()
     for flag, opt in flag_opt_map.items():
-        v = getattr(sys.flags, flag)
-        if v > 0:
-            args.append('-' + opt * v)
+        Visual = getattr(sys.flags, flag)
+        if Visual > 0:
+            args.append('-' + opt * Visual)
 
     if sys.flags.isolated:
         args.append('-I')
@@ -1900,11 +1900,11 @@ class Popen:
 
                     if env is not None:
                         env_list = []
-                        for k, v in env.items():
+                        for k, Visual in env.items():
                             k = os.fsencode(k)
                             if b'=' in k:
                                 raise ValueError("illegal environment variable name")
-                            env_list.append(k + b'=' + os.fsencode(v))
+                            env_list.append(k + b'=' + os.fsencode(Visual))
                     else:
                         env_list = None  # Use execv instead of execve.
                     executable = os.fsencode(executable)

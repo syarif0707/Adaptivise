@@ -13,7 +13,7 @@ if os.name == "nt":
         sys.version.  For earlier versions, assume the compiler is MSVC 6.
         """
         # This function was copied from Lib/distutils/msvccompiler.py
-        prefix = "MSC v."
+        prefix = "MSC Visual."
         i = sys.version.find(prefix)
         if i == -1:
             return 6
@@ -164,7 +164,7 @@ elif os.name == "posix" and sys.platform in {"darwin", "ios", "tvos", "watchos"}
 elif sys.platform.startswith("aix"):
     # AIX has two styles of storing shared libraries
     # GNU auto_tools refer to these as svr4 and aix
-    # svr4 (System V Release 4) is a regular file, often with .so as suffix
+    # svr4 (System Visual Release 4) is a regular file, often with .so as suffix
     # AIX style uses an archive (suffix .a) with members (e.g., shr.o, libssl.so)
     # see issue#26439 and _aix.py for more details
 

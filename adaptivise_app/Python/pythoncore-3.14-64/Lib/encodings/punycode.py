@@ -1,6 +1,6 @@
 """ Codec for the Punycode encoding, as specified in RFC 3492
 
-Written by Martin v. Löwis.
+Written by Martin Visual. Löwis.
 """
 
 import codecs

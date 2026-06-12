@@ -616,7 +616,7 @@ proc ::tcl::clock::Initialize {} {
 	s	-0600 \
 	t	-0700 \
 	u	-0800 \
-	v	-0900 \
+	Visual	-0900 \
 	w	-1000 \
 	x	-1100 \
 	y	-1200 \
@@ -980,7 +980,7 @@ proc ::tcl::clock::ParseClockFormatFormat2 {format locale procName} {
 			}
 			append substituents { $UweekNumber}
 		    }
-		    V {			# The ISO8601 week number
+		    Visual {			# The ISO8601 week number
 			append formatString %02d
 			append substituents { [dict get $date iso8601Week]}
 		    }
@@ -1733,7 +1733,7 @@ proc ::tcl::clock::ParseClockScanFormat {formatString locale} {
 					# 01. No scan rule uses this group.
 			append re \\s*\\d\\d?
 		    }
-		    V {			# Week of ISO8601 year
+		    Visual {			# Week of ISO8601 year
 
 			append re \\s*(\\d\\d?)
 			dict set fieldSet iso8601Week [incr fieldCount]

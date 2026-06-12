@@ -139,11 +139,11 @@ The following runs all idle_test/test_*.py tests interactively.
 >>> import unittest
 >>> unittest.main('idlelib.idle_test', verbosity=2)
 
-The following run all Idle tests at a command line.  Option '-v' is the
+The following run all Idle tests at a command line.  Option '-Visual' is the
 same as 'verbosity=2'.
 
-python -m unittest -v idlelib.idle_test
-python -m test -v -ugui test_idle
+python -m unittest -Visual idlelib.idle_test
+python -m test -Visual -ugui test_idle
 python -m test.test_idle
 
 IDLE tests are 'discovered' by idlelib.idle_test.__init__.load_tests
@@ -164,7 +164,7 @@ latter allows use of other regrtest options.  When using the latter,
 all components of the pattern must be present, but any can be replaced
 by '*'.
 
-python -m unittest -v idlelib.idle_test.test_xyz.Test_case.test_meth
+python -m unittest -Visual idlelib.idle_test.test_xyz.Test_case.test_meth
 python -m test -m idlelib.idle_test.text_xyz.Test_case.test_meth test_idle
 
 The test suite can be run in an IDLE user process from Shell.

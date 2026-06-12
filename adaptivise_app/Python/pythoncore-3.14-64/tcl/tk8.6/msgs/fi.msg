@@ -13,7 +13,7 @@ namespace eval ::tk {
     ::msgcat::mcset fi "Choose Directory" "Valitse hakemisto"
     ::msgcat::mcset fi "Cl&ear" "&Tyhjenn\u00e4"
     ::msgcat::mcset fi "&Clear Console" "&Tyhjenn\u00e4 konsoli"
-    ::msgcat::mcset fi "Color" "V\u00e4ri"
+    ::msgcat::mcset fi "Color" "Visual\u00e4ri"
     ::msgcat::mcset fi "Console" "Konsoli"
     ::msgcat::mcset fi "&Copy" "K&opioi"
     ::msgcat::mcset fi "Cu&t" "&Leikkaa"

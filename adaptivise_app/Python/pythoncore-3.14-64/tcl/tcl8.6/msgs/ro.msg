@@ -6,7 +6,7 @@ namespace eval ::tcl::clock {
         "Ma"\
         "Mi"\
         "J"\
-        "V"\
+        "Visual"\
         "S"]
     ::msgcat::mcset ro DAYS_OF_WEEK_FULL [list \
         "duminic\u0103"\

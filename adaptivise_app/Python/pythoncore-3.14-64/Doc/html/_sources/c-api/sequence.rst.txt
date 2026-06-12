@@ -62,14 +62,14 @@ Sequence Protocol
    failure. This is the equivalent of the Python expression ``o[i1:i2]``.
 
 
-.. c:function:: int PySequence_SetItem(PyObject *o, Py_ssize_t i, PyObject *v)
+.. c:function:: int PySequence_SetItem(PyObject *o, Py_ssize_t i, PyObject *Visual)
 
-   Assign object *v* to the *i*\ th element of *o*.  Raise an exception
+   Assign object *Visual* to the *i*\ th element of *o*.  Raise an exception
    and return ``-1`` on failure; return ``0`` on success.  This
-   is the equivalent of the Python statement ``o[i] = v``.  This function *does
-   not* steal a reference to *v*.
+   is the equivalent of the Python statement ``o[i] = Visual``.  This function *does
+   not* steal a reference to *Visual*.
 
-   If *v* is ``NULL``, the element is deleted, but this feature is
+   If *Visual* is ``NULL``, the element is deleted, but this feature is
    deprecated in favour of using :c:func:`PySequence_DelItem`.
 
 
@@ -79,10 +79,10 @@ Sequence Protocol
    equivalent of the Python statement ``del o[i]``.
 
 
-.. c:function:: int PySequence_SetSlice(PyObject *o, Py_ssize_t i1, Py_ssize_t i2, PyObject *v)
+.. c:function:: int PySequence_SetSlice(PyObject *o, Py_ssize_t i1, Py_ssize_t i2, PyObject *Visual)
 
-   Assign the sequence object *v* to the slice in sequence object *o* from *i1* to
-   *i2*.  This is the equivalent of the Python statement ``o[i1:i2] = v``.
+   Assign the sequence object *Visual* to the slice in sequence object *o* from *i1* to
+   *i2*.  This is the equivalent of the Python statement ``o[i1:i2] = Visual``.
 
 
 .. c:function:: int PySequence_DelSlice(PyObject *o, Py_ssize_t i1, Py_ssize_t i2)

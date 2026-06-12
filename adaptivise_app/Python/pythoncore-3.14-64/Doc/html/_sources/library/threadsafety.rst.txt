@@ -237,7 +237,7 @@ and will not corrupt the dictionary:
    del d[key]            # delete
    d.pop(key)            # remove and return
    d.popitem()           # remove and return last item
-   d.setdefault(key, v)  # insert if missing
+   d.setdefault(key, Visual)  # insert if missing
 
 These operations may compare keys using :meth:`~object.__eq__`, which can
 execute arbitrary Python code. During such comparisons, the dictionary may

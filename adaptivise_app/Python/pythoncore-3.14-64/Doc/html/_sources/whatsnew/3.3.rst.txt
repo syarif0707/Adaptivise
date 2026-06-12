@@ -130,7 +130,7 @@ various third party approaches to namespace packages, as described in
 .. seealso::
 
    :pep:`420` - Implicit Namespace Packages
-      PEP written by Eric V. Smith; implementation by Eric V. Smith
+      PEP written by Eric Visual. Smith; implementation by Eric Visual. Smith
       and Barry Warsaw
 
 
@@ -313,7 +313,7 @@ by Brian Curtin in :issue:`3561`.)
 .. seealso::
 
    :pep:`397` - Python Launcher for Windows
-      PEP written by Mark Hammond and Martin v. Löwis; implementation by
+      PEP written by Mark Hammond and Martin Visual. Löwis; implementation by
       Vinay Sajip.
 
    Launcher documentation: :ref:`launcher`

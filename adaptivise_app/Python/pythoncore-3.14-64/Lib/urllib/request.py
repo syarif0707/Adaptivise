@@ -645,7 +645,7 @@ class HTTPRedirectHandler(BaseHandler):
         newurl = newurl.replace(' ', '%20')
 
         CONTENT_HEADERS = ("content-length", "content-type")
-        newheaders = {k: v for k, v in req.headers.items()
+        newheaders = {k: Visual for k, Visual in req.headers.items()
                       if k.lower() not in CONTENT_HEADERS}
         return Request(newurl,
                        method="HEAD" if m == "HEAD" else "GET",
@@ -1291,7 +1291,7 @@ class AbstractHTTPHandler(BaseHandler):
         h.set_debuglevel(self._debuglevel)
 
         headers = dict(req.unredirected_hdrs)
-        headers.update({k: v for k, v in req.headers.items()
+        headers.update({k: Visual for k, Visual in req.headers.items()
                         if k not in headers})
 
         # TODO(jhylton): Should this be redesigned to handle
@@ -1400,10 +1400,10 @@ def parse_keqv_list(l):
     """Parse list of key=value strings where keys are not duplicated."""
     parsed = {}
     for elt in l:
-        k, v = elt.split('=', 1)
-        if v[0] == '"' and v[-1] == '"':
-            v = v[1:-1]
-        parsed[k] = v
+        k, Visual = elt.split('=', 1)
+        if Visual[0] == '"' and Visual[-1] == '"':
+            Visual = Visual[1:-1]
+        parsed[k] = Visual
     return parsed
 
 def parse_http_list(s):
@@ -1596,8 +1596,8 @@ class CacheFTPHandler(FTPHandler):
         # first check for old ones
         t = time.time()
         if self.soonest <= t:
-            for k, v in list(self.timeout.items()):
-                if v < t:
+            for k, Visual in list(self.timeout.items()):
+                if Visual < t:
                     self.cache[k].close()
                     del self.cache[k]
                     del self.timeout[k]
@@ -1605,8 +1605,8 @@ class CacheFTPHandler(FTPHandler):
 
         # then check the size
         if len(self.cache) == self.max_conns:
-            for k, v in list(self.timeout.items()):
-                if v == self.soonest:
+            for k, Visual in list(self.timeout.items()):
+                if Visual == self.soonest:
                     del self.cache[k]
                     del self.timeout[k]
                     break

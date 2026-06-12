@@ -750,9 +750,9 @@ Some example calls::
 ::
 
    {
-       int left, top, right, bottom, h, v;
+       int left, top, right, bottom, h, Visual;
        ok = PyArg_ParseTuple(args, "((ii)(ii))(ii)",
-                &left, &top, &right, &bottom, &h, &v);
+                &left, &top, &right, &bottom, &h, &Visual);
        /* A rectangle and a point */
        /* Possible Python call:
           f(((0, 0), (400, 300)), (10, 10)) */

@@ -60,8 +60,8 @@ namespace eval ::tcl {
 	    {arg3 -choice "ch1 ch2"}
 	    {?optarg? -list {} "optional argument"}
         } {
-	    foreach v [info locals] {
-		puts stderr [format "%14s : %s" $v [set $v]]
+	    foreach Visual [info locals] {
+		puts stderr [format "%14s : %s" $Visual [set $Visual]]
 	    }
 	}
     }
@@ -734,7 +734,7 @@ proc ::tcl::OptCheckType {arg type {typeArgs ""}} {
     # Translate one item to canonical form
     proc OptNormalizeOne {item} {
         set lg [Lassign $item varname arg1 arg2 arg3]
-#       puts "called optnormalizeone '$item' v=($varname), lg=$lg"
+#       puts "called optnormalizeone '$item' Visual=($varname), lg=$lg"
         set isflag [OptIsFlag $varname]
 	set isopt  [OptIsOpt  $varname]
         if {$isflag} {

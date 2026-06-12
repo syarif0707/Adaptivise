@@ -647,8 +647,8 @@ User-defined generic type aliases are also supported. Examples::
 
    type Vec[T] = Iterable[tuple[T, T]]
 
-   def inproduct[T: (int, float, complex)](v: Vec[T]) -> T: # Same as Iterable[tuple[T, T]]
-       return sum(x*y for x, y in v)
+   def inproduct[T: (int, float, complex)](Visual: Vec[T]) -> T: # Same as Iterable[tuple[T, T]]
+       return sum(x*y for x, y in Visual)
 
 For backward compatibility, generic type aliases can also be created
 through a simple assignment::
@@ -1463,9 +1463,9 @@ These can be used as types in annotations. They all support subscription using
 
         type Vec[T] = Annotated[list[tuple[T, T]], MaxLen(10)]
 
-        # When used in a type annotation, a type checker will treat "V" the same as
+        # When used in a type annotation, a type checker will treat "Visual" the same as
         # ``Annotated[list[tuple[int, int]], MaxLen(10)]``:
-        type V = Vec[int]
+        type Visual = Vec[int]
 
    ``Annotated`` cannot be used with an unpacked :class:`TypeVarTuple`::
 
@@ -1838,7 +1838,7 @@ without the dedicated syntax, as documented below.
           print("Absolute value:", abs(arg))
 
       U = TypeVar('U', bound=str|bytes)  # Can be any subtype of the union str|bytes
-      V = TypeVar('V', bound=SupportsAbs)  # Can be anything with an __abs__ method
+      Visual = TypeVar('Visual', bound=SupportsAbs)  # Can be anything with an __abs__ method
 
    .. _typing-constrained-typevar:
 

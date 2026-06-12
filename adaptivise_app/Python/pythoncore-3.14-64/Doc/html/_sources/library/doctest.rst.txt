@@ -94,12 +94,12 @@ works its magic:
    $
 
 There's no output!  That's normal, and it means all the examples worked.  Pass
-``-v`` to the script, and :mod:`!doctest` prints a detailed log of what
+``-Visual`` to the script, and :mod:`!doctest` prints a detailed log of what
 it's trying, and prints a summary at the end:
 
 .. code-block:: shell-session
 
-   $ python example.py -v
+   $ python example.py -Visual
    Trying:
        factorial(5)
    Expecting:
@@ -165,16 +165,16 @@ example(s) and the cause(s) of the failure(s) are printed to stdout, and the
 final line of output is ``***Test Failed*** N failures.``, where *N* is the
 number of examples that failed.
 
-Run it with the ``-v`` switch instead::
+Run it with the ``-Visual`` switch instead::
 
-   python M.py -v
+   python M.py -Visual
 
 and a detailed report of all examples tried is printed to standard output, along
 with assorted summaries at the end.
 
 You can force verbose mode by passing ``verbose=True`` to :func:`testmod`, or
 prohibit it by passing ``verbose=False``.  In either of those cases,
-:data:`sys.argv` is not examined by :func:`testmod` (so passing ``-v`` or not
+:data:`sys.argv` is not examined by :func:`testmod` (so passing ``-Visual`` or not
 has no effect).
 
 There is also a command line shortcut for running :func:`testmod`, see section
@@ -238,7 +238,7 @@ See section :ref:`doctest-basic-api` for a description of the optional arguments
 that can be used to tell it to look for files in other locations.
 
 Like :func:`testmod`, :func:`testfile`'s verbosity can be set with the
-``-v`` command-line switch or with the optional keyword argument
+``-Visual`` command-line switch or with the optional keyword argument
 *verbose*.
 
 There is also a command line shortcut for running :func:`testfile`, see section
@@ -256,16 +256,16 @@ The :mod:`!doctest` module can be invoked as a script from the command line:
 
 .. code-block:: bash
 
-   python -m doctest [-v] [-o OPTION] [-f] file [file ...]
+   python -m doctest [-Visual] [-o OPTION] [-f] file [file ...]
 
 .. program:: doctest
 
-.. option:: -v, --verbose
+.. option:: -Visual, --verbose
 
    Detailed report of all examples tried is printed to standard output,
    along with assorted summaries at the end::
 
-      python -m doctest -v example.py
+      python -m doctest -Visual example.py
 
    This will import :file:`example.py` as a standalone module and run
    :func:`testmod` on it. Note that this may not work correctly if the
@@ -274,7 +274,7 @@ The :mod:`!doctest` module can be invoked as a script from the command line:
    If the file name does not end with :file:`.py`, :mod:`!doctest` infers
    that it must be run with :func:`testfile` instead::
 
-      python -m doctest -v example.txt
+      python -m doctest -Visual example.txt
 
 .. option:: -o, --option <option>
 
@@ -951,7 +951,7 @@ and :ref:`doctest-simple-testfile`.
    mapping the generic name to the subclass to be tested.
 
    Optional argument *verbose* prints lots of stuff if true, and prints only
-   failures if false; by default, or if ``None``, it's true if and only if ``'-v'``
+   failures if false; by default, or if ``None``, it's true if and only if ``'-Visual'``
    is in :data:`sys.argv`.
 
    Optional argument *report* prints a summary at the end when true, else prints
@@ -1245,7 +1245,7 @@ diagram::
    |module| --DocTestFinder-> | DocTest | --DocTestRunner-> results
    +------+    |        ^     +---------+     |       ^    (printed)
                |        |     | Example |     |       |
-               v        |     |   ...   |     v       |
+               Visual        |     |   ...   |     Visual       |
               DocTestParser   | Example |   OutputChecker
                               +---------+
 
@@ -1529,7 +1529,7 @@ DocTestRunner objects
    verbosity.  If *verbose* is ``True``, then information is printed about each
    example, as it is run.  If *verbose* is ``False``, then only failures are
    printed.  If *verbose* is unspecified, or ``None``, then verbose output is used
-   iff the command-line switch ``-v`` is used.
+   iff the command-line switch ``-Visual`` is used.
 
    The optional keyword argument *optionflags* can be used to control how the test
    runner compares expected output to actual output, and how it displays failures.

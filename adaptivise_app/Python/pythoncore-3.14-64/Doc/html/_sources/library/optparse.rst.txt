@@ -70,7 +70,7 @@ using ``argparse``:
    if __name__ == '__main__':
        parser = optparse.OptionParser()
        parser.add_option('-o', '--output')
-       parser.add_option('-v', dest='verbose', action='store_true')
+       parser.add_option('-Visual', dest='verbose', action='store_true')
        opts, args = parser.parse_args()
        process(args, output=opts.output, verbose=opts.verbose)
 
@@ -81,7 +81,7 @@ using ``argparse``:
    if __name__ == '__main__':
        parser = argparse.ArgumentParser()
        parser.add_argument('-o', '--output')
-       parser.add_argument('-v', dest='verbose', action='store_true')
+       parser.add_argument('-Visual', dest='verbose', action='store_true')
        parser.add_argument('rest', nargs='*')
        args = parser.parse_args()
        process(args.rest, output=args.output, verbose=args.verbose)
@@ -95,10 +95,10 @@ However, the ``argparse`` version will also handle some parameter combination
 differently from the way the ``optparse`` version would handle them.
 For example (amongst other differences):
 
-* supplying ``-o -v`` gives ``output="-v"`` and ``verbose=False``
+* supplying ``-o -Visual`` gives ``output="-Visual"`` and ``verbose=False``
   when using ``optparse``, but a usage error with ``argparse``
   (complaining that no value has been supplied for ``-o/--output``,
-  since ``-v`` is interpreted as meaning the verbosity flag)
+  since ``-Visual`` is interpreted as meaning the verbosity flag)
 * similarly, supplying ``-o --`` gives ``output="--"`` and ``args=()``
   when using ``optparse``, but a usage error with ``argparse``
   (also complaining that no value has been supplied for ``-o/--output``,
@@ -284,9 +284,9 @@ required option
 
 For example, consider this hypothetical command-line::
 
-   prog -v --report report.txt foo bar
+   prog -Visual --report report.txt foo bar
 
-``-v`` and ``--report`` are both options.  Assuming that ``--report``
+``-Visual`` and ``--report`` are both options.  Assuming that ``--report``
 takes one argument, ``report.txt`` is an option argument.  ``foo`` and
 ``bar`` are positional arguments.
 
@@ -494,16 +494,16 @@ Handling boolean (flag) options
 Flag options---set a variable to true or false when a particular option is
 seen---are quite common.  :mod:`!optparse` supports them with two separate actions,
 ``store_true`` and ``store_false``.  For example, you might have a ``verbose``
-flag that is turned on with ``-v`` and off with ``-q``::
+flag that is turned on with ``-Visual`` and off with ``-q``::
 
-   parser.add_option("-v", action="store_true", dest="verbose")
+   parser.add_option("-Visual", action="store_true", dest="verbose")
    parser.add_option("-q", action="store_false", dest="verbose")
 
 Here we have two different options with the same destination, which is perfectly
 OK.  (It just means you have to be a bit careful when setting default
 values---see below.)
 
-When :mod:`!optparse` encounters ``-v`` on the command line, it sets
+When :mod:`!optparse` encounters ``-Visual`` on the command line, it sets
 ``options.verbose`` to ``True``; when it encounters ``-q``,
 ``options.verbose`` is set to ``False``.
 
@@ -546,19 +546,19 @@ command line is parsed.
 First, consider the verbose/quiet example.  If we want :mod:`!optparse` to set
 ``verbose`` to ``True`` unless ``-q`` is seen, then we can do this::
 
-   parser.add_option("-v", action="store_true", dest="verbose", default=True)
+   parser.add_option("-Visual", action="store_true", dest="verbose", default=True)
    parser.add_option("-q", action="store_false", dest="verbose")
 
 Since default values apply to the *destination* rather than to any particular
 option, and these two options happen to have the same destination, this is
 exactly equivalent::
 
-   parser.add_option("-v", action="store_true", dest="verbose")
+   parser.add_option("-Visual", action="store_true", dest="verbose")
    parser.add_option("-q", action="store_false", dest="verbose", default=True)
 
 Consider this::
 
-   parser.add_option("-v", action="store_true", dest="verbose", default=False)
+   parser.add_option("-Visual", action="store_true", dest="verbose", default=False)
    parser.add_option("-q", action="store_false", dest="verbose", default=True)
 
 Again, the default value for ``verbose`` will be ``True``: the last default
@@ -590,7 +590,7 @@ user-friendly (documented) options::
 
    usage = "usage: %prog [options] arg1 arg2"
    parser = OptionParser(usage=usage)
-   parser.add_option("-v", "--verbose",
+   parser.add_option("-Visual", "--verbose",
                      action="store_true", dest="verbose", default=True,
                      help="make lots of noise [default]")
    parser.add_option("-q", "--quiet",
@@ -613,7 +613,7 @@ following to standard output:
 
    Options:
      -h, --help            show this help message and exit
-     -v, --verbose         make lots of noise [default]
+     -Visual, --verbose         make lots of noise [default]
      -q, --quiet           be vewwy quiet (I'm hunting wabbits)
      -f FILE, --filename=FILE
                            write output to FILE
@@ -709,7 +709,7 @@ This would result in the following help output:
 
    Options:
      -h, --help            show this help message and exit
-     -v, --verbose         make lots of noise [default]
+     -Visual, --verbose         make lots of noise [default]
      -q, --quiet           be vewwy quiet (I'm hunting wabbits)
      -f FILE, --filename=FILE
                            write output to FILE
@@ -747,7 +747,7 @@ that results in the following output:
 
    Options:
      -h, --help            show this help message and exit
-     -v, --verbose         make lots of noise [default]
+     -Visual, --verbose         make lots of noise [default]
      -q, --quiet           be vewwy quiet (I'm hunting wabbits)
      -f FILE, --filename=FILE
                            write output to FILE
@@ -884,7 +884,7 @@ Here's what :mod:`!optparse`\ -based scripts usually look like::
        parser = OptionParser(usage)
        parser.add_option("-f", "--file", dest="filename",
                          help="read data from FILENAME")
-       parser.add_option("-v", "--verbose",
+       parser.add_option("-Visual", "--verbose",
                          action="store_true", dest="verbose")
        parser.add_option("-q", "--quiet",
                          action="store_false", dest="verbose")
@@ -1254,7 +1254,7 @@ must specify for any option using that action.
 
      parser.add_option("-q", "--quiet",
                        action="store_const", const=0, dest="verbose")
-     parser.add_option("-v", "--verbose",
+     parser.add_option("-Visual", "--verbose",
                        action="store_const", const=1, dest="verbose")
      parser.add_option("--noisy",
                        action="store_const", const=2, dest="verbose")
@@ -1331,15 +1331,15 @@ must specify for any option using that action.
 
   Example::
 
-     parser.add_option("-v", action="count", dest="verbosity")
+     parser.add_option("-Visual", action="count", dest="verbosity")
 
-  The first time ``-v`` is seen on the command line, :mod:`!optparse` does the
+  The first time ``-Visual`` is seen on the command line, :mod:`!optparse` does the
   equivalent of::
 
      options.verbosity = 0
      options.verbosity += 1
 
-  Every subsequent occurrence of ``-v`` results in  ::
+  Every subsequent occurrence of ``-Visual`` results in  ::
 
      options.verbosity += 1
 
@@ -1376,7 +1376,7 @@ must specify for any option using that action.
      parser = OptionParser(add_help_option=False)
 
      parser.add_option("-h", "--help", action="help")
-     parser.add_option("-v", action="store_true", dest="verbose",
+     parser.add_option("-Visual", action="store_true", dest="verbose",
                        help="Be moderately verbose")
      parser.add_option("--file", dest="filename",
                        help="Input file to read data from")
@@ -1392,7 +1392,7 @@ must specify for any option using that action.
 
      Options:
        -h, --help        Show this help message and exit
-       -v                Be moderately verbose
+       -Visual                Be moderately verbose
        --file=FILENAME   Input file to read data from
 
   After printing the help message, :mod:`!optparse` terminates your process with

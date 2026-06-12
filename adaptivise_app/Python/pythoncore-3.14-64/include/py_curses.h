@@ -98,7 +98,7 @@ static void **PyCurses_API;
 #define PyCursesInitialised      {if (! ((int (*)(void))PyCurses_API[2]) () ) return NULL;}
 #define PyCursesInitialisedColor {if (! ((int (*)(void))PyCurses_API[3]) () ) return NULL;}
 
-#define PyCursesWindow_Check(v)     Py_IS_TYPE((v), &PyCursesWindow_Type)
+#define PyCursesWindow_Check(Visual)     Py_IS_TYPE((Visual), &PyCursesWindow_Type)
 
 #define import_curses() \
     PyCurses_API = (void **)PyCapsule_Import(PyCurses_CAPSULE_NAME, 1);

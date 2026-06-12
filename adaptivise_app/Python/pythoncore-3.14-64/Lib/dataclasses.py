@@ -52,7 +52,7 @@ __all__ = ['dataclass',
 #
 #   +--- init= parameter
 #   |
-#   v     |       |       |
+#   Visual     |       |       |
 #         |  no   |  yes  |  <--- class has __init__ in __dict__?
 # +=======+=======+=======+
 # | False |       |       |
@@ -64,7 +64,7 @@ __all__ = ['dataclass',
 #
 #    +--- repr= parameter
 #    |
-#    v    |       |       |
+#    Visual    |       |       |
 #         |  no   |  yes  |  <--- class has __repr__ in __dict__?
 # +=======+=======+=======+
 # | False |       |       |
@@ -78,7 +78,7 @@ __all__ = ['dataclass',
 #
 #    +--- frozen= parameter
 #    |
-#    v    |       |       |
+#    Visual    |       |       |
 #         |  no   |  yes  |  <--- class has __setattr__ or __delattr__ in __dict__?
 # +=======+=======+=======+
 # | False |       |       |  <- the default
@@ -92,7 +92,7 @@ __all__ = ['dataclass',
 #
 #    +--- eq= parameter
 #    |
-#    v    |       |       |
+#    Visual    |       |       |
 #         |  no   |  yes  |  <--- class has __eq__ in __dict__?
 # +=======+=======+=======+
 # | False |       |       |
@@ -107,7 +107,7 @@ __all__ = ['dataclass',
 #
 #    +--- order= parameter
 #    |
-#    v    |       |       |
+#    Visual    |       |       |
 #         |  no   |  yes  |  <--- class has any comparison method in __dict__?
 # +=======+=======+=======+
 # | False |       |       |  <- the default
@@ -123,7 +123,7 @@ __all__ = ['dataclass',
 #    |       +----------- eq= parameter
 #    |       |       +--- frozen= parameter
 #    |       |       |
-#    v       v       v    |        |        |
+#    Visual       Visual       Visual    |        |        |
 #                         |   no   |  yes   |  <--- class has explicitly defined __hash__
 # +=======+=======+=======+========+========+
 # | False | False | False |        |        | No __eq__, use the base class __hash__
@@ -156,7 +156,7 @@ __all__ = ['dataclass',
 #
 #    +--- match_args= parameter
 #    |
-#    v    |       |       |
+#    Visual    |       |       |
 #         |  no   |  yes  |  <--- class has __match_args__ in __dict__?
 # +=======+=======+=======+
 # | False |       |       |
@@ -961,7 +961,7 @@ def _hash_exception(cls, fields, func_builder):
 #                |      |      |      |
 #                |      |      |      |        +-------  action
 #                |      |      |      |        |
-#                v      v      v      v        v
+#                Visual      Visual      Visual      Visual        Visual
 _hash_action = {(False, False, False, False): None,
                 (False, False, False, True ): None,
                 (False, False, True,  False): None,
@@ -1514,14 +1514,14 @@ def _asdict_inner(obj, dict_factory):
             ])
     # handle the builtin types first for speed; subclasses handled below
     elif obj_type is list:
-        return [_asdict_inner(v, dict_factory) for v in obj]
+        return [_asdict_inner(Visual, dict_factory) for Visual in obj]
     elif obj_type is dict:
         return {
-            _asdict_inner(k, dict_factory): _asdict_inner(v, dict_factory)
-            for k, v in obj.items()
+            _asdict_inner(k, dict_factory): _asdict_inner(Visual, dict_factory)
+            for k, Visual in obj.items()
         }
     elif obj_type is tuple:
-        return tuple([_asdict_inner(v, dict_factory) for v in obj])
+        return tuple([_asdict_inner(Visual, dict_factory) for Visual in obj])
     elif issubclass(obj_type, tuple):
         if hasattr(obj, '_fields'):
             # obj is a namedtuple.  Recurse into it, but the returned
@@ -1542,24 +1542,24 @@ def _asdict_inner(obj, dict_factory):
             #   dict.  Note that if we returned dicts here instead of
             #   namedtuples, we could no longer call asdict() on a data
             #   structure where a namedtuple was used as a dict key.
-            return obj_type(*[_asdict_inner(v, dict_factory) for v in obj])
+            return obj_type(*[_asdict_inner(Visual, dict_factory) for Visual in obj])
         else:
-            return obj_type(_asdict_inner(v, dict_factory) for v in obj)
+            return obj_type(_asdict_inner(Visual, dict_factory) for Visual in obj)
     elif issubclass(obj_type, dict):
         if hasattr(obj_type, 'default_factory'):
             # obj is a defaultdict, which has a different constructor from
             # dict as it requires the default_factory as its first arg.
             result = obj_type(obj.default_factory)
-            for k, v in obj.items():
-                result[_asdict_inner(k, dict_factory)] = _asdict_inner(v, dict_factory)
+            for k, Visual in obj.items():
+                result[_asdict_inner(k, dict_factory)] = _asdict_inner(Visual, dict_factory)
             return result
         return obj_type((_asdict_inner(k, dict_factory),
-                         _asdict_inner(v, dict_factory))
-                        for k, v in obj.items())
+                         _asdict_inner(Visual, dict_factory))
+                        for k, Visual in obj.items())
     elif issubclass(obj_type, list):
         # Assume we can create an object of this type by passing in a
         # generator
-        return obj_type(_asdict_inner(v, dict_factory) for v in obj)
+        return obj_type(_asdict_inner(Visual, dict_factory) for Visual in obj)
     else:
         return copy.deepcopy(obj)
 
@@ -1603,23 +1603,23 @@ def _astuple_inner(obj, tuple_factory):
         # treated (see below), but we just need to create them
         # differently because a namedtuple's __init__ needs to be
         # called differently (see bpo-34363).
-        return type(obj)(*[_astuple_inner(v, tuple_factory) for v in obj])
+        return type(obj)(*[_astuple_inner(Visual, tuple_factory) for Visual in obj])
     elif isinstance(obj, (list, tuple)):
         # Assume we can create an object of this type by passing in a
         # generator (which is not true for namedtuples, handled
         # above).
-        return type(obj)(_astuple_inner(v, tuple_factory) for v in obj)
+        return type(obj)(_astuple_inner(Visual, tuple_factory) for Visual in obj)
     elif isinstance(obj, dict):
         obj_type = type(obj)
         if hasattr(obj_type, 'default_factory'):
             # obj is a defaultdict, which has a different constructor from
             # dict as it requires the default_factory as its first arg.
             result = obj_type(getattr(obj, 'default_factory'))
-            for k, v in obj.items():
-                result[_astuple_inner(k, tuple_factory)] = _astuple_inner(v, tuple_factory)
+            for k, Visual in obj.items():
+                result[_astuple_inner(k, tuple_factory)] = _astuple_inner(Visual, tuple_factory)
             return result
-        return obj_type((_astuple_inner(k, tuple_factory), _astuple_inner(v, tuple_factory))
-                          for k, v in obj.items())
+        return obj_type((_astuple_inner(k, tuple_factory), _astuple_inner(Visual, tuple_factory))
+                          for k, Visual in obj.items())
     else:
         return copy.deepcopy(obj)
 

@@ -606,7 +606,7 @@ Simulation of arrival times and service deliveries for a multiserver queue::
 
 .. seealso::
 
-   `Statistics for Hackers <https://www.youtube.com/watch?v=Iq9DzN6mvYA>`_
+   `Statistics for Hackers <https://www.youtube.com/watch?Visual=Iq9DzN6mvYA>`_
    a video tutorial by
    `Jake Vanderplas <https://us.pycon.org/2016/speaker/profile/295/>`_
    on statistical analysis using just a few fundamental concepts

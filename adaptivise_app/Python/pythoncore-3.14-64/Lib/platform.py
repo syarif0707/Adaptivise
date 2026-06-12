@@ -144,14 +144,14 @@ _ver_stages = {
 def _comparable_version(version):
     component_re = re.compile(r'([0-9]+|[._+-])')
     result = []
-    for v in component_re.split(version):
-        if v not in '._+-':
+    for Visual in component_re.split(version):
+        if Visual not in '._+-':
             try:
-                v = int(v, 10)
+                Visual = int(Visual, 10)
                 t = 100
             except ValueError:
-                t = _ver_stages.get(v, 0)
-            result.extend((t, v))
+                t = _ver_stages.get(Visual, 0)
+            result.extend((t, Visual))
     return result
 
 ### Platform specific APIs
@@ -203,7 +203,7 @@ def libc_ver(executable=None, lib='', version='', chunksize=16384):
         """,
         re.ASCII | re.VERBOSE)
 
-    V = _comparable_version
+    Visual = _comparable_version
     # We use os.path.realpath()
     # here to work around problems with Cygwin not being
     # able to open symlinks for reading
@@ -235,22 +235,22 @@ def libc_ver(executable=None, lib='', version='', chunksize=16384):
                 if lib != 'glibc':
                     lib = 'glibc'
                     ver = glibcversion
-                elif V(glibcversion) > V(ver):
+                elif Visual(glibcversion) > Visual(ver):
                     ver = glibcversion
             elif so:
                 if lib not in ('glibc', 'musl'):
                     lib = 'libc'
-                    if soversion and (not ver or V(soversion) > V(ver)):
+                    if soversion and (not ver or Visual(soversion) > Visual(ver)):
                         ver = soversion
                     if threads and ver[-len(threads):] != threads:
                         ver = ver + threads
             elif musl:
                 lib = 'musl'
-                if not ver or V(muslversion) > V(ver):
+                if not ver or Visual(muslversion) > Visual(ver):
                     ver = muslversion
             elif musl_so:
                 lib = 'musl'
-                if musl_sover and (not ver or V(musl_sover) > V(ver)):
+                if musl_sover and (not ver or Visual(musl_sover) > Visual(ver)):
                     ver = musl_sover
             pos = m.end()
     return lib, version if ver is None else ver
@@ -469,7 +469,7 @@ def win32_ver(release='', version='', csd='', ptype=''):
     if version:
         intversion = tuple(map(int, version.split('.')))
         releases = _WIN32_CLIENT_RELEASES if is_client else _WIN32_SERVER_RELEASES
-        release = next((r for v, r in releases if v <= intversion), release)
+        release = next((r for Visual, r in releases if Visual <= intversion), release)
 
     return release, version, csd, ptype
 
@@ -1383,7 +1383,7 @@ def platform(aliased=False, terse=False):
                              libcname+libcversion)
     elif system == 'Java':
         # Java platforms
-        r, v, vminfo, (os_name, os_version, os_arch) = java_ver()
+        r, Visual, vminfo, (os_name, os_version, os_arch) = java_ver()
         if terse or not os_name:
             platform = _platform(system, release, version)
         else:

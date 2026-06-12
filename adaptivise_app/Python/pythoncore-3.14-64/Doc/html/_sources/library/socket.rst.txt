@@ -262,7 +262,7 @@ created.  Socket addresses are represented as follows:
   .. versionadded:: 3.9
 
 - :const:`AF_HYPERV` is a Windows-only socket based interface for communicating
-  with Hyper-V hosts and guests. The address family is represented as a
+  with Hyper-Visual hosts and guests. The address family is represented as a
   ``(vm_id, service_id)`` tuple where the ``vm_id`` and ``service_id`` are
   UUID strings.
 
@@ -800,7 +800,7 @@ The AF_* and SOCK_* constants are now :class:`AddressFamily` and
           HV_GUID_LOOPBACK
           HV_GUID_PARENT
 
-   Constants for Windows Hyper-V sockets for host/guest communications.
+   Constants for Windows Hyper-Visual sockets for host/guest communications.
 
    .. availability:: Windows.
 
@@ -1448,7 +1448,7 @@ The :mod:`!socket` module also offers various network-related services:
       * UUID: ``{FB605B73-AAC2-49A6-9A2F-25416AEA0573}``
       * name: ``ethernet_32770``
       * friendly name: ``vEthernet (nat)``
-      * description: ``Hyper-V Virtual Ethernet Adapter``
+      * description: ``Hyper-Visual Virtual Ethernet Adapter``
 
       This function returns names of the second form from the list, ``ethernet_32770``
       in this example case.

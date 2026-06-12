@@ -32,8 +32,8 @@ class Dialog:
     def show(self, **options):
 
         # update instance options
-        for k, v in options.items():
-            self.options[k] = v
+        for k, Visual in options.items():
+            self.options[k] = Visual
 
         self._fixoptions()
 

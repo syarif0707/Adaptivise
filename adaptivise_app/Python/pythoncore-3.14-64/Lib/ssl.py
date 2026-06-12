@@ -863,10 +863,10 @@ class SSLObject:
         bytes read.
         """
         if buffer is not None:
-            v = self._sslobj.read(len, buffer)
+            Visual = self._sslobj.read(len, buffer)
         else:
-            v = self._sslobj.read(len)
-        return v
+            Visual = self._sslobj.read(len)
+        return Visual
 
     def write(self, data):
         """Write 'data' to the SSL object and return the number of bytes
@@ -1260,8 +1260,8 @@ class SSLSocket(socket):
             with memoryview(data) as view, view.cast("B") as byte_view:
                 amount = len(byte_view)
                 while count < amount:
-                    v = self.send(byte_view[count:])
-                    count += v
+                    Visual = self.send(byte_view[count:])
+                    count += Visual
         else:
             return super().sendall(data, flags)
 

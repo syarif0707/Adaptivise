@@ -57,7 +57,7 @@ See also :c:func:`PyObject_GetItem`, :c:func:`PyObject_SetItem` and
    .. versionadded:: 3.13
 
 
-.. c:function:: int PyMapping_SetItemString(PyObject *o, const char *key, PyObject *v)
+.. c:function:: int PyMapping_SetItemString(PyObject *o, const char *key, PyObject *Visual)
 
    This is the same as :c:func:`PyObject_SetItem`, but *key* is
    specified as a :c:expr:`const char*` UTF-8 encoded bytes string,

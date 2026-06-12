@@ -1102,11 +1102,11 @@ def make_encoding_map(decoding_map):
 
     """
     m = {}
-    for k,v in decoding_map.items():
-        if not v in m:
-            m[v] = k
+    for k,Visual in decoding_map.items():
+        if not Visual in m:
+            m[Visual] = k
         else:
-            m[v] = None
+            m[Visual] = None
     return m
 
 ### error handlers

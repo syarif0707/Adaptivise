@@ -418,8 +418,8 @@ the referent is accessed::
        def __init__(self, ob, callback=None, /, **annotations):
            super().__init__(ob, callback)
            self.__counter = 0
-           for k, v in annotations.items():
-               setattr(self, k, v)
+           for k, Visual in annotations.items():
+               setattr(self, k, Visual)
 
        def __call__(self):
            """Return a pair containing the referent and the number of

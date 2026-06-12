@@ -629,13 +629,13 @@ precision and rounding characteristics for computations::
    from decimal import Decimal, Context, localcontext
 
    # Displays with default precision of 28 digits
-   v = Decimal('578')
-   print v.sqrt()
+   Visual = Decimal('578')
+   print Visual.sqrt()
 
    with localcontext(Context(prec=16)):
        # All code in this block uses a precision of 16 digits.
        # The original context is restored on exiting the block.
-       print v.sqrt()
+       print Visual.sqrt()
 
 
 .. _new-25-context-managers:
@@ -1092,7 +1092,7 @@ Here are all of the changes that Python 2.5 makes to the core Python language.
 
 * One error that Python programmers sometimes make is forgetting to include an
   :file:`__init__.py` module in a package directory. Debugging this mistake can be
-  confusing, and usually requires running Python with the :option:`-v` switch to
+  confusing, and usually requires running Python with the :option:`-Visual` switch to
   log all the paths searched. In Python 2.5, a new :exc:`ImportWarning` warning is
   triggered when an import would have picked up a directory as a package but no
   :file:`__init__.py` was found.  This warning is silently ignored by default;
@@ -1264,7 +1264,7 @@ complete list of changes, or look through the SVN logs for all the details.
              'd': ['del', 'di', 'diritta'], 'm': ['mezzo', 'mi'],
              'l': ['la'], 'o': ['oscura'], 'n': ['nel', 'nostra'],
              'p': ['per'], 's': ['selva', 'smarrita'],
-             'r': ['ritrovai'], 'u': ['una'], 'v': ['vita', 'via']}
+             'r': ['ritrovai'], 'u': ['una'], 'Visual': ['vita', 'via']}
 
   (Contributed by Guido van Rossum.)
 

@@ -1904,7 +1904,7 @@ Other Build and C API Changes
   interpreter is not available (for example, in cross compilation scenarios).
 
 * :c:func:`PyUnicode_FromFormat` now supports width and precision
-  specifications for ``%s``, ``%A``, ``%U``, ``%V``, ``%S``, and ``%R``.
+  specifications for ``%s``, ``%A``, ``%U``, ``%Visual``, ``%S``, and ``%R``.
   (Contributed by Ysj Ray and Victor Stinner in :issue:`7330`.)
 
 * New function :c:func:`PyStructSequence_InitType2` supplements the

@@ -18,14 +18,14 @@
 
     <title>optparse — Parser for command line options &#8212; Python 3.14.4 documentation</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
-    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=82640b3f" />
-    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?Visual=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?Visual=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?Visual=82640b3f" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?Visual=5349f25f" />
     
-    <script src="../_static/documentation_options.js?v=1885ab2e"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?Visual=1885ab2e"></script>
+    <script src="../_static/doctools.js?Visual=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?Visual=dc90522c"></script>
     
     <script src="../_static/sidebar.js"></script>
     
@@ -317,7 +317,7 @@ using <code class="docutils literal notranslate"><span class="pre">argparse</spa
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">optparse</span><span class="o">.</span><span class="n">OptionParser</span><span class="p">()</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="s1">&#39;--output&#39;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s1">&#39;-v&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s1">&#39;-Visual&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
     <span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
     <span class="n">process</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">opts</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
 </pre></div>
@@ -327,7 +327,7 @@ using <code class="docutils literal notranslate"><span class="pre">argparse</spa
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="s1">&#39;--output&#39;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-v&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-Visual&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;verbose&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;rest&#39;</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
     <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
     <span class="n">process</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">rest</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
@@ -341,10 +341,10 @@ processed in the same way as the named options.</p>
 differently from the way the <code class="docutils literal notranslate"><span class="pre">optparse</span></code> version would handle them.
 For example (amongst other differences):</p>
 <ul class="simple">
-<li><p>supplying <code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">-v</span></code> gives <code class="docutils literal notranslate"><span class="pre">output=&quot;-v&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">verbose=False</span></code>
+<li><p>supplying <code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">-Visual</span></code> gives <code class="docutils literal notranslate"><span class="pre">output=&quot;-Visual&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">verbose=False</span></code>
 when using <code class="docutils literal notranslate"><span class="pre">optparse</span></code>, but a usage error with <code class="docutils literal notranslate"><span class="pre">argparse</span></code>
 (complaining that no value has been supplied for <code class="docutils literal notranslate"><span class="pre">-o/--output</span></code>,
-since <code class="docutils literal notranslate"><span class="pre">-v</span></code> is interpreted as meaning the verbosity flag)</p></li>
+since <code class="docutils literal notranslate"><span class="pre">-Visual</span></code> is interpreted as meaning the verbosity flag)</p></li>
 <li><p>similarly, supplying <code class="docutils literal notranslate"><span class="pre">-o</span> <span class="pre">--</span></code> gives <code class="docutils literal notranslate"><span class="pre">output=&quot;--&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">args=()</span></code>
 when using <code class="docutils literal notranslate"><span class="pre">optparse</span></code>, but a usage error with <code class="docutils literal notranslate"><span class="pre">argparse</span></code>
 (also complaining that no value has been supplied for <code class="docutils literal notranslate"><span class="pre">-o/--output</span></code>,
@@ -502,10 +502,10 @@ help at it either.</p>
 </dd>
 </dl>
 <p>For example, consider this hypothetical command-line:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">prog</span> <span class="o">-</span><span class="n">v</span> <span class="o">--</span><span class="n">report</span> <span class="n">report</span><span class="o">.</span><span class="n">txt</span> <span class="n">foo</span> <span class="n">bar</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">prog</span> <span class="o">-</span><span class="n">Visual</span> <span class="o">--</span><span class="n">report</span> <span class="n">report</span><span class="o">.</span><span class="n">txt</span> <span class="n">foo</span> <span class="n">bar</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">-v</span></code> and <code class="docutils literal notranslate"><span class="pre">--report</span></code> are both options.  Assuming that <code class="docutils literal notranslate"><span class="pre">--report</span></code>
+<p><code class="docutils literal notranslate"><span class="pre">-Visual</span></code> and <code class="docutils literal notranslate"><span class="pre">--report</span></code> are both options.  Assuming that <code class="docutils literal notranslate"><span class="pre">--report</span></code>
 takes one argument, <code class="docutils literal notranslate"><span class="pre">report.txt</span></code> is an option argument.  <code class="docutils literal notranslate"><span class="pre">foo</span></code> and
 <code class="docutils literal notranslate"><span class="pre">bar</span></code> are positional arguments.</p>
 </section>
@@ -673,15 +673,15 @@ types is covered in section <a class="reference internal" href="#optparse-extend
 <p>Flag options—set a variable to true or false when a particular option is
 seen—are quite common.  <code class="xref py py-mod docutils literal notranslate"><span class="pre">optparse</span></code> supports them with two separate actions,
 <code class="docutils literal notranslate"><span class="pre">store_true</span></code> and <code class="docutils literal notranslate"><span class="pre">store_false</span></code>.  For example, you might have a <code class="docutils literal notranslate"><span class="pre">verbose</span></code>
-flag that is turned on with <code class="docutils literal notranslate"><span class="pre">-v</span></code> and off with <code class="docutils literal notranslate"><span class="pre">-q</span></code>:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">)</span>
+flag that is turned on with <code class="docutils literal notranslate"><span class="pre">-Visual</span></code> and off with <code class="docutils literal notranslate"><span class="pre">-q</span></code>:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-q&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_false&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Here we have two different options with the same destination, which is perfectly
 OK.  (It just means you have to be a bit careful when setting default
 values—see below.)</p>
-<p>When <code class="xref py py-mod docutils literal notranslate"><span class="pre">optparse</span></code> encounters <code class="docutils literal notranslate"><span class="pre">-v</span></code> on the command line, it sets
+<p>When <code class="xref py py-mod docutils literal notranslate"><span class="pre">optparse</span></code> encounters <code class="docutils literal notranslate"><span class="pre">-Visual</span></code> on the command line, it sets
 <code class="docutils literal notranslate"><span class="pre">options.verbose</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>; when it encounters <code class="docutils literal notranslate"><span class="pre">-q</span></code>,
 <code class="docutils literal notranslate"><span class="pre">options.verbose</span></code> is set to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
 </section>
@@ -711,19 +711,19 @@ supply a default value for each destination, which is assigned before the
 command line is parsed.</p>
 <p>First, consider the verbose/quiet example.  If we want <code class="xref py py-mod docutils literal notranslate"><span class="pre">optparse</span></code> to set
 <code class="docutils literal notranslate"><span class="pre">verbose</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code> unless <code class="docutils literal notranslate"><span class="pre">-q</span></code> is seen, then we can do this:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-q&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_false&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Since default values apply to the <em>destination</em> rather than to any particular
 option, and these two options happen to have the same destination, this is
 exactly equivalent:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">)</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-q&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_false&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Consider this:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-q&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_false&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -750,7 +750,7 @@ usage message for your whole program.  Here’s an OptionParser populated with
 user-friendly (documented) options:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span> <span class="o">=</span> <span class="s2">&quot;usage: %prog [options] arg1 arg2&quot;</span>
 <span class="n">parser</span> <span class="o">=</span> <span class="n">OptionParser</span><span class="p">(</span><span class="n">usage</span><span class="o">=</span><span class="n">usage</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span>
                   <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                   <span class="n">help</span><span class="o">=</span><span class="s2">&quot;make lots of noise [default]&quot;</span><span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-q&quot;</span><span class="p">,</span> <span class="s2">&quot;--quiet&quot;</span><span class="p">,</span>
@@ -771,7 +771,7 @@ following to standard output:</p>
 
 Options:
   -h, --help            show this help message and exit
-  -v, --verbose         make lots of noise [default]
+  -Visual, --verbose         make lots of noise [default]
   -q, --quiet           be vewwy quiet (I&#39;m hunting wabbits)
   -f FILE, --filename=FILE
                         write output to FILE
@@ -860,7 +860,7 @@ an option to the group.</p>
 
 Options:
   -h, --help            show this help message and exit
-  -v, --verbose         make lots of noise [default]
+  -Visual, --verbose         make lots of noise [default]
   -q, --quiet           be vewwy quiet (I&#39;m hunting wabbits)
   -f FILE, --filename=FILE
                         write output to FILE
@@ -896,7 +896,7 @@ extending the previous example:</p>
 
 Options:
   -h, --help            show this help message and exit
-  -v, --verbose         make lots of noise [default]
+  -Visual, --verbose         make lots of noise [default]
   -q, --quiet           be vewwy quiet (I&#39;m hunting wabbits)
   -f FILE, --filename=FILE
                         write output to FILE
@@ -1019,7 +1019,7 @@ and/or <code class="xref py py-meth docutils literal notranslate"><span class="p
     <span class="n">parser</span> <span class="o">=</span> <span class="n">OptionParser</span><span class="p">(</span><span class="n">usage</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="s2">&quot;--file&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;filename&quot;</span><span class="p">,</span>
                       <span class="n">help</span><span class="o">=</span><span class="s2">&quot;read data from FILENAME&quot;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span>
                       <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-q&quot;</span><span class="p">,</span> <span class="s2">&quot;--quiet&quot;</span><span class="p">,</span>
                       <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_false&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">)</span>
@@ -1365,7 +1365,7 @@ destination from the first short option string (e.g., <code class="docutils lite
 <p>Example:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-q&quot;</span><span class="p">,</span> <span class="s2">&quot;--quiet&quot;</span><span class="p">,</span>
                   <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_const&quot;</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span>
                   <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_const&quot;</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--noisy&quot;</span><span class="p">,</span>
                   <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_const&quot;</span><span class="p">,</span> <span class="n">const</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">)</span>
@@ -1436,16 +1436,16 @@ is encountered.</p>
 supplied, <code class="xref py py-attr docutils literal notranslate"><span class="pre">dest</span></code> is set to zero before being incremented the
 first time.</p>
 <p>Example:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbosity&quot;</span><span class="p">)</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbosity&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The first time <code class="docutils literal notranslate"><span class="pre">-v</span></code> is seen on the command line, <code class="xref py py-mod docutils literal notranslate"><span class="pre">optparse</span></code> does the
+<p>The first time <code class="docutils literal notranslate"><span class="pre">-Visual</span></code> is seen on the command line, <code class="xref py py-mod docutils literal notranslate"><span class="pre">optparse</span></code> does the
 equivalent of:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">options</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">options</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">+=</span> <span class="mi">1</span>
 </pre></div>
 </div>
-<p>Every subsequent occurrence of <code class="docutils literal notranslate"><span class="pre">-v</span></code> results in</p>
+<p>Every subsequent occurrence of <code class="docutils literal notranslate"><span class="pre">-Visual</span></code> results in</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">options</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">+=</span> <span class="mi">1</span>
 </pre></div>
 </div>
@@ -1477,7 +1477,7 @@ OptionParsers, so you do not normally need to create one.</p>
 <span class="n">parser</span> <span class="o">=</span> <span class="n">OptionParser</span><span class="p">(</span><span class="n">add_help_option</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-h&quot;</span><span class="p">,</span> <span class="s2">&quot;--help&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;help&quot;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;verbose&quot;</span><span class="p">,</span>
                   <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Be moderately verbose&quot;</span><span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;--file&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;filename&quot;</span><span class="p">,</span>
                   <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input file to read data from&quot;</span><span class="p">)</span>
@@ -1491,7 +1491,7 @@ it will print something like the following help message to stdout (assuming
 
 Options:
   -h, --help        Show this help message and exit
-  -v                Be moderately verbose
+  -Visual                Be moderately verbose
   --file=FILENAME   Input file to read data from
 </pre></div>
 </div>

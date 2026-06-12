@@ -948,8 +948,8 @@ want one of them to be the value::
     ...         return obj
     ...     PX = (0, 'P.X', 'km')
     ...     PY = (1, 'P.Y', 'km')
-    ...     VX = (2, 'V.X', 'km/s')
-    ...     VY = (3, 'V.Y', 'km/s')
+    ...     VX = (2, 'Visual.X', 'km/s')
+    ...     VY = (3, 'Visual.Y', 'km/s')
     ...
 
     >>> print(Coordinate['PY'])
@@ -1430,8 +1430,8 @@ Supports having more than one value per member::
     ...     def __new__(cls, value, *values):
     ...         self = object.__new__(cls)
     ...         self._value_ = value
-    ...         for v in values:
-    ...             self._add_value_alias_(v)
+    ...         for Visual in values:
+    ...             self._add_value_alias_(Visual)
     ...         return self
     ...
     >>> class DType(MultiValueEnum):

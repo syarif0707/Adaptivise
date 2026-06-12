@@ -18,14 +18,14 @@
 
     <title>Socket Programming HOWTO &#8212; Python 3.14.4 documentation</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
-    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=82640b3f" />
-    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?Visual=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?Visual=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?Visual=82640b3f" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?Visual=5349f25f" />
     
-    <script src="../_static/documentation_options.js?v=1885ab2e"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?Visual=1885ab2e"></script>
+    <script src="../_static/doctools.js?Visual=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?Visual=dc90522c"></script>
     
     <script src="../_static/sidebar.js"></script>
     
@@ -452,7 +452,7 @@ that not all machines use the same formats for binary data. For example,
 <a class="reference external" href="https://en.wikipedia.org/wiki/Endianness#Networking">network byte order</a>
 is big-endian, with the most significant byte first,
 so a 16 bit integer with the value <code class="docutils literal notranslate"><span class="pre">1</span></code> would be the two hex bytes <code class="docutils literal notranslate"><span class="pre">00</span> <span class="pre">01</span></code>.
-However, most common processors (x86/AMD64, ARM, RISC-V), are little-endian,
+However, most common processors (x86/AMD64, ARM, RISC-Visual), are little-endian,
 with the least significant byte first - that same <code class="docutils literal notranslate"><span class="pre">1</span></code> would be <code class="docutils literal notranslate"><span class="pre">01</span> <span class="pre">00</span></code>.</p>
 <p>Socket libraries have calls for converting 16 and 32 bit integers - <code class="docutils literal notranslate"><span class="pre">ntohl,</span>
 <span class="pre">htonl,</span> <span class="pre">ntohs,</span> <span class="pre">htons</span></code> where “n” means <em>network</em> and “h” means <em>host</em>, “s” means

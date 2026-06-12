@@ -43,7 +43,7 @@ typedef struct _Py_Identifier {
     Py_ssize_t index;
     // Hidden PyMutex struct for non free-threaded build.
     struct {
-        uint8_t v;
+        uint8_t Visual;
     } mutex;
 } _Py_Identifier;
 

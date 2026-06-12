@@ -330,13 +330,13 @@ async def classify_vark(request: VarkScores):
     primary_style = " & ".join(detected_styles) if len(detected_styles) > 1 else detected_styles[0]
     
     return {
-        "learning_style": detected_styles, # Returns ['V', 'A']
-        "formatted_style": primary_style   # Returns "V & A"
+        "learning_style": detected_styles, # Returns ['Visual', 'A']
+        "formatted_style": primary_style   # Returns "Visual & A"
     }
 
 def lightweight_weighted_kmeans(user_scores, threshold=1.5):
     """
-    user_scores: [V, A, R, K] e.g., [7, 7, 1, 1]
+    user_scores: [Visual, Auditory, Read/Write, Kinesthetic] e.g., [7, 7, 1, 1]
     Replaces sklearn KMeans with pure Euclidean distance math.
     """
     X = np.array(user_scores)
@@ -344,7 +344,7 @@ def lightweight_weighted_kmeans(user_scores, threshold=1.5):
     
     # Theoretical extremes for a 16-question set
     centroids = np.array([
-        [16, 0, 0, 0], # V-Center
+        [16, 0, 0, 0], # Visual-Center
         [0, 16, 0, 0], # A-Center
         [0, 0, 16, 0], # R-Center
         [0, 0, 0, 16]  # K-Center
@@ -355,7 +355,7 @@ def lightweight_weighted_kmeans(user_scores, threshold=1.5):
     
     min_dist = min(distances)
     styles = ['Visual', 'Auditory', 'Read/Write', 'Kinesthetic']
-    style_codes = ['V', 'A', 'R', 'K']
+    style_codes = ['Visual', 'Auditory', 'Read/Write', 'Kinesthetic']
     
     detected_styles = [style_codes[i] for i, d in enumerate(distances) if d <= min_dist + threshold]
     primary_style = " & ".join(detected_styles) if len(detected_styles) > 1 else detected_styles[0]

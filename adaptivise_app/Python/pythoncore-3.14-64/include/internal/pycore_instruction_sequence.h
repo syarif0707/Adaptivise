@@ -75,7 +75,7 @@ int _PyInstructionSequence_AddNested(_PyInstructionSequence *seq, _PyInstruction
 void PyInstructionSequence_Fini(_PyInstructionSequence *seq);
 
 extern PyTypeObject _PyInstructionSequence_Type;
-#define _PyInstructionSequence_Check(v) Py_IS_TYPE((v), &_PyInstructionSequence_Type)
+#define _PyInstructionSequence_Check(Visual) Py_IS_TYPE((Visual), &_PyInstructionSequence_Type)
 
 #ifdef __cplusplus
 }

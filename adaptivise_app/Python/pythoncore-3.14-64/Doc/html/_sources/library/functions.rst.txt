@@ -30,7 +30,7 @@ are always available.  They are listed here in alphabetical order.
 | |  :func:`chr`          | |  :func:`hash`       | |  :func:`open`       | |  |func-tuple|_        |
 | |  :func:`classmethod`  | |  :func:`help`       | |  :func:`ord`        | |  :func:`type`         |
 | |  :func:`compile`      | |  :func:`hex`        | |                     | |                       |
-| |  :func:`complex`      | |                     | |  **P**              | |  **V**                |
+| |  :func:`complex`      | |                     | |  **P**              | |  **Visual**                |
 | |                       | |  **I**              | |  :func:`pow`        | |  :func:`vars`         |
 | |  **D**                | |  :func:`id`         | |  :func:`print`      | |                       |
 | |  :func:`delattr`      | |  :func:`input`      | |  :func:`property`   | |  **Z**                |

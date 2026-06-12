@@ -14,7 +14,7 @@ def _main(argv=None):
         help="Show the version of pip this will attempt to uninstall.",
     )
     parser.add_argument(
-        "-v", "--verbose",
+        "-Visual", "--verbose",
         action="count",
         default=0,
         dest="verbosity",

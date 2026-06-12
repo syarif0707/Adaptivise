@@ -10,7 +10,7 @@
 [IDLE Classic Windows]
 copy=<Control-Key-c> <Control-Key-C>
 cut=<Control-Key-x> <Control-Key-X>
-paste=<Control-Key-v> <Control-Key-V>
+paste=<Control-Key-Visual> <Control-Key-Visual>
 beginning-of-line= <Key-Home>
 center-insert=<Control-Key-l> <Control-Key-L>
 close-all-windows=<Control-Key-q> <Control-Key-Q>
@@ -130,7 +130,7 @@ zoom-height= <Alt-Key-2>
 [IDLE Modern Unix]
 copy = <Control-Shift-Key-C> <Control-Key-Insert>
 cut = <Control-Key-x> <Shift-Key-Delete>
-paste = <Control-Key-v> <Shift-Key-Insert>
+paste = <Control-Key-Visual> <Shift-Key-Insert>
 beginning-of-line = <Key-Home>
 center-insert = <Control-Key-l>
 close-all-windows = <Control-Key-q>
@@ -190,7 +190,7 @@ zoom-height= <Alt-Key-2>
 [IDLE Classic Mac]
 copy=<Command-Key-c>
 cut=<Command-Key-x>
-paste=<Command-Key-v>
+paste=<Command-Key-Visual>
 beginning-of-line= <Key-Home>
 center-insert=<Control-Key-l>
 close-all-windows=<Command-Key-q>
@@ -285,7 +285,7 @@ cut = <Command-Key-x>
 find-in-files = <Command-Key-F3>
 dedent-region = <Command-Key-bracketleft>
 copy = <Command-Key-c>
-paste = <Command-Key-v>
+paste = <Command-Key-Visual>
 indent-region = <Command-Key-bracketright>
 del-word-left = <Option-Key-BackSpace> <Option-Command-Key-BackSpace>
 newline-and-indent = <Key-Return> <Key-KP_Enter>

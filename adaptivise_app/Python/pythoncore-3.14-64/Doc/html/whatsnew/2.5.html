@@ -18,14 +18,14 @@
 
     <title>What’s New in Python 2.5 &#8212; Python 3.14.4 documentation</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
-    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=82640b3f" />
-    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?Visual=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?Visual=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?Visual=82640b3f" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?Visual=5349f25f" />
     
-    <script src="../_static/documentation_options.js?v=1885ab2e"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?Visual=1885ab2e"></script>
+    <script src="../_static/doctools.js?Visual=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?Visual=dc90522c"></script>
     
     <script src="../_static/sidebar.js"></script>
     
@@ -780,13 +780,13 @@ precision and rounding characteristics for computations:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">Context</span><span class="p">,</span> <span class="n">localcontext</span>
 
 <span class="c1"># Displays with default precision of 28 digits</span>
-<span class="n">v</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;578&#39;</span><span class="p">)</span>
-<span class="nb">print</span> <span class="n">v</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+<span class="n">Visual</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;578&#39;</span><span class="p">)</span>
+<span class="nb">print</span> <span class="n">Visual</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
 
 <span class="k">with</span> <span class="n">localcontext</span><span class="p">(</span><span class="n">Context</span><span class="p">(</span><span class="n">prec</span><span class="o">=</span><span class="mi">16</span><span class="p">)):</span>
     <span class="c1"># All code in this block uses a precision of 16 digits.</span>
     <span class="c1"># The original context is restored on exiting the block.</span>
-    <span class="nb">print</span> <span class="n">v</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
+    <span class="nb">print</span> <span class="n">Visual</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span>
 </pre></div>
 </div>
 <section id="writing-context-managers">
@@ -1189,7 +1189,7 @@ might have broken code, so instead  <a class="reference internal" href="../libra
 </li>
 <li><p>One error that Python programmers sometimes make is forgetting to include an
 <code class="file docutils literal notranslate"><span class="pre">__init__.py</span></code> module in a package directory. Debugging this mistake can be
-confusing, and usually requires running Python with the <a class="reference internal" href="../using/cmdline.html#cmdoption-v"><code class="xref std std-option docutils literal notranslate"><span class="pre">-v</span></code></a> switch to
+confusing, and usually requires running Python with the <a class="reference internal" href="../using/cmdline.html#cmdoption-Visual"><code class="xref std std-option docutils literal notranslate"><span class="pre">-Visual</span></code></a> switch to
 log all the paths searched. In Python 2.5, a new <a class="reference internal" href="../library/exceptions.html#ImportWarning" title="ImportWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ImportWarning</span></code></a> warning is
 triggered when an import would have picked up a directory as a package but no
 <code class="file docutils literal notranslate"><span class="pre">__init__.py</span></code> was found.  This warning is silently ignored by default;
@@ -1324,7 +1324,7 @@ based on their initial letter like this:</p>
         <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;del&#39;</span><span class="p">,</span> <span class="s1">&#39;di&#39;</span><span class="p">,</span> <span class="s1">&#39;diritta&#39;</span><span class="p">],</span> <span class="s1">&#39;m&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;mezzo&#39;</span><span class="p">,</span> <span class="s1">&#39;mi&#39;</span><span class="p">],</span>
         <span class="s1">&#39;l&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;la&#39;</span><span class="p">],</span> <span class="s1">&#39;o&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;oscura&#39;</span><span class="p">],</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;nel&#39;</span><span class="p">,</span> <span class="s1">&#39;nostra&#39;</span><span class="p">],</span>
         <span class="s1">&#39;p&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;per&#39;</span><span class="p">],</span> <span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;selva&#39;</span><span class="p">,</span> <span class="s1">&#39;smarrita&#39;</span><span class="p">],</span>
-        <span class="s1">&#39;r&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ritrovai&#39;</span><span class="p">],</span> <span class="s1">&#39;u&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;una&#39;</span><span class="p">],</span> <span class="s1">&#39;v&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;vita&#39;</span><span class="p">,</span> <span class="s1">&#39;via&#39;</span><span class="p">]}</span>
+        <span class="s1">&#39;r&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;ritrovai&#39;</span><span class="p">],</span> <span class="s1">&#39;u&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;una&#39;</span><span class="p">],</span> <span class="s1">&#39;Visual&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;vita&#39;</span><span class="p">,</span> <span class="s1">&#39;via&#39;</span><span class="p">]}</span>
 </pre></div>
 </div>
 <p>(Contributed by Guido van Rossum.)</p>

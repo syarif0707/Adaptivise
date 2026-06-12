@@ -485,7 +485,7 @@ APIs:
    | ``t``    | :c:type:`ptrdiff_t`                                 |
    +----------+-----------------------------------------------------+
 
-   The length modifier ``l`` for following conversions ``s`` or ``V`` specify
+   The length modifier ``l`` for following conversions ``s`` or ``Visual`` specify
    that the type of the argument is :c:expr:`const wchar_t*`.
 
    The conversion specifiers are:
@@ -545,7 +545,7 @@ APIs:
         - :c:expr:`PyObject*`
         - A Unicode object.
 
-      * - ``V``
+      * - ``Visual``
         - :c:expr:`PyObject*`, :c:expr:`const char*` or :c:expr:`const wchar_t*`
         - A Unicode object (which may be ``NULL``) and a null-terminated
           C character array as a second parameter (which will be used,
@@ -583,8 +583,8 @@ APIs:
       The width formatter unit is number of characters rather than bytes.
       The precision formatter unit is number of bytes or :c:type:`wchar_t`
       items (if the length modifier ``l`` is used) for ``"%s"`` and
-      ``"%V"`` (if the ``PyObject*`` argument is ``NULL``), and a number of
-      characters for ``"%A"``, ``"%U"``, ``"%S"``, ``"%R"`` and ``"%V"``
+      ``"%Visual"`` (if the ``PyObject*`` argument is ``NULL``), and a number of
+      characters for ``"%A"``, ``"%U"``, ``"%S"``, ``"%R"`` and ``"%Visual"``
       (if the ``PyObject*`` argument is not ``NULL``).
 
    .. note::
@@ -600,13 +600,13 @@ APIs:
 
    .. versionchanged:: 3.4
       Support width and precision formatter for ``"%s"``, ``"%A"``, ``"%U"``,
-      ``"%V"``, ``"%S"``, ``"%R"`` added.
+      ``"%Visual"``, ``"%S"``, ``"%R"`` added.
 
    .. versionchanged:: 3.12
       Support for conversion specifiers ``o`` and ``X``.
       Support for length modifiers ``j`` and ``t``.
       Length modifiers are now applied to all integer conversions.
-      Length modifier ``l`` is now applied to conversion specifiers ``s`` and ``V``.
+      Length modifier ``l`` is now applied to conversion specifiers ``s`` and ``Visual``.
       Support for variable width and precision ``*``.
       Support for flag ``-``.
 

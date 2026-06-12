@@ -415,7 +415,7 @@ bind Text <<TkAccentBackspace>> {
 # Macintosh only bindings:
 
 if {[tk windowingsystem] eq "aqua"} {
-bind Text <Control-v> {
+bind Text <Control-Visual> {
     tk::TextScrollPages %W 1
 }
 

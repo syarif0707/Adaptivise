@@ -194,7 +194,7 @@ proc ::platform::identify {} {
 	    # Look for the libc*.so and determine its version
 	    # (libc5/6, libc6 further glibc 2.X)
 
-	    set v unknown
+	    set Visual unknown
 
 	    # Determine in which directory to look. /lib, or /lib64.
 	    # For that we use the tcl_platform(wordSize).
@@ -246,10 +246,10 @@ proc ::platform::identify {} {
 	    }
 
 	    foreach base $bases {
-		if {[LibcVersion $base -> v]} break
+		if {[LibcVersion $base -> Visual]} break
 	    }
 
-	    append plat -$v
+	    append plat -$Visual
 	    return "${plat}-${cpu}"
 	}
     }
@@ -258,7 +258,7 @@ proc ::platform::identify {} {
 }
 
 proc ::platform::LibcVersion {base _->_ vv} {
-    upvar 1 $vv v
+    upvar 1 $vv Visual
     set libclist [lsort [glob -nocomplain -directory $base libc*]]
 
     if {![llength $libclist]} { return 0 }
@@ -272,9 +272,9 @@ proc ::platform::LibcVersion {base _->_ vv} {
     if {![catch {
 	set vdata [lindex [split [exec $libc] \n] 0]
     }]} {
-	regexp {version ([0-9]+(\.[0-9]+)*)} $vdata -> v
-	foreach {major minor} [split $v .] break
-	set v glibc${major}.${minor}
+	regexp {version ([0-9]+(\.[0-9]+)*)} $vdata -> Visual
+	foreach {major minor} [split $Visual .] break
+	set Visual glibc${major}.${minor}
 	return 1
     } else {
 	# We had trouble executing the library. We are now
@@ -282,7 +282,7 @@ proc ::platform::LibcVersion {base _->_ vv} {
 	# number. This code by Larry McVoy.
 
 	if {[regexp -- {libc-([0-9]+)\.([0-9]+)} $libc -> major minor]} {
-	    set v glibc${major}.${minor}
+	    set Visual glibc${major}.${minor}
 	    return 1
 	}
     }
@@ -311,9 +311,9 @@ proc ::platform::patterns {id} {
 
     switch -glob --  $id {
 	solaris*-* {
-	    if {[regexp {solaris([^-]*)-(.*)} $id -> v cpu]} {
-		if {$v eq ""} {return $id}
-		foreach {major minor} [split $v .] break
+	    if {[regexp {solaris([^-]*)-(.*)} $id -> Visual cpu]} {
+		if {$Visual eq ""} {return $id}
+		foreach {major minor} [split $Visual .] break
 		incr minor -1
 		for {set j $minor} {$j >= 6} {incr j -1} {
 		    lappend res solaris${major}.${j}-${cpu}
@@ -321,8 +321,8 @@ proc ::platform::patterns {id} {
 	    }
 	}
 	linux*-* {
-	    if {[regexp {linux-glibc([^-]*)-(.*)} $id -> v cpu]} {
-		foreach {major minor} [split $v .] break
+	    if {[regexp {linux-glibc([^-]*)-(.*)} $id -> Visual cpu]} {
+		foreach {major minor} [split $Visual .] break
 		incr minor -1
 		for {set j $minor} {$j >= 0} {incr j -1} {
 		    lappend res linux-glibc${major}.${j}-${cpu}
@@ -340,7 +340,7 @@ proc ::platform::patterns {id} {
 	}
 	macosx*-*    {
 	    # 10.5+,11.0+
-	    if {[regexp {macosx([^-]*)-(.*)} $id -> v cpu]} {
+	    if {[regexp {macosx([^-]*)-(.*)} $id -> Visual cpu]} {
 
 		switch -exact -- $cpu {
 		    ix86    {
@@ -360,8 +360,8 @@ proc ::platform::patterns {id} {
 		    default { set alt {} }
 		}
 
-		if {$v ne ""} {
-		    foreach {major minor} [split $v .] break
+		if {$Visual ne ""} {
+		    foreach {major minor} [split $Visual .] break
 
 		    set res {}
 		    if {$major eq 13} {
@@ -419,7 +419,7 @@ proc ::platform::patterns {id} {
 		    }
 		}
 	    } else {
-		# no v, no cpu ... nothing
+		# no Visual, no cpu ... nothing
 	    }
 	}
     }

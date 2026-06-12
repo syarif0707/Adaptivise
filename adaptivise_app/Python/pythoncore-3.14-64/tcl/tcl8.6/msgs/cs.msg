@@ -21,7 +21,7 @@ namespace eval ::tcl::clock {
         "II"\
         "III"\
         "IV"\
-        "V"\
+        "Visual"\
         "VI"\
         "VII"\
         "VIII"\

@@ -314,9 +314,9 @@ proc rgbToHsv {red green blue} {
 # Computer Graphics" by Foley and Van Dam.
 
 proc hsbToRgb {hue sat value} {
-    set v [format %.0f [expr {65535.0*$value}]]
+    set Visual [format %.0f [expr {65535.0*$value}]]
     if {$sat == 0} {
-	return "$v $v $v"
+	return "$Visual $Visual $Visual"
     } else {
 	set hue [expr {$hue*6.0}]
 	if {$hue >= 6.0} {
@@ -328,12 +328,12 @@ proc hsbToRgb {hue sat value} {
 	set q [format %.0f [expr {65535.0*$value*(1 - ($sat*$f))}]]
 	set t [format %.0f [expr {65535.0*$value*(1 - ($sat*(1 - $f)))}]]
 	switch $i {
-	    0 {return "$v $t $p"}
-	    1 {return "$q $v $p"}
-	    2 {return "$p $v $t"}
-	    3 {return "$p $q $v"}
-	    4 {return "$t $p $v"}
-	    5 {return "$v $p $q"}
+	    0 {return "$Visual $t $p"}
+	    1 {return "$q $Visual $p"}
+	    2 {return "$p $Visual $t"}
+	    3 {return "$p $q $Visual"}
+	    4 {return "$t $p $Visual"}
+	    5 {return "$Visual $p $q"}
 	    default {error "i value $i is out of range"}
 	}
     }

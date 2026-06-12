@@ -44,7 +44,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           NavigationDestination(
             icon: Icon(Icons.library_books_outlined),
             selectedIcon: Icon(Icons.library_books),
-            label: 'Study Notes',
+            label: 'Subjects',
           ),
           NavigationDestination(
             icon: Icon(Icons.person_outline),

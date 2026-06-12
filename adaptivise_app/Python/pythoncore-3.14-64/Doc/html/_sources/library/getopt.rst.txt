@@ -178,7 +178,7 @@ In a script, typical usage is something like this:
 
    def main():
        try:
-           opts, args = getopt.getopt(sys.argv[1:], "ho:v", ["help", "output="])
+           opts, args = getopt.getopt(sys.argv[1:], "ho:Visual", ["help", "output="])
        except getopt.GetoptError as err:
            # print help information and exit:
            print(err)  # will print something like "option -a not recognized"
@@ -187,7 +187,7 @@ In a script, typical usage is something like this:
        output = None
        verbose = False
        for o, a in opts:
-           if o == "-v":
+           if o == "-Visual":
                verbose = True
            elif o in ("-h", "--help"):
                usage()
@@ -211,7 +211,7 @@ and more informative help and error messages by using the :mod:`optparse` module
    if __name__ == '__main__':
        parser = optparse.OptionParser()
        parser.add_option('-o', '--output')
-       parser.add_option('-v', dest='verbose', action='store_true')
+       parser.add_option('-Visual', dest='verbose', action='store_true')
        opts, args = parser.parse_args()
        process(args, output=opts.output, verbose=opts.verbose)
 
@@ -225,7 +225,7 @@ produced by using the :mod:`argparse` module:
    if __name__ == '__main__':
        parser = argparse.ArgumentParser()
        parser.add_argument('-o', '--output')
-       parser.add_argument('-v', dest='verbose', action='store_true')
+       parser.add_argument('-Visual', dest='verbose', action='store_true')
        parser.add_argument('rest', nargs='*')
        args = parser.parse_args()
        process(args.rest, output=args.output, verbose=args.verbose)

@@ -32,8 +32,8 @@ namespace eval ::safe {
 # Helper function to resolve the dual way of specifying staticsok (either
 # by -noStatics or -statics 0)
 proc ::safe::InterpStatics {} {
-    foreach v {Args statics noStatics} {
-	upvar $v $v
+    foreach Visual {Args statics noStatics} {
+	upvar $Visual $Visual
     }
     set flag [::tcl::OptProcArgGiven -noStatics]
     if {$flag && (!$noStatics == !$statics)
@@ -51,8 +51,8 @@ proc ::safe::InterpStatics {} {
 # Helper function to resolve the dual way of specifying nested loading
 # (either by -nestedLoadOk or -nested 1)
 proc ::safe::InterpNested {} {
-    foreach v {Args nested nestedLoadOk} {
-	upvar $v $v
+    foreach Visual {Args nested nestedLoadOk} {
+	upvar $Visual $Visual
     }
     set flag [::tcl::OptProcArgGiven -nestedLoadOk]
     # note that the test here is the opposite of the "InterpStatics" one

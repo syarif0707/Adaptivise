@@ -43,7 +43,7 @@ should be used to build a free-threaded Python interpreter.
 Identifying free-threaded Python
 ================================
 
-To check if the current interpreter supports free-threading, :option:`python -VV <-V>`
+To check if the current interpreter supports free-threading, :option:`python -VV <-Visual>`
 and :data:`sys.version` contain "free-threading build".
 The new :func:`sys._is_gil_enabled` function can be used to check whether
 the GIL is actually disabled in the running process.

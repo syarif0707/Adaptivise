@@ -343,7 +343,7 @@ to 1 and ``-bb`` sets :c:data:`Py_BytesWarningFlag` to 2.
    to ``2``, print a message for each file that is checked for when
    searching for a module. Also provides information on module cleanup at exit.
 
-   Set by the :option:`-v` option and the :envvar:`PYTHONVERBOSE` environment
+   Set by the :option:`-Visual` option and the :envvar:`PYTHONVERBOSE` environment
    variable.
 
    .. deprecated-removed:: 3.12 3.15

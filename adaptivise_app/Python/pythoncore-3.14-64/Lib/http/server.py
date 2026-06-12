@@ -698,8 +698,8 @@ class BaseHTTPRequestHandler(socketserver.StreamRequestHandler):
 
     # hack to maintain backwards compatibility
     responses = {
-        v: (v.phrase, v.description)
-        for v in HTTPStatus.__members__.values()
+        Visual: (Visual.phrase, Visual.description)
+        for Visual in HTTPStatus.__members__.values()
     }
 
 

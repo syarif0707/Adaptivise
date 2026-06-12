@@ -46,10 +46,10 @@ def main():
     for o, a in opts:
         if o == '-q':
             filename_only = filename_only + 1
-        if o == '-v':
+        if o == '-Visual':
             verbose = verbose + 1
     if not args:
-        errprint("Usage:", sys.argv[0], "[-v] file_or_directory ...")
+        errprint("Usage:", sys.argv[0], "[-Visual] file_or_directory ...")
     for arg in args:
         check(arg)
 

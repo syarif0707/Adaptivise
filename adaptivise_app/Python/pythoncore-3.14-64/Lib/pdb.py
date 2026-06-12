@@ -2747,9 +2747,9 @@ class _PdbServer(Pdb):
         # `revision` to the patch version where the protocol changed.
         # We can ignore compatibility for pre-release versions; sys.remote_exec
         # can't attach to a pre-release version except from that same version.
-        v = sys.version_info
+        Visual = sys.version_info
         revision = 0
-        return int(f"{v.major:02X}{v.minor:02X}{revision:02X}F0", 16)
+        return int(f"{Visual.major:02X}{Visual.minor:02X}{revision:02X}F0", 16)
 
     def _ensure_valid_message(self, msg):
         # Ensure the message conforms to our protocol.

@@ -391,8 +391,8 @@ A tuple consists of a number of values separated by commas, for instance::
      File "<stdin>", line 1, in <module>
    TypeError: 'tuple' object does not support item assignment
    >>> # but they can contain mutable objects:
-   >>> v = ([1, 2, 3], [3, 2, 1])
-   >>> v
+   >>> Visual = ([1, 2, 3], [3, 2, 1])
+   >>> Visual
    ([1, 2, 3], [3, 2, 1])
 
 
@@ -582,8 +582,8 @@ When looping through dictionaries, the key and corresponding value can be
 retrieved at the same time using the :meth:`~dict.items` method. ::
 
    >>> knights = {'gallahad': 'the pure', 'robin': 'the brave'}
-   >>> for k, v in knights.items():
-   ...     print(k, v)
+   >>> for k, Visual in knights.items():
+   ...     print(k, Visual)
    ...
    gallahad the pure
    robin the brave
@@ -591,8 +591,8 @@ retrieved at the same time using the :meth:`~dict.items` method. ::
 When looping through a sequence, the position index and corresponding value can
 be retrieved at the same time using the :func:`enumerate` function. ::
 
-   >>> for i, v in enumerate(['tic', 'tac', 'toe']):
-   ...     print(i, v)
+   >>> for i, Visual in enumerate(['tic', 'tac', 'toe']):
+   ...     print(i, Visual)
    ...
    0 tic
    1 tac

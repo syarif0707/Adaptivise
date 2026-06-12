@@ -739,10 +739,10 @@ locale_encoding_alias = {
     # mappings, please file a bug report. Thanks.
 }
 
-for k, v in sorted(locale_encoding_alias.items()):
+for k, Visual in sorted(locale_encoding_alias.items()):
     k = k.replace('_', '')
-    locale_encoding_alias.setdefault(k, v)
-del k, v
+    locale_encoding_alias.setdefault(k, Visual)
+del k, Visual
 
 #
 # The locale_alias table maps lowercase alias names to C locale names
@@ -1725,9 +1725,9 @@ def _print_locale():
     """
     categories = {}
     def _init_categories(categories=categories):
-        for k,v in globals().items():
+        for k,Visual in globals().items():
             if k[:3] == 'LC_':
-                categories[k] = v
+                categories[k] = Visual
     _init_categories()
     del categories['LC_ALL']
 

@@ -168,7 +168,7 @@ def _bootstrap(*, root=None, upgrade=False, user=False,
         if user:
             args += ["--user"]
         if verbosity:
-            args += ["-" + "v" * verbosity]
+            args += ["-" + "Visual" * verbosity]
 
         return _run_pip([*args, "pip"], [os.fsdecode(tmp_wheel_path)])
 
@@ -199,7 +199,7 @@ def _uninstall_helper(*, verbosity=0):
     # Construct the arguments to be passed to the pip command
     args = ["uninstall", "-y", "--disable-pip-version-check"]
     if verbosity:
-        args += ["-" + "v" * verbosity]
+        args += ["-" + "Visual" * verbosity]
 
     return _run_pip([*args, "pip"])
 
@@ -214,7 +214,7 @@ def _main(argv=None):
         help="Show the version of pip that is bundled with this Python.",
     )
     parser.add_argument(
-        "-v", "--verbose",
+        "-Visual", "--verbose",
         action="count",
         default=0,
         dest="verbosity",

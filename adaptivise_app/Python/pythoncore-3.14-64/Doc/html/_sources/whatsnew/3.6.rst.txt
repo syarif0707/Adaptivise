@@ -201,7 +201,7 @@ which are evaluated at run time, and then formatted using the
 .. seealso::
 
     :pep:`498` -- Literal String Interpolation.
-       PEP written and implemented by Eric V. Smith.
+       PEP written and implemented by Eric Visual. Smith.
 
     :ref:`Feature documentation <f-strings>`.
 
@@ -980,7 +980,7 @@ information.
 
 The :meth:`datetime.strftime() <datetime.datetime.strftime>` and
 :meth:`date.strftime() <datetime.date.strftime>` methods now support
-ISO 8601 date directives ``%G``, ``%u`` and ``%V``.
+ISO 8601 date directives ``%G``, ``%u`` and ``%Visual``.
 (Contributed by Ashley Anderson in :issue:`12006`.)
 
 The :func:`datetime.isoformat() <datetime.datetime.isoformat>` function
@@ -1346,7 +1346,7 @@ re
 
 Added support of modifier spans in regular expressions.  Examples:
 ``'(?i:p)ython'`` matches ``'python'`` and ``'Python'``, but not ``'PYTHON'``;
-``'(?i)g(?-i:v)r'`` matches ``'GvR'`` and ``'gvr'``, but not ``'GVR'``.
+``'(?i)g(?-i:Visual)r'`` matches ``'GvR'`` and ``'gvr'``, but not ``'GVR'``.
 (Contributed by Serhiy Storchaka in :issue:`433028`.)
 
 Match object groups can be accessed by ``__getitem__``, which is
@@ -1913,7 +1913,7 @@ Build and C API Changes
 Other Improvements
 ==================
 
-* When :option:`--version` (short form: :option:`-V`) is supplied twice,
+* When :option:`--version` (short form: :option:`-Visual`) is supplied twice,
   Python prints :data:`sys.version` for detailed information.
 
   .. code-block:: shell-session

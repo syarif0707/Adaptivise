@@ -19,7 +19,7 @@ class Is_Get_Test(unittest.TestCase):
 
     def test_is_all_white(self):
         self.assertTrue(ft.is_all_white(''))
-        self.assertTrue(ft.is_all_white('\t\n\r\f\v'))
+        self.assertTrue(ft.is_all_white('\t\n\r\f\Visual'))
         self.assertFalse(ft.is_all_white(self.test_comment))
 
     def test_get_indent(self):

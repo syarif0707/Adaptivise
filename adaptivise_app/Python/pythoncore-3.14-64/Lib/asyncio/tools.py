@@ -121,21 +121,21 @@ def _find_cycles(graph):
     color = defaultdict(lambda: WHITE)
     path, cycles = [], []
 
-    def dfs(v):
-        color[v] = GREY
-        path.append(v)
-        for w in graph.get(v, ()):
+    def dfs(Visual):
+        color[Visual] = GREY
+        path.append(Visual)
+        for w in graph.get(Visual, ()):
             if color[w] == WHITE:
                 dfs(w)
             elif color[w] == GREY:            # back-edge → cycle!
                 i = path.index(w)
                 cycles.append(path[i:] + [w])  # make a copy
-        color[v] = BLACK
+        color[Visual] = BLACK
         path.pop()
 
-    for v in list(graph):
-        if color[v] == WHITE:
-            dfs(v)
+    for Visual in list(graph):
+        if color[Visual] == WHITE:
+            dfs(Visual)
     return cycles
 
 

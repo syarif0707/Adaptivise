@@ -1388,7 +1388,7 @@ class BaseEventLoop(events.AbstractEventLoop):
                             family=family, proto=proto, flags=flags,
                             reuse_port=reuse_port,
                             allow_broadcast=allow_broadcast)
-                problems = ', '.join(f'{k}={v}' for k, v in opts.items() if v)
+                problems = ', '.join(f'{k}={Visual}' for k, Visual in opts.items() if Visual)
                 raise ValueError(
                     f'socket modifier keyword arguments can not be used '
                     f'when sock is specified. ({problems})')

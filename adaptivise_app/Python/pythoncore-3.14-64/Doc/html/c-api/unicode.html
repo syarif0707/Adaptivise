@@ -18,14 +18,14 @@
 
     <title>Unicode Objects and Codecs &#8212; Python 3.14.4 documentation</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
-    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=82640b3f" />
-    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?Visual=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?Visual=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?Visual=82640b3f" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?Visual=5349f25f" />
     
-    <script src="../_static/documentation_options.js?v=1885ab2e"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?Visual=1885ab2e"></script>
+    <script src="../_static/doctools.js?Visual=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?Visual=dc90522c"></script>
     
     <script src="../_static/sidebar.js"></script>
     
@@ -769,7 +769,7 @@ flag if both are given).</p></td>
 </tr>
 </tbody>
 </table>
-<p>The length modifier <code class="docutils literal notranslate"><span class="pre">l</span></code> for following conversions <code class="docutils literal notranslate"><span class="pre">s</span></code> or <code class="docutils literal notranslate"><span class="pre">V</span></code> specify
+<p>The length modifier <code class="docutils literal notranslate"><span class="pre">l</span></code> for following conversions <code class="docutils literal notranslate"><span class="pre">s</span></code> or <code class="docutils literal notranslate"><span class="pre">Visual</span></code> specify
 that the type of the argument is <span class="c-expr sig sig-inline c"><span class="k">const</span><span class="w"> </span><span class="n">wchar_t</span><span class="p">*</span></span>.</p>
 <p>The conversion specifiers are:</p>
 <table class="docutils align-default">
@@ -827,7 +827,7 @@ start with the literal <code class="docutils literal notranslate"><span class="p
 <td><p><span class="c-expr sig sig-inline c"><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n">PyObject</span></a><span class="p">*</span></span></p></td>
 <td><p>A Unicode object.</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">V</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">Visual</span></code></p></td>
 <td><p><span class="c-expr sig sig-inline c"><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n">PyObject</span></a><span class="p">*</span></span>, <span class="c-expr sig sig-inline c"><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="p">*</span></span> or <span class="c-expr sig sig-inline c"><span class="k">const</span><span class="w"> </span><span class="n">wchar_t</span><span class="p">*</span></span></p></td>
 <td><p>A Unicode object (which may be <code class="docutils literal notranslate"><span class="pre">NULL</span></code>) and a null-terminated
 C character array as a second parameter (which will be used,
@@ -868,8 +868,8 @@ the module name and the qualified name.</p></td>
 <p>The width formatter unit is number of characters rather than bytes.
 The precision formatter unit is number of bytes or <code class="xref c c-type docutils literal notranslate"><span class="pre">wchar_t</span></code>
 items (if the length modifier <code class="docutils literal notranslate"><span class="pre">l</span></code> is used) for <code class="docutils literal notranslate"><span class="pre">&quot;%s&quot;</span></code> and
-<code class="docutils literal notranslate"><span class="pre">&quot;%V&quot;</span></code> (if the <code class="docutils literal notranslate"><span class="pre">PyObject*</span></code> argument is <code class="docutils literal notranslate"><span class="pre">NULL</span></code>), and a number of
-characters for <code class="docutils literal notranslate"><span class="pre">&quot;%A&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;%U&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;%S&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;%R&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;%V&quot;</span></code>
+<code class="docutils literal notranslate"><span class="pre">&quot;%Visual&quot;</span></code> (if the <code class="docutils literal notranslate"><span class="pre">PyObject*</span></code> argument is <code class="docutils literal notranslate"><span class="pre">NULL</span></code>), and a number of
+characters for <code class="docutils literal notranslate"><span class="pre">&quot;%A&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;%U&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;%S&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;%R&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;%Visual&quot;</span></code>
 (if the <code class="docutils literal notranslate"><span class="pre">PyObject*</span></code> argument is not <code class="docutils literal notranslate"><span class="pre">NULL</span></code>).</p>
 </div>
 <div class="admonition note">
@@ -886,13 +886,13 @@ a precision is given for integer conversions (<code class="docutils literal notr
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 3.4: </span>Support width and precision formatter for <code class="docutils literal notranslate"><span class="pre">&quot;%s&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;%A&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;%U&quot;</span></code>,
-<code class="docutils literal notranslate"><span class="pre">&quot;%V&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;%S&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;%R&quot;</span></code> added.</p>
+<code class="docutils literal notranslate"><span class="pre">&quot;%Visual&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;%S&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;%R&quot;</span></code> added.</p>
 </div>
 <div class="versionchanged">
 <p><span class="versionmodified changed">Changed in version 3.12: </span>Support for conversion specifiers <code class="docutils literal notranslate"><span class="pre">o</span></code> and <code class="docutils literal notranslate"><span class="pre">X</span></code>.
 Support for length modifiers <code class="docutils literal notranslate"><span class="pre">j</span></code> and <code class="docutils literal notranslate"><span class="pre">t</span></code>.
 Length modifiers are now applied to all integer conversions.
-Length modifier <code class="docutils literal notranslate"><span class="pre">l</span></code> is now applied to conversion specifiers <code class="docutils literal notranslate"><span class="pre">s</span></code> and <code class="docutils literal notranslate"><span class="pre">V</span></code>.
+Length modifier <code class="docutils literal notranslate"><span class="pre">l</span></code> is now applied to conversion specifiers <code class="docutils literal notranslate"><span class="pre">s</span></code> and <code class="docutils literal notranslate"><span class="pre">Visual</span></code>.
 Support for variable width and precision <code class="docutils literal notranslate"><span class="pre">*</span></code>.
 Support for flag <code class="docutils literal notranslate"><span class="pre">-</span></code>.</p>
 <p>An unrecognized format character now sets a <a class="reference internal" href="../library/exceptions.html#SystemError" title="SystemError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SystemError</span></code></a>.

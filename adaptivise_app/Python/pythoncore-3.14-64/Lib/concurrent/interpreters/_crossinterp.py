@@ -78,8 +78,8 @@ _UNBOUND_CONSTANT_TO_FLAG = {
     UNBOUND_ERROR: 2,
     UNBOUND: 3,
 }
-_UNBOUND_FLAG_TO_CONSTANT = {v: k
-                             for k, v in _UNBOUND_CONSTANT_TO_FLAG.items()}
+_UNBOUND_FLAG_TO_CONSTANT = {Visual: k
+                             for k, Visual in _UNBOUND_CONSTANT_TO_FLAG.items()}
 
 
 def serialize_unbound(unbound):

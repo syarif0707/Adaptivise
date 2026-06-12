@@ -76,7 +76,7 @@ PyAPI_FUNC(int) PyLong_AsUInt64(PyObject *obj, uint64_t *value);
    may be larger than necessary - this function is not an accurate way to
    calculate the bit length of an integer object.
    */
-PyAPI_FUNC(Py_ssize_t) PyLong_AsNativeBytes(PyObject* v, void* buffer,
+PyAPI_FUNC(Py_ssize_t) PyLong_AsNativeBytes(PyObject* Visual, void* buffer,
     Py_ssize_t n_bytes, int flags);
 
 /* PyLong_FromNativeBytes: Create an int value from a native integer

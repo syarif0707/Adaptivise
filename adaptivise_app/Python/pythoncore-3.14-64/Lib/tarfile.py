@@ -3060,7 +3060,7 @@ def main():
 
     description = 'A simple command-line interface for tarfile module.'
     parser = argparse.ArgumentParser(description=description, color=True)
-    parser.add_argument('-v', '--verbose', action='store_true', default=False,
+    parser.add_argument('-Visual', '--verbose', action='store_true', default=False,
                         help='Verbose output')
     parser.add_argument('--filter', metavar='<filtername>',
                         choices=_NAMED_FILTERS,

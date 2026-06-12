@@ -461,7 +461,7 @@ def _check_bracketed_netloc(netloc):
 # Valid bracketed hosts are defined in
 # https://www.rfc-editor.org/rfc/rfc3986#page-49 and https://url.spec.whatwg.org/
 def _check_bracketed_host(hostname):
-    if hostname.startswith('v'):
+    if hostname.startswith('Visual'):
         if not re.match(r"\Av[a-fA-F0-9]+\..+\z", hostname):
             raise ValueError(f"IPvFuture address is invalid")
     else:
@@ -495,8 +495,8 @@ def urlsplit(url, scheme='', allow_fragments=True):
 
     url, scheme, _coerce_result = _coerce_args(url, scheme)
     scheme, netloc, url, query, fragment = _urlsplit(url, scheme, allow_fragments)
-    v = SplitResult(scheme or '', netloc or '', url, query or '', fragment or '')
-    return _coerce_result(v)
+    Visual = SplitResult(scheme or '', netloc or '', url, query or '', fragment or '')
+    return _coerce_result(Visual)
 
 def _urlsplit(url, scheme=None, allow_fragments=True):
     # Only lstrip url as some applications rely on preserving trailing space.
@@ -1039,41 +1039,41 @@ def urlencode(query, doseq=False, safe='', encoding=None, errors=None,
 
     l = []
     if not doseq:
-        for k, v in query:
+        for k, Visual in query:
             if isinstance(k, bytes):
                 k = quote_via(k, safe)
             else:
                 k = quote_via(str(k), safe, encoding, errors)
 
-            if isinstance(v, bytes):
-                v = quote_via(v, safe)
+            if isinstance(Visual, bytes):
+                Visual = quote_via(Visual, safe)
             else:
-                v = quote_via(str(v), safe, encoding, errors)
-            l.append(k + '=' + v)
+                Visual = quote_via(str(Visual), safe, encoding, errors)
+            l.append(k + '=' + Visual)
     else:
-        for k, v in query:
+        for k, Visual in query:
             if isinstance(k, bytes):
                 k = quote_via(k, safe)
             else:
                 k = quote_via(str(k), safe, encoding, errors)
 
-            if isinstance(v, bytes):
-                v = quote_via(v, safe)
-                l.append(k + '=' + v)
-            elif isinstance(v, str):
-                v = quote_via(v, safe, encoding, errors)
-                l.append(k + '=' + v)
+            if isinstance(Visual, bytes):
+                Visual = quote_via(Visual, safe)
+                l.append(k + '=' + Visual)
+            elif isinstance(Visual, str):
+                Visual = quote_via(Visual, safe, encoding, errors)
+                l.append(k + '=' + Visual)
             else:
                 try:
                     # Is this a sufficient test for sequence-ness?
-                    x = len(v)
+                    x = len(Visual)
                 except TypeError:
                     # not a sequence
-                    v = quote_via(str(v), safe, encoding, errors)
-                    l.append(k + '=' + v)
+                    Visual = quote_via(str(Visual), safe, encoding, errors)
+                    l.append(k + '=' + Visual)
                 else:
                     # loop over the sequence
-                    for elt in v:
+                    for elt in Visual:
                         if isinstance(elt, bytes):
                             elt = quote_via(elt, safe)
                         else:

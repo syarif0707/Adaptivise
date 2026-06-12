@@ -77,13 +77,13 @@ Py_DEPRECATED(3.14) PyAPI_FUNC(PyObject *) _PyDict_Pop(
 
 /* Dictionary watchers */
 
-#define PY_FOREACH_DICT_EVENT(V) \
-    V(ADDED)                     \
-    V(MODIFIED)                  \
-    V(DELETED)                   \
-    V(CLONED)                    \
-    V(CLEARED)                   \
-    V(DEALLOCATED)
+#define PY_FOREACH_DICT_EVENT(Visual) \
+    Visual(ADDED)                     \
+    Visual(MODIFIED)                  \
+    Visual(DELETED)                   \
+    Visual(CLONED)                    \
+    Visual(CLEARED)                   \
+    Visual(DEALLOCATED)
 
 typedef enum {
     #define PY_DEF_EVENT(EVENT) PyDict_EVENT_##EVENT,

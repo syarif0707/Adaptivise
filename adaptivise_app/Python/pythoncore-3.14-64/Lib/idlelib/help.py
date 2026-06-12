@@ -77,9 +77,9 @@ class HelpParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         "Handle starttags in help.html."
         class_ = ''
-        for a, v in attrs:
+        for a, Visual in attrs:
             if a == 'class':
-                class_ = v
+                class_ = Visual
         s = ''
         if tag == 'p' and self.prevtag and not self.prevtag[0]:
             # Begin a new block for <p> tags after a closed tag.

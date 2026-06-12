@@ -2462,7 +2462,7 @@ def get_value(value):
     """ quoted-string / attribute
 
     """
-    v = Value()
+    Visual = Value()
     if not value:
         raise errors.HeaderParseError("Expected value but found end of string")
     leader = None
@@ -2477,8 +2477,8 @@ def get_value(value):
         token, value = get_extended_attribute(value)
     if leader is not None:
         token[:0] = [leader]
-    v.append(token)
-    return v, value
+    Visual.append(token)
+    return Visual, value
 
 def get_parameter(value):
     """ attribute [section] ["*"] [CFWS] "=" value
@@ -2602,7 +2602,7 @@ def get_parameter(value):
         value = value[1:]
     if remainder is not None:
         # Treat the rest of value as bare quoted string content.
-        v = Value()
+        Visual = Value()
         while value:
             if value[0] in WSP:
                 token, value = get_fws(value)
@@ -2611,8 +2611,8 @@ def get_parameter(value):
                 value = value[1:]
             else:
                 token, value = get_qcontent(value)
-            v.append(token)
-        token = v
+            Visual.append(token)
+        token = Visual
     else:
         token, value = get_value(value)
     appendto.append(token)

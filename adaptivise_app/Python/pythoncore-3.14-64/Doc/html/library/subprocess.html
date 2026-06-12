@@ -18,14 +18,14 @@
 
     <title>subprocess — Subprocess management &#8212; Python 3.14.4 documentation</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
-    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=82640b3f" />
-    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?Visual=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?Visual=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?Visual=82640b3f" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?Visual=5349f25f" />
     
-    <script src="../_static/documentation_options.js?v=1885ab2e"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?Visual=1885ab2e"></script>
+    <script src="../_static/doctools.js?Visual=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?Visual=dc90522c"></script>
     
     <script src="../_static/sidebar.js"></script>
     
@@ -1187,7 +1187,7 @@ on Windows.</p>
 <dt class="sig sig-object py" id="subprocess.STARTUPINFO">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">subprocess.</span></span><span class="sig-name descname"><span class="pre">STARTUPINFO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">dwFlags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hStdInput</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hStdOutput</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hStdError</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wShowWindow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lpAttributeList</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#subprocess.STARTUPINFO" title="Link to this definition">¶</a></dt>
 <dd><p>Partial support of the Windows
-<a class="reference external" href="https://msdn.microsoft.com/en-us/library/ms686331(v=vs.85).aspx">STARTUPINFO</a>
+<a class="reference external" href="https://msdn.microsoft.com/en-us/library/ms686331(Visual=vs.85).aspx">STARTUPINFO</a>
 structure is used for <a class="reference internal" href="#subprocess.Popen" title="subprocess.Popen"><code class="xref py py-class docutils literal notranslate"><span class="pre">Popen</span></code></a> creation.  The following attributes can
 be set by passing them as keyword-only arguments.</p>
 <div class="versionchanged">
@@ -1236,7 +1236,7 @@ ignored and the default for standard error is the console window’s buffer.</p>
 <dd><p>If <a class="reference internal" href="#subprocess.STARTUPINFO.dwFlags" title="subprocess.STARTUPINFO.dwFlags"><code class="xref py py-attr docutils literal notranslate"><span class="pre">dwFlags</span></code></a> specifies <a class="reference internal" href="#subprocess.STARTF_USESHOWWINDOW" title="subprocess.STARTF_USESHOWWINDOW"><code class="xref py py-data docutils literal notranslate"><span class="pre">STARTF_USESHOWWINDOW</span></code></a>, this attribute
 can be any of the values that can be specified in the <code class="docutils literal notranslate"><span class="pre">nCmdShow</span></code>
 parameter for the
-<a class="reference external" href="https://msdn.microsoft.com/en-us/library/ms633548(v=vs.85).aspx">ShowWindow</a>
+<a class="reference external" href="https://msdn.microsoft.com/en-us/library/ms633548(Visual=vs.85).aspx">ShowWindow</a>
 function, except for <code class="docutils literal notranslate"><span class="pre">SW_SHOWDEFAULT</span></code>. Otherwise, this attribute is
 ignored.</p>
 <p><a class="reference internal" href="#subprocess.SW_HIDE" title="subprocess.SW_HIDE"><code class="xref py py-data docutils literal notranslate"><span class="pre">SW_HIDE</span></code></a> is provided for this attribute. It is used when
@@ -1248,7 +1248,7 @@ ignored.</p>
 <span class="sig-name descname"><span class="pre">lpAttributeList</span></span><a class="headerlink" href="#subprocess.STARTUPINFO.lpAttributeList" title="Link to this definition">¶</a></dt>
 <dd><p>A dictionary of additional attributes for process creation as given in
 <code class="docutils literal notranslate"><span class="pre">STARTUPINFOEX</span></code>, see
-<a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms686880(v=vs.85).aspx">UpdateProcThreadAttribute</a>.</p>
+<a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/ms686880(Visual=vs.85).aspx">UpdateProcThreadAttribute</a>.</p>
 <p>Supported attributes:</p>
 <dl>
 <dt><strong>handle_list</strong></dt><dd><p>Sequence of handles that will be inherited. <em>close_fds</em> must be true if

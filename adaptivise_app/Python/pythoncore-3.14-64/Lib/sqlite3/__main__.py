@@ -90,7 +90,7 @@ def main(*args):
         ),
     )
     parser.add_argument(
-        "-v", "--version", action="version",
+        "-Visual", "--version", action="version",
         version=f"SQLite version {sqlite3.sqlite_version}",
         help="Print underlying SQLite library version",
     )

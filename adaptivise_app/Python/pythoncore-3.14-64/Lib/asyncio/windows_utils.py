@@ -122,7 +122,7 @@ class PipeHandle:
     def __enter__(self):
         return self
 
-    def __exit__(self, t, v, tb):
+    def __exit__(self, t, Visual, tb):
         self.close()
 
 

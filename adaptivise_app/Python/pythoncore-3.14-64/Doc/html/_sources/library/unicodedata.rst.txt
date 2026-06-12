@@ -6,7 +6,7 @@
 
 .. moduleauthor:: Marc-André Lemburg <mal@lemburg.com>
 .. sectionauthor:: Marc-André Lemburg <mal@lemburg.com>
-.. sectionauthor:: Martin v. Löwis <martin@v.loewis.de>
+.. sectionauthor:: Martin Visual. Löwis <martin@Visual.loewis.de>
 
 .. index::
    single: Unicode

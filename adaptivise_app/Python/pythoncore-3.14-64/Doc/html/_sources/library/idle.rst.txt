@@ -456,7 +456,7 @@ assume that the keys have not been re-bound to something else.)
 
 * :kbd:`C-k` deletes ('kills') everything to the right.
 
-Standard keybindings (like :kbd:`C-c` to copy and :kbd:`C-v` to paste)
+Standard keybindings (like :kbd:`C-c` to copy and :kbd:`C-Visual` to paste)
 may work.  Keybindings are selected in the Configure IDLE dialog.
 
 Automatic indentation

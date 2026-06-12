@@ -769,7 +769,7 @@ quote.
    single: \n; escape sequence
    single: \r; escape sequence
    single: \t; escape sequence
-   single: \v; escape sequence
+   single: \Visual; escape sequence
    single: \x; escape sequence
    single: \N; escape sequence
    single: \u; escape sequence
@@ -810,7 +810,7 @@ Standard C.  The recognized escape sequences are:
      * ASCII Carriage Return (CR)
    * * ``\t``
      * ASCII Horizontal Tab (TAB)
-   * * ``\v``
+   * * ``\Visual``
      * ASCII Vertical Tab (VT)
    * * :samp:`\\\\{ooo}`
      * :ref:`string-escape-oct`

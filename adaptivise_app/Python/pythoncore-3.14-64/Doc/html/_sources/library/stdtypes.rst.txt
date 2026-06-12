@@ -279,8 +279,8 @@ type is widened to that of the other:
 Arithmetic with complex and real operands is defined by the usual mathematical
 formula, for example::
 
-    x + complex(u, v) = complex(x + u, v)
-    x * complex(u, v) = complex(x * u, x * v)
+    x + complex(u, Visual) = complex(x + u, Visual)
+    x * complex(u, Visual) = complex(x * u, x * Visual)
 
 A comparison between numbers of different types behaves as though the exact
 values of those numbers were being compared. [2]_
@@ -2669,7 +2669,7 @@ expression support in the :mod:`re` module).
    +-----------------------+-----------------------------+
    | ``\r\n``              | Carriage Return + Line Feed |
    +-----------------------+-----------------------------+
-   | ``\v`` or ``\x0b``    | Line Tabulation             |
+   | ``\Visual`` or ``\x0b``    | Line Tabulation             |
    +-----------------------+-----------------------------+
    | ``\f`` or ``\x0c``    | Form Feed                   |
    +-----------------------+-----------------------------+
@@ -2688,7 +2688,7 @@ expression support in the :mod:`re` module).
 
    .. versionchanged:: 3.2
 
-      ``\v`` and ``\f`` added to list of line boundaries.
+      ``\Visual`` and ``\f`` added to list of line boundaries.
 
    For example::
 
@@ -4543,14 +4543,14 @@ copying.
    A :class:`memoryview` supports slicing and indexing to expose its data.
    One-dimensional slicing will result in a subview::
 
-    >>> v = memoryview(b'abcefg')
-    >>> v[1]
+    >>> Visual = memoryview(b'abcefg')
+    >>> Visual[1]
     98
-    >>> v[-1]
+    >>> Visual[-1]
     103
-    >>> v[1:4]
+    >>> Visual[1:4]
     <memory at 0x7f3ddc9f4350>
-    >>> bytes(v[1:4])
+    >>> bytes(Visual[1:4])
     b'bce'
 
    If :class:`~memoryview.format` is one of the native format specifiers
@@ -4578,20 +4578,20 @@ copying.
    one-dimensional slice assignment. Resizing is not allowed::
 
       >>> data = bytearray(b'abcefg')
-      >>> v = memoryview(data)
-      >>> v.readonly
+      >>> Visual = memoryview(data)
+      >>> Visual.readonly
       False
-      >>> v[0] = ord(b'z')
+      >>> Visual[0] = ord(b'z')
       >>> data
       bytearray(b'zbcefg')
-      >>> v[1:4] = b'123'
+      >>> Visual[1:4] = b'123'
       >>> data
       bytearray(b'z123fg')
-      >>> v[2:3] = b'spam'
+      >>> Visual[2:3] = b'spam'
       Traceback (most recent call last):
         File "<stdin>", line 1, in <module>
       ValueError: memoryview assignment: lvalue and rvalue have different structures
-      >>> v[2:6] = b'spam'
+      >>> Visual[2:6] = b'spam'
       >>> data
       bytearray(b'z1spam')
 
@@ -4599,12 +4599,12 @@ copying.
    'B', 'b' or 'c' are also hashable. The hash is defined as
    ``hash(m) == hash(m.tobytes())``::
 
-      >>> v = memoryview(b'abcefg')
-      >>> hash(v) == hash(b'abcefg')
+      >>> Visual = memoryview(b'abcefg')
+      >>> hash(Visual) == hash(b'abcefg')
       True
-      >>> hash(v[2:4]) == hash(b'ce')
+      >>> hash(Visual[2:4]) == hash(b'ce')
       True
-      >>> hash(v[::-2]) == hash(b'abcefg'[::-2])
+      >>> hash(Visual[::-2]) == hash(b'abcefg'[::-2])
       True
 
    .. versionchanged:: 3.3
@@ -4630,7 +4630,7 @@ copying.
       respective format codes are interpreted using :mod:`struct` syntax.
 
       For the subset of :mod:`struct` format strings currently supported by
-      :meth:`tolist`, ``v`` and ``w`` are equal if ``v.tolist() == w.tolist()``::
+      :meth:`tolist`, ``Visual`` and ``w`` are equal if ``Visual.tolist() == w.tolist()``::
 
          >>> import array
          >>> a = array.array('I', [1, 2, 3, 4, 5])
@@ -4664,8 +4664,8 @@ copying.
          >>> a == b
          False
 
-      Note that, as with floating-point numbers, ``v is w`` does *not* imply
-      ``v == w`` for memoryview objects.
+      Note that, as with floating-point numbers, ``Visual is w`` does *not* imply
+      ``Visual == w`` for memoryview objects.
 
       .. versionchanged:: 3.3
          Previous versions compared the raw memory disregarding the item format
@@ -5550,7 +5550,7 @@ support membership tests:
    Keys and values are iterated over in insertion order.
    This allows the creation of ``(value, key)`` pairs
    using :func:`zip`: ``pairs = zip(d.values(), d.keys())``.  Another way to
-   create the same list is ``pairs = [(v, k) for (k, v) in d.items()]``.
+   create the same list is ``pairs = [(Visual, k) for (k, Visual) in d.items()]``.
 
    Iterating views while adding or deleting entries in the dictionary may raise
    a :exc:`RuntimeError` or fail to iterate over all entries.

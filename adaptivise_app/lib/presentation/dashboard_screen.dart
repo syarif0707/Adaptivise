@@ -50,10 +50,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           final String style = profile['primary_vark_style'] ?? 'Not Determined';
           // Access JSONB scores and cast to int/double safely
           final Map<String, dynamic> rawScores = profile['vark_scores'] ?? {};
-          final double v = (rawScores['V'] ?? 0).toDouble();
-          final double a = (rawScores['A'] ?? 0).toDouble();
-          final double r = (rawScores['R'] ?? 0).toDouble();
-          final double k = (rawScores['K'] ?? 0).toDouble();
+          final double visual = _scoreFor(rawScores, 'Visual');
+          final double auditory = _scoreFor(rawScores, 'Auditory');
+          final double readWrite = _scoreFor(rawScores, 'Read/Write');
+          final double kinesthetic = _scoreFor(rawScores, 'Kinesthetic');
+          final double scoreTotal = visual + auditory + readWrite + kinesthetic;
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),
@@ -106,54 +107,55 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          _legendItem("Visual", AppColors.visual),
+                          _legendItem("Visual", AppColors.Visual),
                           const SizedBox(width: 15),
-                          _legendItem("Aural", AppColors.aural),
+                          _legendItem("Auditory", AppColors.Auditory),
                           const SizedBox(width: 15),
-                          _legendItem("Read/Write", AppColors.readWrite),
+                          _legendItem("Read/Write", AppColors.ReadWrite),
                           const SizedBox(width: 15),
-                          _legendItem("Kinesthetic", AppColors.kinesthetic),
+                          _legendItem("Kinesthetic", AppColors.Kinesthetic),
                         ],
                       ),
                       const SizedBox(height: 20),
-                      // The Pie Chart
                       Expanded(
-                        child: PieChart(
-                          PieChartData(
-                            sectionsSpace: 2,
-                            centerSpaceRadius: 40,
-                            sections: [
-                              _pieSection("V", v, AppColors.visual),
-                              _pieSection("A", a, AppColors.aural),
-                              _pieSection("R", r, AppColors.readWrite),
-                              _pieSection("K", k, AppColors.kinesthetic),
-                            ],
-                          ),
-                        ),
+                        child: scoreTotal > 0
+                            ? PieChart(
+                                PieChartData(
+                                  sectionsSpace: 2,
+                                  centerSpaceRadius: 40,
+                                  sections: [
+                                    _pieSection("Visual", visual, AppColors.Visual, scoreTotal),
+                                    _pieSection("Auditory", auditory, AppColors.Auditory, scoreTotal),
+                                    _pieSection("Read/Write", readWrite, AppColors.ReadWrite, scoreTotal),
+                                    _pieSection("Kinesthetic", kinesthetic, AppColors.Kinesthetic, scoreTotal),
+                                  ].where((s) => s.value > 0).toList(),
+                                ),
+                              )
+                            : const Center(
+                                child: Text(
+                                  'Retake the VARK questionnaire to see your chart.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 30),
                 // Action Button
-                SizedBox(
-                  width: double.infinity,
-                  height: 55,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Navigate to appropriate adaptive content
-                      if (style.contains('Kinesthetic')) {
-                        Navigator.pushNamed(context, '/kinesthetic_quiz');
-                      } else if (style.contains('Read/Write')) {
-                        Navigator.pushNamed(context, '/summary_mode');
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                    ),
-                    child: const Text("Start Personalized Study", style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                
+                ElevatedButton(
+                  onPressed: () {
+                    // Navigate to learning resources or recommendations
+                    // Navigator.push(context, MaterialPageRoute(builder: (_) => RecommendationsScreen()));
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                   ),
+                  child: const Text("Explore Learning Resources", style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ],
             ),
@@ -186,17 +188,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  // Helper for Pie Chart Sections
-  PieChartSectionData _pieSection(String title, double value, Color color) {
-    const double total = 100; // Assuming scores normalize to 100 for percentage display
-    final double percentage = (value / total) * 100;
-    
+  double _scoreFor(Map<String, dynamic> scores, String key) {
+    final raw = scores[key];
+    if (raw is num) return raw.toDouble();
+    return double.tryParse(raw?.toString() ?? '') ?? 0;
+  }
+
+  PieChartSectionData _pieSection(String title, double value, Color color, double total) {
+    final percentage = total > 0 ? (value / total) * 100 : 0;
+
     return PieChartSectionData(
       color: color,
       value: value,
-      title: value > 0 ? '$title\n${percentage.toStringAsFixed(1)}%' : '',
+      title: '$title\n${percentage.toStringAsFixed(0)}%',
       radius: 80,
-      titleStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white),
+      titleStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.white),
     );
   }
 }

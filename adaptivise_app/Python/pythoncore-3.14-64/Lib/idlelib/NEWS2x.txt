@@ -237,7 +237,7 @@ What's New in IDLE 1.2?
 
 - Removed ability to configure tabs indent from Options dialog.  This 'feature'
   has never worked and no one has complained.  It is still possible to set a
-  default tabs (v. spaces) indent 'manually' via config-main.def (or to turn on
+  default tabs (Visual. spaces) indent 'manually' via config-main.def (or to turn on
   tabs for the current EditorWindow via the Format menu) but IDLE will
   encourage indentation via spaces.
 
@@ -605,7 +605,7 @@ What's New in IDLEfork 0.9 Alpha 2?
 
 - Removed the "Help/Advice" menu entry.  Thanks, David!  We'll remember!
 
-- Change the "Classic Windows" theme's paste key to be <ctrl-v>.
+- Change the "Classic Windows" theme's paste key to be <ctrl-Visual>.
 
 - Rearrange the Shell menu to put Stack Viewer entries adjacent.
 

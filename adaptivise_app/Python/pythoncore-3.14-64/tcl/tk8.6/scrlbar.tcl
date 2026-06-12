@@ -92,16 +92,16 @@ bind Scrollbar <Control-2> {
 }
 
 bind Scrollbar <<PrevLine>> {
-    tk::ScrollByUnits %W v -1
+    tk::ScrollByUnits %W Visual -1
 }
 bind Scrollbar <<NextLine>> {
-    tk::ScrollByUnits %W v 1
+    tk::ScrollByUnits %W Visual 1
 }
 bind Scrollbar <<PrevPara>> {
-    tk::ScrollByPages %W v -1
+    tk::ScrollByPages %W Visual -1
 }
 bind Scrollbar <<NextPara>> {
-    tk::ScrollByPages %W v 1
+    tk::ScrollByPages %W Visual 1
 }
 bind Scrollbar <<PrevChar>> {
     tk::ScrollByUnits %W h -1
@@ -131,10 +131,10 @@ bind Scrollbar <<LineEnd>> {
 
 if {[tk windowingsystem] eq "aqua"} {
     bind Scrollbar <MouseWheel> {
-	tk::ScrollByUnits %W v [expr {-(%D)}]
+	tk::ScrollByUnits %W Visual [expr {-(%D)}]
     }
     bind Scrollbar <Option-MouseWheel> {
-	tk::ScrollByUnits %W v [expr {-10 * (%D)}]
+	tk::ScrollByUnits %W Visual [expr {-10 * (%D)}]
     }
     bind Scrollbar <Shift-MouseWheel> {
 	tk::ScrollByUnits %W h [expr {-(%D)}]
@@ -145,9 +145,9 @@ if {[tk windowingsystem] eq "aqua"} {
 } else {
     bind Scrollbar <MouseWheel> {
 	if {%D >= 0} {
-	    tk::ScrollByUnits %W v [expr {-%D/30}]
+	    tk::ScrollByUnits %W Visual [expr {-%D/30}]
 	} else {
-	    tk::ScrollByUnits %W v [expr {(29-%D)/30}]
+	    tk::ScrollByUnits %W Visual [expr {(29-%D)/30}]
 	}
     }
     bind Scrollbar <Shift-MouseWheel> {
@@ -160,8 +160,8 @@ if {[tk windowingsystem] eq "aqua"} {
 }
 
 if {[tk windowingsystem] eq "x11"} {
-    bind Scrollbar <4> {tk::ScrollByUnits %W v -5}
-    bind Scrollbar <5> {tk::ScrollByUnits %W v 5}
+    bind Scrollbar <4> {tk::ScrollByUnits %W Visual -5}
+    bind Scrollbar <5> {tk::ScrollByUnits %W Visual 5}
     bind Scrollbar <Shift-4> {tk::ScrollByUnits %W h -5}
     bind Scrollbar <Shift-5> {tk::ScrollByUnits %W h 5}
 }
@@ -333,7 +333,7 @@ proc ::tk::ScrollEndDrag {w x y} {
 # Arguments:
 # w -		The scrollbar widget.
 # orient -	Which kinds of scrollbars this applies to:  "h" for
-#		horizontal, "v" for vertical, "hv" for both.
+#		horizontal, "Visual" for vertical, "hv" for both.
 # amount -	How many units to scroll:  typically 1 or -1.
 
 proc ::tk::ScrollByUnits {w orient amount} {
@@ -358,7 +358,7 @@ proc ::tk::ScrollByUnits {w orient amount} {
 # Arguments:
 # w -		The scrollbar widget.
 # orient -	Which kinds of scrollbars this applies to:  "h" for
-#		horizontal, "v" for vertical, "hv" for both.
+#		horizontal, "Visual" for vertical, "hv" for both.
 # amount -	How many screens to scroll:  typically 1 or -1.
 
 proc ::tk::ScrollByPages {w orient amount} {

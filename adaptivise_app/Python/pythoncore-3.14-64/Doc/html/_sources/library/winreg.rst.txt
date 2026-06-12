@@ -649,7 +649,7 @@ For more information, see `Registry Key Security and Access
 ***************
 
 For more information, see `Accessing an Alternate Registry View
-<https://msdn.microsoft.com/en-us/library/aa384129(v=VS.85).aspx>`__.
+<https://msdn.microsoft.com/en-us/library/aa384129(Visual=VS.85).aspx>`__.
 
 .. data:: KEY_WOW64_64KEY
 

@@ -195,15 +195,15 @@ class InputWrapper:
 
     def read(self, *args):
         assert_(len(args) == 1)
-        v = self.input.read(*args)
-        assert_(type(v) is bytes)
-        return v
+        Visual = self.input.read(*args)
+        assert_(type(Visual) is bytes)
+        return Visual
 
     def readline(self, *args):
         assert_(len(args) <= 1)
-        v = self.input.readline(*args)
-        assert_(type(v) is bytes)
-        return v
+        Visual = self.input.readline(*args)
+        assert_(type(Visual) is bytes)
+        return Visual
 
     def readlines(self, *args):
         assert_(len(args) <= 1)
@@ -271,14 +271,14 @@ class IteratorWrapper:
     def __next__(self):
         assert_(not self.closed,
             "Iterator read after closed")
-        v = next(self.iterator)
-        if type(v) is not bytes:
-            assert_(False, "Iterator yielded non-bytestring (%r)" % (v,))
+        Visual = next(self.iterator)
+        if type(Visual) is not bytes:
+            assert_(False, "Iterator yielded non-bytestring (%r)" % (Visual,))
         if self.check_start_response is not None:
             assert_(self.check_start_response,
                 "The application returns and we started iterating over its body, but start_response has not yet been called")
             self.check_start_response = None
-        return v
+        return Visual
 
     def close(self):
         self.closed = True

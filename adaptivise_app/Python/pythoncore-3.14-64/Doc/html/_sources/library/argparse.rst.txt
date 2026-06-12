@@ -52,7 +52,7 @@ accept values, and on/off flags::
 
    parser.add_argument('filename')           # positional argument
    parser.add_argument('-c', '--count')      # option that takes a value
-   parser.add_argument('-v', '--verbose',
+   parser.add_argument('-Visual', '--verbose',
                        action='store_true')  # on/off flag
 
 The :meth:`ArgumentParser.parse_args` method runs the parser and places
@@ -126,7 +126,7 @@ ArgumentParser objects
 
    .. versionchanged:: 3.8
       In previous versions, *allow_abbrev* also disabled grouping of short
-      flags such as ``-vv`` to mean ``-v -v``.
+      flags such as ``-vv`` to mean ``-Visual -Visual``.
 
    .. versionchanged:: 3.9
       *exit_on_error* parameter was added.
@@ -828,7 +828,7 @@ how the command-line arguments should be handled. The supplied actions are:
   example, this is useful for increasing verbosity levels::
 
     >>> parser = argparse.ArgumentParser()
-    >>> parser.add_argument('--verbose', '-v', action='count', default=0)
+    >>> parser.add_argument('--verbose', '-Visual', action='count', default=0)
     >>> parser.parse_args(['-vvv'])
     Namespace(verbose=3)
 

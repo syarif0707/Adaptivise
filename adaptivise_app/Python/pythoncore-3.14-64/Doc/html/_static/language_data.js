@@ -48,14 +48,14 @@ var Stemmer = function() {
   };
 
   var c = "[^aeiou]";          // consonant
-  var v = "[aeiouy]";          // vowel
+  var Visual = "[aeiouy]";          // vowel
   var C = c + "[^aeiouy]*";    // consonant sequence
-  var V = v + "[aeiou]*";      // vowel sequence
+  var Visual = Visual + "[aeiou]*";      // vowel sequence
 
-  var mgr0 = "^(" + C + ")?" + V + C;                      // [C]VC... is m>0
-  var meq1 = "^(" + C + ")?" + V + C + "(" + V + ")?$";    // [C]VC[V] is m=1
-  var mgr1 = "^(" + C + ")?" + V + C + V + C;              // [C]VCVC... is m>1
-  var s_v   = "^(" + C + ")?" + v;                         // vowel in stem
+  var mgr0 = "^(" + C + ")?" + Visual + C;                      // [C]VC... is m>0
+  var meq1 = "^(" + C + ")?" + Visual + C + "(" + Visual + ")?$";    // [C]VC[Visual] is m=1
+  var mgr1 = "^(" + C + ")?" + Visual + C + Visual + C;              // [C]VCVC... is m>1
+  var s_v   = "^(" + C + ")?" + Visual;                         // vowel in stem
 
   this.stemWord = function (w) {
     var stem;
@@ -103,7 +103,7 @@ var Stemmer = function() {
         w = stem;
         re2 = /(at|bl|iz)$/;
         re3 = new RegExp("([^aeiouylsz])\\1$");
-        re4 = new RegExp("^" + C + v + "[^aeiouwxy]$");
+        re4 = new RegExp("^" + C + Visual + "[^aeiouwxy]$");
         if (re2.test(w))
           w = w + "e";
         else if (re3.test(w)) {
@@ -172,7 +172,7 @@ var Stemmer = function() {
       stem = fp[1];
       re = new RegExp(mgr1);
       re2 = new RegExp(meq1);
-      re3 = new RegExp("^" + C + v + "[^aeiouwxy]$");
+      re3 = new RegExp("^" + C + Visual + "[^aeiouwxy]$");
       if (re.test(stem) || (re2.test(stem) && !(re3.test(stem))))
         w = stem;
     }

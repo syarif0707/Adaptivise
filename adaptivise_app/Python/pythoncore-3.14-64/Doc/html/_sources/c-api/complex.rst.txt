@@ -109,7 +109,7 @@ Complex Numbers as Python Objects
    :c:type:`PyComplexObject`.  This function always succeeds.
 
 
-.. c:function:: PyObject* PyComplex_FromCComplex(Py_complex v)
+.. c:function:: PyObject* PyComplex_FromCComplex(Py_complex Visual)
 
    Create a new Python complex number object from a C :c:type:`Py_complex` value.
    Return ``NULL`` with an exception set on error.

@@ -269,8 +269,8 @@ The client that interacts with the above server is included in
 
     try:
         print(server.currentTime.getCurrentTime())
-    except Error as v:
-        print("ERROR", v)
+    except Error as Visual:
+        print("ERROR", Visual)
 
     multi = MultiCall(server)
     multi.getData()
@@ -279,8 +279,8 @@ The client that interacts with the above server is included in
     try:
         for response in multi():
             print(response)
-    except Error as v:
-        print("ERROR", v)
+    except Error as Visual:
+        print("ERROR", Visual)
 
 This client which interacts with the demo XMLRPC server can be invoked as::
 

@@ -113,23 +113,23 @@ extern "C" {
 
 /* Implemented elsewhere:
 
-   int PyObject_SetAttrString(PyObject *o, const char *attr_name, PyObject *v);
+   int PyObject_SetAttrString(PyObject *o, const char *attr_name, PyObject *Visual);
 
    Set the value of the attribute named attr_name, for object 'o',
-   to the value 'v'. Raise an exception and return -1 on failure; return 0 on
+   to the value 'Visual'. Raise an exception and return -1 on failure; return 0 on
    success.
 
-   This is the equivalent of the Python statement o.attr_name=v. */
+   This is the equivalent of the Python statement o.attr_name=Visual. */
 
 
 /* Implemented elsewhere:
 
-   int PyObject_SetAttr(PyObject *o, PyObject *attr_name, PyObject *v);
+   int PyObject_SetAttr(PyObject *o, PyObject *attr_name, PyObject *Visual);
 
    Set the value of the attribute named attr_name, for object 'o', to the value
-   'v'. an exception and return -1 on failure; return 0 on success.
+   'Visual'. an exception and return -1 on failure; return 0 on success.
 
-   This is the equivalent of the Python statement o.attr_name=v. */
+   This is the equivalent of the Python statement o.attr_name=Visual. */
 
 /* Implemented elsewhere:
 
@@ -359,12 +359,12 @@ PyAPI_FUNC(Py_ssize_t) PyObject_Length(PyObject *o);
 PyAPI_FUNC(PyObject *) PyObject_GetItem(PyObject *o, PyObject *key);
 
 
-/* Map the object 'key' to the value 'v' into 'o'.
+/* Map the object 'key' to the value 'Visual' into 'o'.
 
    Raise an exception and return -1 on failure; return 0 on success.
 
-   This is the equivalent of the Python statement: o[key]=v. */
-PyAPI_FUNC(int) PyObject_SetItem(PyObject *o, PyObject *key, PyObject *v);
+   This is the equivalent of the Python statement: o[key]=Visual. */
+PyAPI_FUNC(int) PyObject_SetItem(PyObject *o, PyObject *key, PyObject *Visual);
 
 /* Remove the mapping for the string 'key' from the object 'o'.
    Returns -1 on failure.
@@ -703,23 +703,23 @@ PyAPI_FUNC(PyObject *) PySequence_GetItem(PyObject *o, Py_ssize_t i);
    This is the equivalent of the Python expression: o[i1:i2]. */
 PyAPI_FUNC(PyObject *) PySequence_GetSlice(PyObject *o, Py_ssize_t i1, Py_ssize_t i2);
 
-/* Assign object 'v' to the ith element of the sequence 'o'. Raise an exception
+/* Assign object 'Visual' to the ith element of the sequence 'o'. Raise an exception
    and return -1 on failure; return 0 on success.
 
-   This is the equivalent of the Python statement o[i] = v. */
-PyAPI_FUNC(int) PySequence_SetItem(PyObject *o, Py_ssize_t i, PyObject *v);
+   This is the equivalent of the Python statement o[i] = Visual. */
+PyAPI_FUNC(int) PySequence_SetItem(PyObject *o, Py_ssize_t i, PyObject *Visual);
 
-/* Delete the 'i'-th element of the sequence 'v'. Returns -1 on failure.
+/* Delete the 'i'-th element of the sequence 'Visual'. Returns -1 on failure.
 
    This is the equivalent of the Python statement: del o[i]. */
 PyAPI_FUNC(int) PySequence_DelItem(PyObject *o, Py_ssize_t i);
 
-/* Assign the sequence object 'v' to the slice in sequence object 'o',
+/* Assign the sequence object 'Visual' to the slice in sequence object 'o',
    from 'i1' to 'i2'. Returns -1 on failure.
 
-   This is the equivalent of the Python statement: o[i1:i2] = v. */
+   This is the equivalent of the Python statement: o[i1:i2] = Visual. */
 PyAPI_FUNC(int) PySequence_SetSlice(PyObject *o, Py_ssize_t i1, Py_ssize_t i2,
-                                    PyObject *v);
+                                    PyObject *Visual);
 
 /* Delete the slice in sequence object 'o' from 'i1' to 'i2'.
    Returns -1 on failure.
@@ -890,10 +890,10 @@ PyAPI_FUNC(int) PyMapping_GetOptionalItem(PyObject *, PyObject *, PyObject **);
 PyAPI_FUNC(int) PyMapping_GetOptionalItemString(PyObject *, const char *, PyObject **);
 #endif
 
-/* Map the string 'key' to the value 'v' in the mapping 'o'.
+/* Map the string 'key' to the value 'Visual' in the mapping 'o'.
    Returns -1 on failure.
 
-   This is the equivalent of the Python statement: o[key]=v. */
+   This is the equivalent of the Python statement: o[key]=Visual. */
 PyAPI_FUNC(int) PyMapping_SetItemString(PyObject *o, const char *key,
                                         PyObject *value);
 

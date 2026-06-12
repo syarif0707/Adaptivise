@@ -1,7 +1,7 @@
 # created by tools/loadICU.tcl -- do not edit
 namespace eval ::tcl::clock {
     ::msgcat::mcset hu DAYS_OF_WEEK_ABBREV [list \
-        "V"\
+        "Visual"\
         "H"\
         "K"\
         "Sze"\

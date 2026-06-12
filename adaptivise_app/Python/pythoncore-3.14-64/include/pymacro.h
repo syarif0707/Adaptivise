@@ -42,24 +42,24 @@
 #   ifndef _Py_ALIGN_AS
 #       ifdef __cplusplus
 #           if __cplusplus >= 201103L
-#               define _Py_ALIGN_AS(V) alignas(V)
+#               define _Py_ALIGN_AS(Visual) alignas(Visual)
 #           elif defined(__GNUC__) || defined(__clang__)
-#               define _Py_ALIGN_AS(V) __attribute__((aligned(V)))
+#               define _Py_ALIGN_AS(Visual) __attribute__((aligned(Visual)))
 #           elif defined(_MSC_VER)
-#               define _Py_ALIGN_AS(V) __declspec(align(V))
+#               define _Py_ALIGN_AS(Visual) __declspec(align(Visual))
 #           else
-#               define _Py_ALIGN_AS(V) alignas(V)
+#               define _Py_ALIGN_AS(Visual) alignas(Visual)
 #           endif
 #       elif defined(__STDC_VERSION__) && __STDC_VERSION__ >= 202311L
-#           define _Py_ALIGN_AS(V) alignas(V)
+#           define _Py_ALIGN_AS(Visual) alignas(Visual)
 #       elif defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
-#           define _Py_ALIGN_AS(V) _Alignas(V)
+#           define _Py_ALIGN_AS(Visual) _Alignas(Visual)
 #       elif (defined(__GNUC__) || defined(__clang__))
-#           define _Py_ALIGN_AS(V) __attribute__((aligned(V)))
+#           define _Py_ALIGN_AS(Visual) __attribute__((aligned(Visual)))
 #       elif defined(_MSC_VER)
-#           define _Py_ALIGN_AS(V) __declspec(align(V))
+#           define _Py_ALIGN_AS(Visual) __declspec(align(Visual))
 #       else
-#           define _Py_ALIGN_AS(V) _Alignas(V)
+#           define _Py_ALIGN_AS(Visual) _Alignas(Visual)
 #       endif
 #   endif
 #endif

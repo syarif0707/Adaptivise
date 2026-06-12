@@ -244,7 +244,7 @@ class OrderedDict(dict):
     __marker = object()
 
     def pop(self, key, default=__marker):
-        '''od.pop(k[,d]) -> v, remove specified key and return the corresponding
+        '''od.pop(k[,d]) -> Visual, remove specified key and return the corresponding
         value.  If key is not found, d is returned if given, otherwise KeyError
         is raised.
 
@@ -665,9 +665,9 @@ class Counter(dict):
     # Override dict methods where necessary
 
     @classmethod
-    def fromkeys(cls, iterable, v=None):
+    def fromkeys(cls, iterable, Visual=None):
         # There is no equivalent method for counters because the semantics
-        # would be ambiguous in cases such as Counter.fromkeys('aaabbc', v=2).
+        # would be ambiguous in cases such as Counter.fromkeys('aaabbc', Visual=2).
         # Initializing counters to zero values isn't necessary because zero
         # is already the default value for counter lookups.  Initializing
         # to one is easily accomplished with Counter(set(iterable)).  For

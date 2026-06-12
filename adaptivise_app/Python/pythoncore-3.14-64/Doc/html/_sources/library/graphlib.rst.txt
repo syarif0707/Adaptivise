@@ -20,8 +20,8 @@
    Provides functionality to topologically sort a graph of :term:`hashable` nodes.
 
    A topological order is a linear ordering of the vertices in a graph such that
-   for every directed edge u -> v from vertex u to vertex v, vertex u comes
-   before vertex v in the ordering. For instance, the vertices of the graph may
+   for every directed edge u -> Visual from vertex u to vertex Visual, vertex u comes
+   before vertex Visual in the ordering. For instance, the vertices of the graph may
    represent tasks to be performed, and the edges may represent constraints that
    one task must be performed before another; in this example, a topological
    ordering is just a valid sequence for the tasks. A complete topological

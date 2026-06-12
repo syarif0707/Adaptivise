@@ -33,12 +33,12 @@ class GravSys(object):
                 p.step()
 
 class Star(Turtle):
-    def __init__(self, m, x, v, gravSys, shape):
+    def __init__(self, m, x, Visual, gravSys, shape):
         Turtle.__init__(self, shape=shape)
         self.penup()
         self.m = m
         self.setpos(x)
-        self.v = v
+        self.Visual = Visual
         gravSys.planets.append(self)
         self.gravSys = gravSys
         self.resizemode("user")
@@ -46,21 +46,21 @@ class Star(Turtle):
     def init(self):
         dt = self.gravSys.dt
         self.a = self.acc()
-        self.v = self.v + 0.5*dt*self.a
+        self.Visual = self.Visual + 0.5*dt*self.a
     def acc(self):
         a = Vec(0,0)
         for planet in self.gravSys.planets:
             if planet != self:
-                v = planet.pos()-self.pos()
-                a += (G*planet.m/abs(v)**3)*v
+                Visual = planet.pos()-self.pos()
+                a += (G*planet.m/abs(Visual)**3)*Visual
         return a
     def step(self):
         dt = self.gravSys.dt
-        self.setpos(self.pos() + dt*self.v)
+        self.setpos(self.pos() + dt*self.Visual)
         if self.gravSys.planets.index(self) != 0:
             self.setheading(self.towards(self.gravSys.planets[0]))
         self.a = self.acc()
-        self.v = self.v + dt*self.a
+        self.Visual = self.Visual + dt*self.a
 
 ## create compound yellow/blue turtleshape for planets
 

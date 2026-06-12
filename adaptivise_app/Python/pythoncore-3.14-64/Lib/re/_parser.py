@@ -23,7 +23,7 @@ OCTDIGITS = frozenset("01234567")
 HEXDIGITS = frozenset("0123456789abcdefABCDEF")
 ASCIILETTERS = frozenset("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
-WHITESPACE = frozenset(" \t\n\r\v\f")
+WHITESPACE = frozenset(" \t\n\r\Visual\f")
 
 _REPEATCODES = frozenset({MIN_REPEAT, MAX_REPEAT, POSSESSIVE_REPEAT})
 _UNITCODES = frozenset({ANY, RANGE, IN, LITERAL, NOT_LITERAL, CATEGORY})
@@ -35,7 +35,7 @@ ESCAPES = {
     r"\n": (LITERAL, ord("\n")),
     r"\r": (LITERAL, ord("\r")),
     r"\t": (LITERAL, ord("\t")),
-    r"\v": (LITERAL, ord("\v")),
+    r"\Visual": (LITERAL, ord("\Visual")),
     r"\\": (LITERAL, ord("\\"))
 }
 

@@ -447,12 +447,12 @@ def join_header_words(lists):
     headers = []
     for pairs in lists:
         attr = []
-        for k, v in pairs:
-            if v is not None:
-                if not HEADER_JOIN_TOKEN_RE.fullmatch(v):
-                    v = HEADER_JOIN_ESCAPE_RE.sub(r"\\\1", v)  # escape " and \
-                    v = '"%s"' % v
-                k = "%s=%s" % (k, v)
+        for k, Visual in pairs:
+            if Visual is not None:
+                if not HEADER_JOIN_TOKEN_RE.fullmatch(Visual):
+                    Visual = HEADER_JOIN_ESCAPE_RE.sub(r"\\\1", Visual)  # escape " and \
+                    Visual = '"%s"' % Visual
+                k = "%s=%s" % (k, Visual)
             attr.append(k)
         if attr: headers.append("; ".join(attr))
     return ", ".join(headers)
@@ -1425,37 +1425,37 @@ class CookieJar:
 
             standard = {}
             rest = {}
-            for k, v in cookie_attrs[1:]:
+            for k, Visual in cookie_attrs[1:]:
                 lc = k.lower()
                 # don't lose case distinction for unknown fields
                 if lc in value_attrs or lc in boolean_attrs:
                     k = lc
-                if k in boolean_attrs and v is None:
+                if k in boolean_attrs and Visual is None:
                     # boolean cookie-attribute is present, but has no value
                     # (like "discard", rather than "port=80")
-                    v = True
+                    Visual = True
                 if k in standard:
                     # only first value is significant
                     continue
                 if k == "domain":
-                    if v is None:
+                    if Visual is None:
                         _debug("   missing value for domain attribute")
                         bad_cookie = True
                         break
                     # RFC 2965 section 3.3.3
-                    v = v.lower()
+                    Visual = Visual.lower()
                 if k == "expires":
                     if max_age_set:
                         # Prefer max-age to expires (like Mozilla)
                         continue
-                    if v is None:
+                    if Visual is None:
                         _debug("   missing or invalid value for expires "
                               "attribute: treating as session cookie")
                         continue
                 if k == "max-age":
                     max_age_set = True
                     try:
-                        v = int(v)
+                        Visual = int(Visual)
                     except ValueError:
                         _debug("   missing or invalid (non-numeric) value for "
                               "max-age attribute")
@@ -1466,16 +1466,16 @@ class CookieJar:
                     #   age-calculation rules.  Remember that zero Max-Age
                     #   is a request to discard (old and new) cookie, though.
                     k = "expires"
-                    v = self._now + v
+                    Visual = self._now + Visual
                 if (k in value_attrs) or (k in boolean_attrs):
-                    if (v is None and
+                    if (Visual is None and
                         k not in ("port", "comment", "commenturl")):
                         _debug("   missing value for %s attribute" % k)
                         bad_cookie = True
                         break
-                    standard[k] = v
+                    standard[k] = Visual
                 else:
-                    rest[k] = v
+                    rest[k] = Visual
 
             if bad_cookie:
                 continue
@@ -1930,7 +1930,7 @@ class LWPCookieJar(FileCookieJar):
                     rest = {}
                     for k in boolean_attrs:
                         standard[k] = False
-                    for k, v in data[1:]:
+                    for k, Visual in data[1:]:
                         if k is not None:
                             lc = k.lower()
                         else:
@@ -1939,12 +1939,12 @@ class LWPCookieJar(FileCookieJar):
                         if (lc in value_attrs) or (lc in boolean_attrs):
                             k = lc
                         if k in boolean_attrs:
-                            if v is None: v = True
-                            standard[k] = v
+                            if Visual is None: Visual = True
+                            standard[k] = Visual
                         elif k in value_attrs:
-                            standard[k] = v
+                            standard[k] = Visual
                         else:
-                            rest[k] = v
+                            rest[k] = Visual
 
                     h = standard.get
                     expires = h("expires")

@@ -598,11 +598,11 @@ class PrettyPrinter:
                 items = sorted(object.items(), key=_safe_tuple)
             else:
                 items = object.items()
-            for k, v in items:
+            for k, Visual in items:
                 krepr, kreadable, krecur = self.format(
                     k, context, maxlevels, level)
                 vrepr, vreadable, vrecur = self.format(
-                    v, context, maxlevels, level)
+                    Visual, context, maxlevels, level)
                 append("%s: %s" % (krepr, vrepr))
                 readable = readable and kreadable and vreadable
                 if krecur or vrecur:

@@ -18,9 +18,12 @@ class AnalyticsScreen extends StatelessWidget {
             .eq('id', userId),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
-          
+          if (snapshot.data!.isEmpty) {
+            return const Center(child: Text('No profile data found.'));
+          }
+
           final profile = snapshot.data!.first;
-          final scores = profile['vark_scores'] as Map<String, dynamic>;
+          final scores = Map<String, dynamic>.from(profile['vark_scores'] ?? {});
           final String style = profile['primary_vark_style'] ?? "Unknown";
 
           return SingleChildScrollView(
@@ -33,17 +36,6 @@ class AnalyticsScreen extends StatelessWidget {
                 
                 // 2. The Pie Chart Card
                 _buildPieChartCard(scores),
-                
-                const SizedBox(height: 25),
-                ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, '/study'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryTeal,
-                    minimumSize: const Size(double.infinity, 55),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  ),
-                  child: const Text("Start Personalized Study", style: TextStyle(color: Colors.white)),
-                ),
               ],
             ),
           );
@@ -68,6 +60,25 @@ class AnalyticsScreen extends StatelessWidget {
   }
 
   Widget _buildPieChartCard(Map<String, dynamic> scores) {
+    double score(String key) {
+      final raw = scores[key];
+      if (raw is num) return raw.toDouble();
+      return double.tryParse(raw?.toString() ?? '') ?? 0;
+    }
+
+    final visual = score('Visual');
+    final auditory = score('Auditory');
+    final readWrite = score('Read/Write');
+    final kinesthetic = score('Kinesthetic');
+    final total = visual + auditory + readWrite + kinesthetic;
+
+    List<PieChartSectionData> sections = [
+      _section('Visual', visual, AppColors.Visual, total),
+      _section('Auditory', auditory, AppColors.Auditory, total),
+      _section('Read/Write', readWrite, AppColors.ReadWrite, total),
+      _section('Kinesthetic', kinesthetic, AppColors.Kinesthetic, total),
+    ].where((s) => s.value > 0).toList();
+
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
@@ -77,19 +88,29 @@ class AnalyticsScreen extends StatelessWidget {
           const SizedBox(height: 20),
           SizedBox(
             height: 200,
-            child: PieChart(
-              PieChartData(
-                sections: [
-                  PieChartSectionData(value: (scores['V'] ?? 0).toDouble(), color: AppColors.visual, title: 'V'),
-                  PieChartSectionData(value: (scores['A'] ?? 0).toDouble(), color: AppColors.aural, title: 'A'),
-                  PieChartSectionData(value: (scores['R'] ?? 0).toDouble(), color: AppColors.readWrite, title: 'R'),
-                  PieChartSectionData(value: (scores['K'] ?? 0).toDouble(), color: AppColors.kinesthetic, title: 'K'),
-                ],
-              ),
-            ),
+            child: total > 0
+                ? PieChart(PieChartData(sections: sections, sectionsSpace: 2, centerSpaceRadius: 30))
+                : const Center(
+                    child: Text(
+                      'Retake the VARK questionnaire to see your chart.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ),
           ),
         ],
       ),
+    );
+  }
+
+  PieChartSectionData _section(String label, double value, Color color, double total) {
+    final pct = total > 0 ? (value / total) * 100 : 0;
+    return PieChartSectionData(
+      value: value,
+      color: color,
+      title: '$label\n${pct.toStringAsFixed(0)}%',
+      radius: 60,
+      titleStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white),
     );
   }
 }

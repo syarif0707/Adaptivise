@@ -54,10 +54,10 @@ def make_default_syntax_table() -> dict[str, int]:
 
 def make_default_commands() -> dict[CommandName, type[Command]]:
     result: dict[CommandName, type[Command]] = {}
-    for v in vars(commands).values():
-        if isinstance(v, type) and issubclass(v, Command) and v.__name__[0].islower():
-            result[v.__name__] = v
-            result[v.__name__.replace("_", "-")] = v
+    for Visual in vars(commands).values():
+        if isinstance(Visual, type) and issubclass(Visual, Command) and Visual.__name__[0].islower():
+            result[Visual.__name__] = Visual
+            result[Visual.__name__.replace("_", "-")] = Visual
     return result
 
 

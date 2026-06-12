@@ -764,7 +764,7 @@ Yes.  Usually this is done by nesting :keyword:`lambda` within
    64+F(Ru+x*(Ro-Ru)/Sx,yc,0,0,i)),range(Sx))):L(Iu+y*(Io-Iu)/Sy),range(Sy
    ))))(-2.1, 0.7, -1.2, 1.2, 30, 80, 24))
    #    \___ ___/  \___ ___/  |   |   |__ lines on screen
-   #        V          V      |   |______ columns on screen
+   #        Visual          Visual      |   |______ columns on screen
    #        |          |      |__________ maximum of "iterations"
    #        |          |_________________ range on y axis
    #        |____________________________ range on x axis
@@ -1943,8 +1943,8 @@ For example, here is the implementation of
 :meth:`!collections.abc.Sequence.__contains__`::
 
     def __contains__(self, value):
-        for v in self:
-            if v is value or v == value:
+        for Visual in self:
+            if Visual is value or Visual == value:
                 return True
         return False
 

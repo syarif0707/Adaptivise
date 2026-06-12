@@ -11,7 +11,7 @@ extern "C" {
 extern PyTypeObject _PyManagedBuffer_Type;
 
 PyObject *
-_PyMemoryView_FromBufferProc(PyObject *v, int flags,
+_PyMemoryView_FromBufferProc(PyObject *Visual, int flags,
                              getbufferproc bufferproc);
 
 #ifdef __cplusplus

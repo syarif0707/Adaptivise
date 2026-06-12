@@ -567,8 +567,8 @@ Example of Client Usage
 
        try:
            print(proxy.examples.getStateName(41))
-       except Error as v:
-           print("ERROR", v)
+       except Error as Visual:
+           print("ERROR", Visual)
 
 To access an XML-RPC server through a HTTP proxy, you need to define a custom
 transport.  The following example shows how::

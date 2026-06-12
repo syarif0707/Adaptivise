@@ -18,14 +18,14 @@
 
     <title>Argparse Tutorial &#8212; Python 3.14.4 documentation</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
-    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=82640b3f" />
-    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?Visual=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?Visual=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?Visual=82640b3f" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?Visual=5349f25f" />
     
-    <script src="../_static/documentation_options.js?v=1885ab2e"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?Visual=1885ab2e"></script>
+    <script src="../_static/doctools.js?Visual=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?Visual=dc90522c"></script>
     
     <script src="../_static/sidebar.js"></script>
     
@@ -509,7 +509,7 @@ you will notice that I haven’t yet touched on the topic of short
 versions of the options. It’s quite simple:</p>
 <div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
 <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;increase output verbosity&quot;</span><span class="p">,</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;increase output verbosity&quot;</span><span class="p">,</span>
                     <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
 <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
@@ -517,14 +517,14 @@ versions of the options. It’s quite simple:</p>
 </pre></div>
 </div>
 <p>And here goes:</p>
-<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span>-v
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span>-Visual
 <span class="go">verbosity turned on</span>
 <span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span>--help
-<span class="go">usage: prog.py [-h] [-v]</span>
+<span class="go">usage: prog.py [-h] [-Visual]</span>
 
 <span class="go">options:</span>
 <span class="go">  -h, --help     show this help message and exit</span>
-<span class="go">  -v, --verbose  increase output verbosity</span>
+<span class="go">  -Visual, --verbose  increase output verbosity</span>
 </pre></div>
 </div>
 <p>Note that the new ability is also reflected in the help text.</p>
@@ -537,7 +537,7 @@ versions of the options. It’s quite simple:</p>
 <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;square&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
                     <span class="n">help</span><span class="o">=</span><span class="s2">&quot;display a square of a given number&quot;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
                     <span class="n">help</span><span class="o">=</span><span class="s2">&quot;increase output verbosity&quot;</span><span class="p">)</span>
 <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 <span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="o">**</span><span class="mi">2</span>
@@ -549,7 +549,7 @@ versions of the options. It’s quite simple:</p>
 </div>
 <p>And now the output:</p>
 <div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>prog.py
-<span class="go">usage: prog.py [-h] [-v] square</span>
+<span class="go">usage: prog.py [-h] [-Visual] square</span>
 <span class="go">prog.py: error: the following arguments are required: square</span>
 <span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span>
 <span class="go">16</span>
@@ -569,7 +569,7 @@ multiple verbosity values, and actually get to use them:</p>
 <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;square&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
                     <span class="n">help</span><span class="o">=</span><span class="s2">&quot;display a square of a given number&quot;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
                     <span class="n">help</span><span class="o">=</span><span class="s2">&quot;increase output verbosity&quot;</span><span class="p">)</span>
 <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 <span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="o">**</span><span class="mi">2</span>
@@ -584,14 +584,14 @@ multiple verbosity values, and actually get to use them:</p>
 <p>And the output:</p>
 <div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span>
 <span class="go">16</span>
-<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-v
-<span class="go">usage: prog.py [-h] [-v VERBOSITY] square</span>
-<span class="go">prog.py: error: argument -v/--verbosity: expected one argument</span>
-<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-v<span class="w"> </span><span class="m">1</span>
+<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-Visual
+<span class="go">usage: prog.py [-h] [-Visual VERBOSITY] square</span>
+<span class="go">prog.py: error: argument -Visual/--verbosity: expected one argument</span>
+<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-Visual<span class="w"> </span><span class="m">1</span>
 <span class="go">4^2 == 16</span>
-<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-v<span class="w"> </span><span class="m">2</span>
+<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-Visual<span class="w"> </span><span class="m">2</span>
 <span class="go">the square of 4 equals 16</span>
-<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-v<span class="w"> </span><span class="m">3</span>
+<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-Visual<span class="w"> </span><span class="m">3</span>
 <span class="go">16</span>
 </pre></div>
 </div>
@@ -601,7 +601,7 @@ Let’s fix it by restricting the values the <code class="docutils literal notra
 <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;square&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
                     <span class="n">help</span><span class="o">=</span><span class="s2">&quot;display a square of a given number&quot;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
                     <span class="n">help</span><span class="o">=</span><span class="s2">&quot;increase output verbosity&quot;</span><span class="p">)</span>
 <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 <span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="o">**</span><span class="mi">2</span>
@@ -614,18 +614,18 @@ Let’s fix it by restricting the values the <code class="docutils literal notra
 </pre></div>
 </div>
 <p>And the output:</p>
-<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-v<span class="w"> </span><span class="m">3</span>
-<span class="go">usage: prog.py [-h] [-v {0,1,2}] square</span>
-<span class="go">prog.py: error: argument -v/--verbosity: invalid choice: 3 (choose from 0, 1, 2)</span>
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-Visual<span class="w"> </span><span class="m">3</span>
+<span class="go">usage: prog.py [-h] [-Visual {0,1,2}] square</span>
+<span class="go">prog.py: error: argument -Visual/--verbosity: invalid choice: 3 (choose from 0, 1, 2)</span>
 <span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-h
-<span class="go">usage: prog.py [-h] [-v {0,1,2}] square</span>
+<span class="go">usage: prog.py [-h] [-Visual {0,1,2}] square</span>
 
 <span class="go">positional arguments:</span>
 <span class="go">  square                display a square of a given number</span>
 
 <span class="go">options:</span>
 <span class="go">  -h, --help            show this help message and exit</span>
-<span class="go">  -v, --verbosity {0,1,2}</span>
+<span class="go">  -Visual, --verbosity {0,1,2}</span>
 <span class="go">                        increase output verbosity</span>
 </pre></div>
 </div>
@@ -638,7 +638,7 @@ verbosity argument (check the output of <code class="docutils literal notranslat
 <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;square&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
                     <span class="n">help</span><span class="o">=</span><span class="s2">&quot;display the square of a given number&quot;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span>
                     <span class="n">help</span><span class="o">=</span><span class="s2">&quot;increase output verbosity&quot;</span><span class="p">)</span>
 <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 <span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="o">**</span><span class="mi">2</span>
@@ -654,24 +654,24 @@ verbosity argument (check the output of <code class="docutils literal notranslat
 to count the number of occurrences of specific options.</p>
 <div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span>
 <span class="go">16</span>
-<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-v
+<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-Visual
 <span class="go">4^2 == 16</span>
 <span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-vv
 <span class="go">the square of 4 equals 16</span>
 <span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>--verbosity<span class="w"> </span>--verbosity
 <span class="go">the square of 4 equals 16</span>
-<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-v<span class="w"> </span><span class="m">1</span>
-<span class="go">usage: prog.py [-h] [-v] square</span>
+<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-Visual<span class="w"> </span><span class="m">1</span>
+<span class="go">usage: prog.py [-h] [-Visual] square</span>
 <span class="go">prog.py: error: unrecognized arguments: 1</span>
 <span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-h
-<span class="go">usage: prog.py [-h] [-v] square</span>
+<span class="go">usage: prog.py [-h] [-Visual] square</span>
 
 <span class="go">positional arguments:</span>
 <span class="go">  square           display a square of a given number</span>
 
 <span class="go">options:</span>
 <span class="go">  -h, --help       show this help message and exit</span>
-<span class="go">  -v, --verbosity  increase output verbosity</span>
+<span class="go">  -Visual, --verbosity  increase output verbosity</span>
 <span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span>-vvv
 <span class="go">16</span>
 </pre></div>
@@ -682,7 +682,7 @@ previous version of our script. That should explain the complaint.</p></li>
 <li><p>It also behaves similar to “store_true” action.</p></li>
 <li><p>Now here’s a demonstration of what the “count” action gives. You’ve probably
 seen this sort of usage before.</p></li>
-<li><p>And if you don’t specify the <code class="docutils literal notranslate"><span class="pre">-v</span></code> flag, that flag is considered to have
+<li><p>And if you don’t specify the <code class="docutils literal notranslate"><span class="pre">-Visual</span></code> flag, that flag is considered to have
 <code class="docutils literal notranslate"><span class="pre">None</span></code> value.</p></li>
 <li><p>As should be expected, specifying the long form of the flag, we should get
 the same output.</p></li>
@@ -696,7 +696,7 @@ our script (e.g. via the <code class="docutils literal notranslate"><span class=
 <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;square&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
                     <span class="n">help</span><span class="o">=</span><span class="s2">&quot;display a square of a given number&quot;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span>
                     <span class="n">help</span><span class="o">=</span><span class="s2">&quot;increase output verbosity&quot;</span><span class="p">)</span>
 <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 <span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="o">**</span><span class="mi">2</span>
@@ -732,7 +732,7 @@ That is, we want any value &gt;= 2 to be as verbose as possible.</p></li>
 <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;square&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span>
                     <span class="n">help</span><span class="o">=</span><span class="s2">&quot;display a square of a given number&quot;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
                     <span class="n">help</span><span class="o">=</span><span class="s2">&quot;increase output verbosity&quot;</span><span class="p">)</span>
 <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 <span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">square</span><span class="o">**</span><span class="mi">2</span>
@@ -768,7 +768,7 @@ not just squares:</p>
 <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the base&quot;</span><span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the exponent&quot;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 <span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">x</span><span class="o">**</span><span class="n">args</span><span class="o">.</span><span class="n">y</span>
 <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
@@ -781,10 +781,10 @@ not just squares:</p>
 </div>
 <p>Output:</p>
 <div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>prog.py
-<span class="go">usage: prog.py [-h] [-v] x y</span>
+<span class="go">usage: prog.py [-h] [-Visual] x y</span>
 <span class="go">prog.py: error: the following arguments are required: x, y</span>
 <span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span>-h
-<span class="go">usage: prog.py [-h] [-v] x y</span>
+<span class="go">usage: prog.py [-h] [-Visual] x y</span>
 
 <span class="go">positional arguments:</span>
 <span class="go">  x                the base</span>
@@ -792,8 +792,8 @@ not just squares:</p>
 
 <span class="go">options:</span>
 <span class="go">  -h, --help       show this help message and exit</span>
-<span class="go">  -v, --verbosity</span>
-<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">2</span><span class="w"> </span>-v
+<span class="go">  -Visual, --verbosity</span>
+<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">2</span><span class="w"> </span>-Visual
 <span class="go">4^2 == 16</span>
 </pre></div>
 </div>
@@ -804,7 +804,7 @@ to display <em>more</em> text instead:</p>
 <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the base&quot;</span><span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the exponent&quot;</span><span class="p">)</span>
-<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbosity&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;count&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
 <span class="n">answer</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">x</span><span class="o">**</span><span class="n">args</span><span class="o">.</span><span class="n">y</span>
 <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">verbosity</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
@@ -817,7 +817,7 @@ to display <em>more</em> text instead:</p>
 <p>Output:</p>
 <div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">2</span>
 <span class="go">16</span>
-<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">2</span><span class="w"> </span>-v
+<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">2</span><span class="w"> </span>-Visual
 <span class="go">4^2 == 16</span>
 <span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">2</span><span class="w"> </span>-vv
 <span class="go">Running &#39;prog.py&#39;</span>
@@ -863,7 +863,7 @@ which will be the opposite of the <code class="docutils literal notranslate"><sp
 
 <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
 <span class="n">group</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">()</span>
-<span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+<span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
 <span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-q&quot;</span><span class="p">,</span> <span class="s2">&quot;--quiet&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the base&quot;</span><span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the exponent&quot;</span><span class="p">)</span>
@@ -884,14 +884,14 @@ demonstration. Anyways, here’s the output:</p>
 <span class="go">4^2 == 16</span>
 <span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">2</span><span class="w"> </span>-q
 <span class="go">16</span>
-<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">2</span><span class="w"> </span>-v
+<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">2</span><span class="w"> </span>-Visual
 <span class="go">4 to the power 2 equals 16</span>
 <span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">2</span><span class="w"> </span>-vq
-<span class="go">usage: prog.py [-h] [-v | -q] x y</span>
-<span class="go">prog.py: error: argument -q/--quiet: not allowed with argument -v/--verbose</span>
-<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">2</span><span class="w"> </span>-v<span class="w"> </span>--quiet
-<span class="go">usage: prog.py [-h] [-v | -q] x y</span>
-<span class="go">prog.py: error: argument -q/--quiet: not allowed with argument -v/--verbose</span>
+<span class="go">usage: prog.py [-h] [-Visual | -q] x y</span>
+<span class="go">prog.py: error: argument -q/--quiet: not allowed with argument -Visual/--verbose</span>
+<span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="m">2</span><span class="w"> </span>-Visual<span class="w"> </span>--quiet
+<span class="go">usage: prog.py [-h] [-Visual | -q] x y</span>
+<span class="go">prog.py: error: argument -q/--quiet: not allowed with argument -Visual/--verbose</span>
 </pre></div>
 </div>
 <p>That should be easy to follow. I’ve added that last output so you can see the
@@ -903,7 +903,7 @@ your program, just in case they don’t know:</p>
 
 <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;calculate X to the power of Y&quot;</span><span class="p">)</span>
 <span class="n">group</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_mutually_exclusive_group</span><span class="p">()</span>
-<span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
+<span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-Visual&quot;</span><span class="p">,</span> <span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
 <span class="n">group</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-q&quot;</span><span class="p">,</span> <span class="s2">&quot;--quiet&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the base&quot;</span><span class="p">)</span>
 <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;the exponent&quot;</span><span class="p">)</span>
@@ -918,11 +918,11 @@ your program, just in case they don’t know:</p>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">x</span><span class="si">}</span><span class="s2">^</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">y</span><span class="si">}</span><span class="s2"> == </span><span class="si">{</span><span class="n">answer</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Note that slight difference in the usage text. Note the <code class="docutils literal notranslate"><span class="pre">[-v</span> <span class="pre">|</span> <span class="pre">-q]</span></code>,
-which tells us that we can either use <code class="docutils literal notranslate"><span class="pre">-v</span></code> or <code class="docutils literal notranslate"><span class="pre">-q</span></code>,
+<p>Note that slight difference in the usage text. Note the <code class="docutils literal notranslate"><span class="pre">[-Visual</span> <span class="pre">|</span> <span class="pre">-q]</span></code>,
+which tells us that we can either use <code class="docutils literal notranslate"><span class="pre">-Visual</span></code> or <code class="docutils literal notranslate"><span class="pre">-q</span></code>,
 but not both at the same time:</p>
 <div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span>--help
-<span class="go">usage: prog.py [-h] [-v | -q] x y</span>
+<span class="go">usage: prog.py [-h] [-Visual | -q] x y</span>
 
 <span class="go">calculate X to the power of Y</span>
 
@@ -932,7 +932,7 @@ but not both at the same time:</p>
 
 <span class="go">options:</span>
 <span class="go">  -h, --help     show this help message and exit</span>
-<span class="go">  -v, --verbose</span>
+<span class="go">  -Visual, --verbose</span>
 <span class="go">  -q, --quiet</span>
 </pre></div>
 </div>
@@ -946,7 +946,7 @@ allows applications to easily localize messages produced by
 <code class="xref py py-mod docutils literal notranslate"><span class="pre">argparse</span></code>. See also <a class="reference internal" href="../library/gettext.html#i18n-howto"><span class="std std-ref">Internationalizing your programs and modules</span></a>.</p>
 <p>For instance, in this <a class="reference internal" href="../library/argparse.html#module-argparse" title="argparse: Command-line option and argument parsing library."><code class="xref py py-mod docutils literal notranslate"><span class="pre">argparse</span></code></a> output:</p>
 <div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>prog.py<span class="w"> </span>--help
-<span class="go">usage: prog.py [-h] [-v | -q] x y</span>
+<span class="go">usage: prog.py [-h] [-Visual | -q] x y</span>
 
 <span class="go">calculate X to the power of Y</span>
 
@@ -956,7 +956,7 @@ allows applications to easily localize messages produced by
 
 <span class="go">options:</span>
 <span class="go">  -h, --help     show this help message and exit</span>
-<span class="go">  -v, --verbose</span>
+<span class="go">  -Visual, --verbose</span>
 <span class="go">  -q, --quiet</span>
 </pre></div>
 </div>

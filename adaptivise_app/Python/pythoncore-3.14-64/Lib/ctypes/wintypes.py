@@ -18,7 +18,7 @@ BOOLEAN = BYTE
 BOOL = ctypes.c_long
 
 class VARIANT_BOOL(ctypes._SimpleCData):
-    _type_ = "v"
+    _type_ = "Visual"
     def __repr__(self):
         return "%s(%r)" % (self.__class__.__name__, self.value)
 

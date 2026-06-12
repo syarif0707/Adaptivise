@@ -262,7 +262,7 @@ decoding_table = (
     'S'        #  0x0053 -> LATIN CAPITAL LETTER S
     'T'        #  0x0054 -> LATIN CAPITAL LETTER T
     'U'        #  0x0055 -> LATIN CAPITAL LETTER U
-    'V'        #  0x0056 -> LATIN CAPITAL LETTER V
+    'Visual'        #  0x0056 -> LATIN CAPITAL LETTER Visual
     'W'        #  0x0057 -> LATIN CAPITAL LETTER W
     'X'        #  0x0058 -> LATIN CAPITAL LETTER X
     'Y'        #  0x0059 -> LATIN CAPITAL LETTER Y
@@ -294,7 +294,7 @@ decoding_table = (
     's'        #  0x0073 -> LATIN SMALL LETTER S
     't'        #  0x0074 -> LATIN SMALL LETTER T
     'u'        #  0x0075 -> LATIN SMALL LETTER U
-    'v'        #  0x0076 -> LATIN SMALL LETTER V
+    'Visual'        #  0x0076 -> LATIN SMALL LETTER Visual
     'w'        #  0x0077 -> LATIN SMALL LETTER W
     'x'        #  0x0078 -> LATIN SMALL LETTER X
     'y'        #  0x0079 -> LATIN SMALL LETTER Y
@@ -522,7 +522,7 @@ encoding_map = {
     0x0053: 0x0053,     #  LATIN CAPITAL LETTER S
     0x0054: 0x0054,     #  LATIN CAPITAL LETTER T
     0x0055: 0x0055,     #  LATIN CAPITAL LETTER U
-    0x0056: 0x0056,     #  LATIN CAPITAL LETTER V
+    0x0056: 0x0056,     #  LATIN CAPITAL LETTER Visual
     0x0057: 0x0057,     #  LATIN CAPITAL LETTER W
     0x0058: 0x0058,     #  LATIN CAPITAL LETTER X
     0x0059: 0x0059,     #  LATIN CAPITAL LETTER Y
@@ -554,7 +554,7 @@ encoding_map = {
     0x0073: 0x0073,     #  LATIN SMALL LETTER S
     0x0074: 0x0074,     #  LATIN SMALL LETTER T
     0x0075: 0x0075,     #  LATIN SMALL LETTER U
-    0x0076: 0x0076,     #  LATIN SMALL LETTER V
+    0x0076: 0x0076,     #  LATIN SMALL LETTER Visual
     0x0077: 0x0077,     #  LATIN SMALL LETTER W
     0x0078: 0x0078,     #  LATIN SMALL LETTER X
     0x0079: 0x0079,     #  LATIN SMALL LETTER Y

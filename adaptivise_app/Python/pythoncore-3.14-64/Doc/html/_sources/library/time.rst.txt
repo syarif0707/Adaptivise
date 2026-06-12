@@ -538,7 +538,7 @@ Functions
    |           | The year starts with the week that contains    |       |
    |           | the first Thursday of the calendar year.       |       |
    +-----------+------------------------------------------------+-------+
-   | ``%V``    | ISO 8601 week number (as a decimal number      |       |
+   | ``%Visual``    | ISO 8601 week number (as a decimal number      |       |
    |           | [01,53]). The first week of the year is the    |       |
    |           | one that contains the first Thursday of the    |       |
    |           | year. Weeks start on Monday.                   |       |

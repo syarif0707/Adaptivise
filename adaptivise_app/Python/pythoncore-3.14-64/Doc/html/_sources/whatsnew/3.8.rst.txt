@@ -278,7 +278,7 @@ calculations can be shown::
   >>> print(f'{theta=}  {cos(radians(theta))=:.3f}')
   theta=30  cos(radians(theta))=0.866
 
-(Contributed by Eric V. Smith and Larry Hastings in :issue:`36817`.)
+(Contributed by Eric Visual. Smith and Larry Hastings in :issue:`36817`.)
 
 
 PEP 578: Python Runtime Audit Hooks

@@ -18,14 +18,14 @@
 
     <title>typing — Support for type hints &#8212; Python 3.14.4 documentation</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
-    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=82640b3f" />
-    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?Visual=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?Visual=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?Visual=82640b3f" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?Visual=5349f25f" />
     
-    <script src="../_static/documentation_options.js?v=1885ab2e"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?Visual=1885ab2e"></script>
+    <script src="../_static/doctools.js?Visual=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?Visual=dc90522c"></script>
     
     <script src="../_static/sidebar.js"></script>
     
@@ -829,8 +829,8 @@ not generic but implicitly inherits from <code class="docutils literal notransla
 
 <span class="nb">type</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="p">]]</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">inproduct</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)](</span><span class="n">v</span><span class="p">:</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span> <span class="c1"># Same as Iterable[tuple[T, T]]</span>
-    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">v</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">inproduct</span><span class="p">[</span><span class="n">T</span><span class="p">:</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">complex</span><span class="p">)](</span><span class="n">Visual</span><span class="p">:</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span> <span class="c1"># Same as Iterable[tuple[T, T]]</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">y</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">Visual</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>For backward compatibility, generic type aliases can also be created
@@ -1642,9 +1642,9 @@ alias, to avoid forcing evaluation of the underlying <a class="reference interna
 
 <span class="nb">type</span> <span class="n">Vec</span><span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">=</span> <span class="n">Annotated</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">T</span><span class="p">,</span> <span class="n">T</span><span class="p">]],</span> <span class="n">MaxLen</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
 
-<span class="c1"># When used in a type annotation, a type checker will treat &quot;V&quot; the same as</span>
+<span class="c1"># When used in a type annotation, a type checker will treat &quot;Visual&quot; the same as</span>
 <span class="c1"># ``Annotated[list[tuple[int, int]], MaxLen(10)]``:</span>
-<span class="nb">type</span> <span class="n">V</span> <span class="o">=</span> <span class="n">Vec</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+<span class="nb">type</span> <span class="n">Visual</span> <span class="o">=</span> <span class="n">Vec</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
 </pre></div>
 </div>
 </div></blockquote>
@@ -2013,7 +2013,7 @@ that the <code class="docutils literal notranslate"><span class="pre">TypeVar</s
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Absolute value:&quot;</span><span class="p">,</span> <span class="nb">abs</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span>
 
 <span class="n">U</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;U&#39;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="nb">str</span><span class="o">|</span><span class="nb">bytes</span><span class="p">)</span>  <span class="c1"># Can be any subtype of the union str|bytes</span>
-<span class="n">V</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;V&#39;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">SupportsAbs</span><span class="p">)</span>  <span class="c1"># Can be anything with an __abs__ method</span>
+<span class="n">Visual</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;Visual&#39;</span><span class="p">,</span> <span class="n">bound</span><span class="o">=</span><span class="n">SupportsAbs</span><span class="p">)</span>  <span class="c1"># Can be anything with an __abs__ method</span>
 </pre></div>
 </div>
 <p id="typing-constrained-typevar">Using a <em>constrained</em> type variable, however, means that the <code class="docutils literal notranslate"><span class="pre">TypeVar</span></code>

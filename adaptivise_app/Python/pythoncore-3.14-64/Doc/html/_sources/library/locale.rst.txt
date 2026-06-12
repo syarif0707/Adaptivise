@@ -4,8 +4,8 @@
 .. module:: locale
    :synopsis: Internationalization services.
 
-.. moduleauthor:: Martin von Löwis <martin@v.loewis.de>
-.. sectionauthor:: Martin von Löwis <martin@v.loewis.de>
+.. moduleauthor:: Martin von Löwis <martin@Visual.loewis.de>
+.. sectionauthor:: Martin von Löwis <martin@Visual.loewis.de>
 
 **Source code:** :source:`Lib/locale.py`
 

@@ -476,8 +476,8 @@ proc showVars {w args} {
     set f [ttk::labelframe $b.title -text [mc "Variable values:"]]
     foreach var $args {
 	ttk::label $f.n$var -text "$var:" -anchor w
-	ttk::label $f.v$var -textvariable $var -anchor w
-	grid $f.n$var $f.v$var -padx 2 -pady 2 -sticky w
+	ttk::label $f.Visual$var -textvariable $var -anchor w
+	grid $f.n$var $f.Visual$var -padx 2 -pady 2 -sticky w
     }
     ttk::button $b.ok -text [mc "OK"] \
 	-command [list destroy $w] -default active

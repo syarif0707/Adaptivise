@@ -2641,12 +2641,12 @@ convenience. These parameters all correspond to ISO 8601 date values.
 | ``%G``    | ISO 8601 year with century     | 0001, 0002, ..., 2013, | \(8)  |
 |           | representing the year that     | 2014, ..., 9998, 9999  |       |
 |           | contains the greater part of   |                        |       |
-|           | the ISO week (``%V``).         |                        |       |
+|           | the ISO week (``%Visual``).         |                        |       |
 +-----------+--------------------------------+------------------------+-------+
 | ``%u``    | ISO 8601 weekday as a decimal  | 1, 2, ..., 7           |       |
 |           | number where 1 is Monday.      |                        |       |
 +-----------+--------------------------------+------------------------+-------+
-| ``%V``    | ISO 8601 week as a decimal     | 01, 02, ..., 53        | \(8), |
+| ``%Visual``    | ISO 8601 week as a decimal     | 01, 02, ..., 53        | \(8), |
 |           | number with Monday as          |                        | \(9)  |
 |           | the first day of the week.     |                        |       |
 |           | Week 01 is the week containing |                        |       |
@@ -2670,7 +2670,7 @@ platform, consult the :manpage:`strftime(3)` documentation. There are also
 differences between platforms in handling of unsupported format specifiers.
 
 .. versionadded:: 3.6
-   ``%G``, ``%u`` and ``%V`` were added.
+   ``%G``, ``%u`` and ``%Visual`` were added.
 
 .. versionadded:: 3.12
    ``%:z`` was added.
@@ -2839,7 +2839,7 @@ Notes:
    are specified.
 
 (8)
-   Similar to ``%U`` and ``%W``, ``%V`` is only used in calculations when the
+   Similar to ``%U`` and ``%W``, ``%Visual`` is only used in calculations when the
    day of the week and the ISO year (``%G``) are specified in a
    :meth:`~.datetime.strptime` format string. Also note that ``%G`` and ``%Y`` are not
    interchangeable.
@@ -2847,7 +2847,7 @@ Notes:
 (9)
    When used with the :meth:`~.datetime.strptime` method, the leading zero is optional
    for  formats ``%d``, ``%m``, ``%H``, ``%I``, ``%M``, ``%S``, ``%j``, ``%U``,
-   ``%W``, and ``%V``. Format ``%y`` does require a leading zero.
+   ``%W``, and ``%Visual``. Format ``%y`` does require a leading zero.
 
 (10)
    When parsing a month and day using :meth:`~.datetime.strptime`, always

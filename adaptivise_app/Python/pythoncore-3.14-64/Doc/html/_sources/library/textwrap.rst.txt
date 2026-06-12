@@ -195,7 +195,7 @@ hyphenated words; only then will long words be broken if necessary, unless
       the :meth:`wrap` method will replace each whitespace character
       with a single space.  The whitespace characters replaced are
       as follows: tab, newline, vertical tab, formfeed, and carriage
-      return (``'\t\n\v\f\r'``).
+      return (``'\t\n\Visual\f\r'``).
 
       .. note::
 

@@ -83,27 +83,27 @@ asdl_ ## NAME ## _seq *_Py_asdl_ ## NAME ## _seq_new(Py_ssize_t size, PyArena *a
 #define asdl_seq_LEN(S) _Py_RVALUE(((S) == NULL ? 0 : (S)->size))
 
 #ifdef Py_DEBUG
-#  define asdl_seq_SET(S, I, V) \
+#  define asdl_seq_SET(S, I, Visual) \
     do { \
         Py_ssize_t _asdl_i = (I); \
         assert((S) != NULL); \
         assert(0 <= _asdl_i && _asdl_i < (S)->size); \
-        (S)->typed_elements[_asdl_i] = (V); \
+        (S)->typed_elements[_asdl_i] = (Visual); \
     } while (0)
 #else
-#  define asdl_seq_SET(S, I, V) _Py_RVALUE((S)->typed_elements[(I)] = (V))
+#  define asdl_seq_SET(S, I, Visual) _Py_RVALUE((S)->typed_elements[(I)] = (Visual))
 #endif
 
 #ifdef Py_DEBUG
-#  define asdl_seq_SET_UNTYPED(S, I, V) \
+#  define asdl_seq_SET_UNTYPED(S, I, Visual) \
     do { \
         Py_ssize_t _asdl_i = (I); \
         assert((S) != NULL); \
         assert(0 <= _asdl_i && _asdl_i < (S)->size); \
-        (S)->elements[_asdl_i] = (V); \
+        (S)->elements[_asdl_i] = (Visual); \
     } while (0)
 #else
-#  define asdl_seq_SET_UNTYPED(S, I, V) _Py_RVALUE((S)->elements[(I)] = (V))
+#  define asdl_seq_SET_UNTYPED(S, I, Visual) _Py_RVALUE((S)->elements[(I)] = (Visual))
 #endif
 
 #ifdef __cplusplus

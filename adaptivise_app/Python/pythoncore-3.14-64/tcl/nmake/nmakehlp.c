@@ -139,10 +139,10 @@ main(
 		return 2;
 	    }
 	    return SubstituteFile(argv[2], argv[3]);
-	case 'V':
+	case 'Visual':
 	    if (argc != 4) {
 		chars = snprintf(msg, sizeof(msg) - 1,
-		    "usage: %s -V filename matchstring\n"
+		    "usage: %s -Visual filename matchstring\n"
 		    "Extract a version from a file:\n"
 		    "eg: pkgIndex.tcl \"package ifneeded http\"",
 		    argv[0]);
@@ -183,7 +183,7 @@ main(
 	}
     }
     chars = snprintf(msg, sizeof(msg) - 1,
-	    "usage: %s -c|-f|-l|-Q|-s|-V ...\n"
+	    "usage: %s -c|-f|-l|-Q|-s|-Visual ...\n"
 	    "This is a little helper app to equalize shell differences between WinNT and\n"
 	    "Win9x and get nmake.exe to accomplish its job.\n",
 	    argv[0]);

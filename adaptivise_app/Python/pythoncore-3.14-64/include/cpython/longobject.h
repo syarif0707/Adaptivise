@@ -33,17 +33,17 @@ PyAPI_FUNC(int) PyLong_IsZero(PyObject *obj);
 
    - On success, set '*sign' to the integer sign, and return 0.
    - On failure, set an exception, and return -1. */
-PyAPI_FUNC(int) PyLong_GetSign(PyObject *v, int *sign);
+PyAPI_FUNC(int) PyLong_GetSign(PyObject *Visual, int *sign);
 
-Py_DEPRECATED(3.14) PyAPI_FUNC(int) _PyLong_Sign(PyObject *v);
+Py_DEPRECATED(3.14) PyAPI_FUNC(int) _PyLong_Sign(PyObject *Visual);
 
 /* _PyLong_NumBits.  Return the number of bits needed to represent the
    absolute value of a long.  For example, this returns 1 for 1 and -1, 2
    for 2 and -2, and 2 for 3 and -3.  It returns 0 for 0.
-   v must not be NULL, and must be a normalized long.
+   Visual must not be NULL, and must be a normalized long.
    Always successful.
 */
-PyAPI_FUNC(int64_t) _PyLong_NumBits(PyObject *v);
+PyAPI_FUNC(int64_t) _PyLong_NumBits(PyObject *Visual);
 
 /* _PyLong_FromByteArray:  View the n unsigned bytes as a binary integer in
    base 256, and return a Python int with the same numeric value.
@@ -63,25 +63,25 @@ PyAPI_FUNC(PyObject *) _PyLong_FromByteArray(
     int little_endian, int is_signed);
 
 /* _PyLong_AsByteArray: Convert the least-significant 8*n bits of long
-   v to a base-256 integer, stored in array bytes.  Normally return 0,
+   Visual to a base-256 integer, stored in array bytes.  Normally return 0,
    return -1 on error.
    If little_endian is 1/true, store the MSB at bytes[n-1] and the LSB at
    bytes[0]; else (little_endian is 0/false) store the MSB at bytes[0] and
    the LSB at bytes[n-1].
-   If is_signed is 0/false, it's an error if v < 0; else (v >= 0) n bytes
+   If is_signed is 0/false, it's an error if Visual < 0; else (Visual >= 0) n bytes
    are filled and there's nothing special about bit 0x80 of the MSB.
    If is_signed is 1/true, bytes is filled with the 2's-complement
-   representation of v's value.  Bit 0x80 of the MSB is the sign bit.
+   representation of Visual's value.  Bit 0x80 of the MSB is the sign bit.
    Error returns (-1):
-   + is_signed is 0 and v < 0.  TypeError is set in this case, and bytes
+   + is_signed is 0 and Visual < 0.  TypeError is set in this case, and bytes
      isn't altered.
-   + n isn't big enough to hold the full mathematical value of v.  For
-     example, if is_signed is 0 and there are more digits in the v than
-     fit in n; or if is_signed is 1, v < 0, and n is just 1 bit shy of
+   + n isn't big enough to hold the full mathematical value of Visual.  For
+     example, if is_signed is 0 and there are more digits in the Visual than
+     fit in n; or if is_signed is 1, Visual < 0, and n is just 1 bit shy of
      being large enough to hold a sign bit.  OverflowError is set in this
      case, but bytes holds the least-significant n bytes of the true value.
 */
-PyAPI_FUNC(int) _PyLong_AsByteArray(PyLongObject* v,
+PyAPI_FUNC(int) _PyLong_AsByteArray(PyLongObject* Visual,
     unsigned char* bytes, size_t n,
     int little_endian, int is_signed, int with_exceptions);
 

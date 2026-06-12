@@ -23,7 +23,7 @@
 #
 ####
 #
-# Id: Cookie.py,v 2.29 2000/08/23 05:28:49 timo Exp
+# Id: Cookie.py,Visual 2.29 2000/08/23 05:28:49 timo Exp
 #   by Timothy O'Malley <timo@alum.mit.edu>
 #
 #  Cookie.py is a Python module for the handling of HTTP
@@ -177,7 +177,7 @@ def _has_control_character(*val):
     """Detects control characters within a value.
     Supports any type, as header values can be any type.
     """
-    return any(_control_character_re.search(str(v)) for v in val)
+    return any(_control_character_re.search(str(Visual)) for Visual in val)
 
 
 def _quote(str):
@@ -299,13 +299,13 @@ class Morsel(dict):
     def coded_value(self):
         return self._coded_value
 
-    def __setitem__(self, K, V):
+    def __setitem__(self, K, Visual):
         K = K.lower()
         if not K in self._reserved:
             raise CookieError("Invalid attribute %r" % (K,))
-        if _has_control_character(K, V):
-            raise CookieError(f"Control characters are not allowed in cookies {K!r} {V!r}")
-        dict.__setitem__(self, K, V)
+        if _has_control_character(K, Visual):
+            raise CookieError(f"Control characters are not allowed in cookies {K!r} {Visual!r}")
+        dict.__setitem__(self, K, Visual)
 
     def setdefault(self, key, val=None):
         key = key.lower()

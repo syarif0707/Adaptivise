@@ -353,13 +353,13 @@ class ShareableList:
                 "".join(_formats),
                 self.shm.buf,
                 self._offset_data_start,
-                *(v.encode(_enc) if isinstance(v, str) else v for v in sequence)
+                *(Visual.encode(_enc) if isinstance(Visual, str) else Visual for Visual in sequence)
             )
             struct.pack_into(
                 self._format_packing_metainfo,
                 self.shm.buf,
                 self._offset_packing_formats,
-                *(v.encode(_enc) for v in _formats)
+                *(Visual.encode(_enc) for Visual in _formats)
             )
             struct.pack_into(
                 self._format_back_transform_codes,
@@ -384,12 +384,12 @@ class ShareableList:
         if (position >= self._list_len) or (self._list_len < 0):
             raise IndexError("Requested position out of range.")
 
-        v = struct.unpack_from(
+        Visual = struct.unpack_from(
             "8s",
             self.shm.buf,
             self._offset_packing_formats + position * 8
         )[0]
-        fmt = v.rstrip(b'\x00')
+        fmt = Visual.rstrip(b'\x00')
         fmt_as_str = fmt.decode(_encoding)
 
         return fmt_as_str
@@ -435,7 +435,7 @@ class ShareableList:
         position = position if position >= 0 else position + self._list_len
         try:
             offset = self._offset_data_start + self._allocated_offsets[position]
-            (v,) = struct.unpack_from(
+            (Visual,) = struct.unpack_from(
                 self._get_packing_format(position),
                 self.shm.buf,
                 offset
@@ -444,9 +444,9 @@ class ShareableList:
             raise IndexError("index out of range")
 
         back_transform = self._get_back_transform(position)
-        v = back_transform(v)
+        Visual = back_transform(Visual)
 
-        return v
+        return Visual
 
     def __setitem__(self, position, value):
         position = position if position >= 0 else position + self._list_len

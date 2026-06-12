@@ -472,10 +472,10 @@ The descriptors prevent invalid instances from being created:
         ...
     ValueError: Expected -5 to be at least 0
 
-    >>> Component('WIDGET', 'metal', 'V')    # Blocked: 'V' isn't a number
+    >>> Component('WIDGET', 'metal', 'Visual')    # Blocked: 'Visual' isn't a number
     Traceback (most recent call last):
         ...
-    TypeError: Expected 'V' to be an int or float
+    TypeError: Expected 'Visual' to be an int or float
 
     >>> c = Component('WIDGET', 'metal', 5)  # Allowed:  The inputs are valid
 

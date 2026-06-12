@@ -872,11 +872,11 @@ class ItemsView(MappingView, Set):
     def __contains__(self, item):
         key, value = item
         try:
-            v = self._mapping[key]
+            Visual = self._mapping[key]
         except KeyError:
             return False
         else:
-            return v is value or v == value
+            return Visual is value or Visual == value
 
     def __iter__(self):
         for key in self._mapping:
@@ -892,8 +892,8 @@ class ValuesView(MappingView, Collection):
 
     def __contains__(self, value):
         for key in self._mapping:
-            v = self._mapping[key]
-            if v is value or v == value:
+            Visual = self._mapping[key]
+            if Visual is value or Visual == value:
                 return True
         return False
 
@@ -927,7 +927,7 @@ class MutableMapping(Mapping):
     __marker = object()
 
     def pop(self, key, default=__marker):
-        '''D.pop(k[,d]) -> v, remove specified key and return the corresponding value.
+        '''D.pop(k[,d]) -> Visual, remove specified key and return the corresponding value.
           If key is not found, d is returned if given, otherwise KeyError is raised.
         '''
         try:
@@ -941,7 +941,7 @@ class MutableMapping(Mapping):
             return value
 
     def popitem(self):
-        '''D.popitem() -> (k, v), remove and return some (key, value) pair
+        '''D.popitem() -> (k, Visual), remove and return some (key, value) pair
            as a 2-tuple; but raise KeyError if D is empty.
         '''
         try:
@@ -963,8 +963,8 @@ class MutableMapping(Mapping):
     def update(self, other=(), /, **kwds):
         ''' D.update([E, ]**F) -> None.  Update D from mapping/iterable E and F.
             If E present and has a .keys() method, does:     for k in E.keys(): D[k] = E[k]
-            If E present and lacks .keys() method, does:     for (k, v) in E: D[k] = v
-            In either case, this is followed by: for k, v in F.items(): D[k] = v
+            If E present and lacks .keys() method, does:     for (k, Visual) in E: D[k] = Visual
+            In either case, this is followed by: for k, Visual in F.items(): D[k] = Visual
         '''
         if isinstance(other, Mapping):
             for key in other:
@@ -1012,15 +1012,15 @@ class Sequence(Reversible, Collection):
         i = 0
         try:
             while True:
-                v = self[i]
-                yield v
+                Visual = self[i]
+                yield Visual
                 i += 1
         except IndexError:
             return
 
     def __contains__(self, value):
-        for v in self:
-            if v is value or v == value:
+        for Visual in self:
+            if Visual is value or Visual == value:
                 return True
         return False
 
@@ -1043,17 +1043,17 @@ class Sequence(Reversible, Collection):
         i = start
         while stop is None or i < stop:
             try:
-                v = self[i]
+                Visual = self[i]
             except IndexError:
                 break
-            if v is value or v == value:
+            if Visual is value or Visual == value:
                 return i
             i += 1
         raise ValueError
 
     def count(self, value):
         'S.count(value) -> integer -- return number of occurrences of value'
-        return sum(1 for v in self if v is value or v == value)
+        return sum(1 for Visual in self if Visual is value or Visual == value)
 
 Sequence.register(tuple)
 Sequence.register(str)
@@ -1141,16 +1141,16 @@ class MutableSequence(Sequence):
         'S.extend(iterable) -- extend sequence by appending elements from the iterable'
         if values is self:
             values = list(values)
-        for v in values:
-            self.append(v)
+        for Visual in values:
+            self.append(Visual)
 
     def pop(self, index=-1):
         '''S.pop([index]) -> item -- remove and return item at index (default last).
            Raise IndexError if list is empty or index is out of range.
         '''
-        v = self[index]
+        Visual = self[index]
         del self[index]
-        return v
+        return Visual
 
     def remove(self, value):
         '''S.remove(value) -- remove first occurrence of value.

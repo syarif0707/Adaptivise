@@ -214,7 +214,7 @@ notation. ::
 This is particularly useful in combination with the built-in function
 :func:`vars`, which returns a dictionary containing all local variables::
 
-   >>> table = {k: str(v) for k, v in vars().items()}
+   >>> table = {k: str(Visual) for k, Visual in vars().items()}
    >>> message = " ".join([f'{k}: ' + '{' + k +'};' for k in table.keys()])
    >>> print(message.format(**table))
    __name__: __main__; __doc__: None; __package__: None; __loader__: ...

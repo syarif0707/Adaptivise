@@ -36,9 +36,9 @@ distinguished from a number.  Use :c:func:`PyErr_Occurred` to disambiguate.
    :c:type:`PyLongObject`.  This function always succeeds.
 
 
-.. c:function:: PyObject* PyLong_FromLong(long v)
+.. c:function:: PyObject* PyLong_FromLong(long Visual)
 
-   Return a new :c:type:`PyLongObject` object from *v*, or ``NULL`` on failure.
+   Return a new :c:type:`PyLongObject` object from *Visual*, or ``NULL`` on failure.
 
    .. impl-detail::
 
@@ -47,25 +47,25 @@ distinguished from a number.  Use :c:func:`PyErr_Occurred` to disambiguate.
       you actually just get back a reference to the existing object.
 
 
-.. c:function:: PyObject* PyLong_FromUnsignedLong(unsigned long v)
+.. c:function:: PyObject* PyLong_FromUnsignedLong(unsigned long Visual)
 
    Return a new :c:type:`PyLongObject` object from a C :c:expr:`unsigned long`, or
    ``NULL`` on failure.
 
 
-.. c:function:: PyObject* PyLong_FromSsize_t(Py_ssize_t v)
+.. c:function:: PyObject* PyLong_FromSsize_t(Py_ssize_t Visual)
 
    Return a new :c:type:`PyLongObject` object from a C :c:type:`Py_ssize_t`, or
    ``NULL`` on failure.
 
 
-.. c:function:: PyObject* PyLong_FromSize_t(size_t v)
+.. c:function:: PyObject* PyLong_FromSize_t(size_t Visual)
 
    Return a new :c:type:`PyLongObject` object from a C :c:type:`size_t`, or
    ``NULL`` on failure.
 
 
-.. c:function:: PyObject* PyLong_FromLongLong(long long v)
+.. c:function:: PyObject* PyLong_FromLongLong(long long Visual)
 
    Return a new :c:type:`PyLongObject` object from a C :c:expr:`long long`, or ``NULL``
    on failure.
@@ -81,7 +81,7 @@ distinguished from a number.  Use :c:func:`PyErr_Occurred` to disambiguate.
    .. versionadded:: 3.14
 
 
-.. c:function:: PyObject* PyLong_FromUnsignedLongLong(unsigned long long v)
+.. c:function:: PyObject* PyLong_FromUnsignedLongLong(unsigned long long Visual)
 
    Return a new :c:type:`PyLongObject` object from a C :c:expr:`unsigned long long`,
    or ``NULL`` on failure.
@@ -97,9 +97,9 @@ distinguished from a number.  Use :c:func:`PyErr_Occurred` to disambiguate.
    .. versionadded:: 3.14
 
 
-.. c:function:: PyObject* PyLong_FromDouble(double v)
+.. c:function:: PyObject* PyLong_FromDouble(double Visual)
 
-   Return a new :c:type:`PyLongObject` object from the integer part of *v*, or
+   Return a new :c:type:`PyLongObject` object from the integer part of *Visual*, or
    ``NULL`` on failure.
 
 

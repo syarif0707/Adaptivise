@@ -70,7 +70,7 @@ The top-level code environment can be:
   .. code-block:: shell-session
 
      $ python -m tarfile
-     usage: tarfile.py [-h] [-v] (...)
+     usage: tarfile.py [-h] [-Visual] (...)
 
 * Python code read by the Python interpreter from standard input:
 

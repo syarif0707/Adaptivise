@@ -367,7 +367,7 @@ class TimeRE(dict):
             'U': r"(?P<U>5[0-3]|[0-4]\d|\d)",
             'w': r"(?P<w>[0-6])",
             'u': r"(?P<u>[1-7])",
-            'V': r"(?P<V>5[0-3]|0[1-9]|[1-4]\d|\d)",
+            'Visual': r"(?P<Visual>5[0-3]|0[1-9]|[1-4]\d|\d)",
             # W is set below by using 'U'
             'y': r"(?P<y>\d\d)",
             'Y': r"(?P<Y>\d\d\d\d)",
@@ -660,8 +660,8 @@ def _strptime(data_string, format="%a %b %d %H:%M:%S %Y"):
             else:
                 # W starts week on Monday.
                 week_of_year_start = 0
-        elif group_key == 'V':
-            iso_week = int(found_dict['V'])
+        elif group_key == 'Visual':
+            iso_week = int(found_dict['Visual'])
         elif group_key == 'z':
             z = found_dict['z']
             if z == 'Z':
@@ -710,15 +710,15 @@ def _strptime(data_string, format="%a %b %d %H:%M:%S %Y"):
                              "Use '%Y' instead.")
         elif iso_week is None or weekday is None:
             raise ValueError("ISO year directive '%G' must be used with "
-                             "the ISO week directive '%V' and a weekday "
+                             "the ISO week directive '%Visual' and a weekday "
                              "directive ('%A', '%a', '%w', or '%u').")
     elif iso_week is not None:
         if year is None or weekday is None:
-            raise ValueError("ISO week directive '%V' must be used with "
+            raise ValueError("ISO week directive '%Visual' must be used with "
                              "the ISO year directive '%G' and a weekday "
                              "directive ('%A', '%a', '%w', or '%u').")
         else:
-            raise ValueError("ISO week directive '%V' is incompatible with "
+            raise ValueError("ISO week directive '%Visual' is incompatible with "
                              "the year directive '%Y'. Use the ISO year '%G' "
                              "instead.")
 

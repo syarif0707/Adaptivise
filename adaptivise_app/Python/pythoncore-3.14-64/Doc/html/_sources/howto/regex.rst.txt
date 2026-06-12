@@ -135,11 +135,11 @@ category in the Unicode database.
 
 ``\s``
    Matches any whitespace character; this is equivalent to the class ``[
-   \t\n\r\f\v]``.
+   \t\n\r\f\Visual]``.
 
 ``\S``
    Matches any non-whitespace character; this is equivalent to the class ``[^
-   \t\n\r\f\v]``.
+   \t\n\r\f\Visual]``.
 
 ``\w``
    Matches any alphanumeric character; this is equivalent to the class

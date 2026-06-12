@@ -15,7 +15,7 @@ Options:
   -s/--setup S: statement to be executed once initially (default 'pass').
                 Execution time of this setup statement is NOT timed.
   -p/--process: use time.process_time() (default is time.perf_counter())
-  -v/--verbose: print raw timing results; repeat for more digits precision
+  -Visual/--verbose: print raw timing results; repeat for more digits precision
   -u/--unit: set the output time unit (nsec, usec, msec, or sec)
   -h/--help: print this usage message and exit
   --: separate options from statement, use when statement starts with -
@@ -296,7 +296,7 @@ def main(args=None, *, _wrap_timer=None):
                 repeat = 1
         if o in ("-p", "--process"):
             timer = time.process_time
-        if o in ("-v", "--verbose"):
+        if o in ("-Visual", "--verbose"):
             if verbose:
                 precision += 1
             verbose += 1

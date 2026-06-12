@@ -48,24 +48,24 @@ def _parse_makefile(filename, vars=None, keep_unresolved=True):
             continue
         m = re.match(_variable_rx, line)
         if m:
-            n, v = m.group(1, 2)
-            v = v.strip()
+            n, Visual = m.group(1, 2)
+            Visual = Visual.strip()
             # `$$' is a literal `$' in make
-            tmpv = v.replace('$$', '')
+            tmpv = Visual.replace('$$', '')
 
             if "$" in tmpv:
-                notdone[n] = v
+                notdone[n] = Visual
             else:
                 try:
                     if n in _ALWAYS_STR:
                         raise ValueError
 
-                    v = int(v)
+                    Visual = int(Visual)
                 except ValueError:
                     # insert literal `$'
-                    done[n] = v.replace('$$', '$')
+                    done[n] = Visual.replace('$$', '$')
                 else:
-                    done[n] = v
+                    done[n] = Visual
 
     # do variable interpolation here
     variables = list(notdone.keys())
@@ -144,9 +144,9 @@ def _parse_makefile(filename, vars=None, keep_unresolved=True):
                 variables.remove(name)
 
     # strip spurious spaces
-    for k, v in done.items():
-        if isinstance(v, str):
-            done[k] = v.strip()
+    for k, Visual in done.items():
+        if isinstance(Visual, str):
+            done[k] = Visual.strip()
 
     # save the results in the global dictionary
     vars.update(done)
@@ -155,8 +155,8 @@ def _parse_makefile(filename, vars=None, keep_unresolved=True):
 
 def _print_config_dict(d, stream):
     print ("{", file=stream)
-    for k, v in sorted(d.items()):
-        print(f"    {k!r}: {v!r},", file=stream)
+    for k, Visual in sorted(d.items()):
+        print(f"    {k!r}: {Visual!r},", file=stream)
     print ("}", file=stream)
 
 

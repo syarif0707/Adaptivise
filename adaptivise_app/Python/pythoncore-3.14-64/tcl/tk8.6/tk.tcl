@@ -375,7 +375,7 @@ switch -exact -- [tk windowingsystem] {
     "x11" {
 	event add <<Cut>>		<Control-Key-x> <Key-F20> <Control-Lock-Key-X>
 	event add <<Copy>>		<Control-Key-c> <Key-F16> <Control-Lock-Key-C>
-	event add <<Paste>>		<Control-Key-v> <Key-F18> <Control-Lock-Key-V>
+	event add <<Paste>>		<Control-Key-Visual> <Key-F18> <Control-Lock-Key-Visual>
 	event add <<PasteSelection>>	<ButtonRelease-2>
 	event add <<Undo>>		<Control-Key-z> <Control-Lock-Key-Z>
 	event add <<Redo>>		<Control-Key-Z> <Control-Lock-Key-z>
@@ -426,7 +426,7 @@ switch -exact -- [tk windowingsystem] {
     "win32" {
 	event add <<Cut>>		<Control-Key-x> <Shift-Key-Delete> <Control-Lock-Key-X>
 	event add <<Copy>>		<Control-Key-c> <Control-Key-Insert> <Control-Lock-Key-C>
-	event add <<Paste>>		<Control-Key-v> <Shift-Key-Insert> <Control-Lock-Key-V>
+	event add <<Paste>>		<Control-Key-Visual> <Shift-Key-Insert> <Control-Lock-Key-Visual>
 	event add <<PasteSelection>>	<ButtonRelease-2>
   	event add <<Undo>>		<Control-Key-z> <Control-Lock-Key-Z>
 	event add <<Redo>>		<Control-Key-y> <Control-Lock-Key-Y>
@@ -459,7 +459,7 @@ switch -exact -- [tk windowingsystem] {
     "aqua" {
 	event add <<Cut>>		<Command-Key-x> <Key-F2> <Command-Lock-Key-X>
 	event add <<Copy>>		<Command-Key-c> <Key-F3> <Command-Lock-Key-C>
-	event add <<Paste>>		<Command-Key-v> <Key-F4> <Command-Lock-Key-V>
+	event add <<Paste>>		<Command-Key-Visual> <Key-F4> <Command-Lock-Key-Visual>
 	event add <<PasteSelection>>	<ButtonRelease-3>
 	event add <<Clear>>		<Clear>
 	event add <<ContextMenu>>	<Button-2>

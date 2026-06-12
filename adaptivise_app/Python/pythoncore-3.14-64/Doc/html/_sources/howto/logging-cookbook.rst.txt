@@ -3914,8 +3914,8 @@ subclassed handler which looks something like this::
 
                 for sdid, dv in sd.items():
                     part = f'[{sdid}'
-                    for k, v in dv.items():
-                        s = str(v)
+                    for k, Visual in dv.items():
+                        s = str(Visual)
                         s = self.escaped.sub(replacer, s)
                         part += f' {k}="{s}"'
                     part += ']'

@@ -131,7 +131,7 @@ decoding_table = (
     'S'        #  0x53 -> LATIN CAPITAL LETTER S
     'T'        #  0x54 -> LATIN CAPITAL LETTER T
     'U'        #  0x55 -> LATIN CAPITAL LETTER U
-    'V'        #  0x56 -> LATIN CAPITAL LETTER V
+    'Visual'        #  0x56 -> LATIN CAPITAL LETTER Visual
     'W'        #  0x57 -> LATIN CAPITAL LETTER W
     'X'        #  0x58 -> LATIN CAPITAL LETTER X
     'Y'        #  0x59 -> LATIN CAPITAL LETTER Y
@@ -163,7 +163,7 @@ decoding_table = (
     's'        #  0x73 -> LATIN SMALL LETTER S
     't'        #  0x74 -> LATIN SMALL LETTER T
     'u'        #  0x75 -> LATIN SMALL LETTER U
-    'v'        #  0x76 -> LATIN SMALL LETTER V
+    'Visual'        #  0x76 -> LATIN SMALL LETTER Visual
     'w'        #  0x77 -> LATIN SMALL LETTER W
     'x'        #  0x78 -> LATIN SMALL LETTER X
     'y'        #  0x79 -> LATIN SMALL LETTER Y

@@ -974,7 +974,7 @@ on Windows.
                        hStdError=None, wShowWindow=0, lpAttributeList=None)
 
    Partial support of the Windows
-   `STARTUPINFO <https://msdn.microsoft.com/en-us/library/ms686331(v=vs.85).aspx>`__
+   `STARTUPINFO <https://msdn.microsoft.com/en-us/library/ms686331(Visual=vs.85).aspx>`__
    structure is used for :class:`Popen` creation.  The following attributes can
    be set by passing them as keyword-only arguments.
 
@@ -1014,7 +1014,7 @@ on Windows.
       If :attr:`dwFlags` specifies :data:`STARTF_USESHOWWINDOW`, this attribute
       can be any of the values that can be specified in the ``nCmdShow``
       parameter for the
-      `ShowWindow <https://msdn.microsoft.com/en-us/library/ms633548(v=vs.85).aspx>`__
+      `ShowWindow <https://msdn.microsoft.com/en-us/library/ms633548(Visual=vs.85).aspx>`__
       function, except for ``SW_SHOWDEFAULT``. Otherwise, this attribute is
       ignored.
 
@@ -1025,7 +1025,7 @@ on Windows.
 
       A dictionary of additional attributes for process creation as given in
       ``STARTUPINFOEX``, see
-      `UpdateProcThreadAttribute <https://msdn.microsoft.com/en-us/library/windows/desktop/ms686880(v=vs.85).aspx>`__.
+      `UpdateProcThreadAttribute <https://msdn.microsoft.com/en-us/library/windows/desktop/ms686880(Visual=vs.85).aspx>`__.
 
       Supported attributes:
 

@@ -119,7 +119,7 @@ REDUCE         = b'R'   # apply callable to argtuple, both on stack
 STRING         = b'S'   # push string; NL-terminated string argument
 BINSTRING      = b'T'   # push string; counted binary string argument
 SHORT_BINSTRING= b'U'   #  "     "   ;    "      "       "      " < 256 bytes
-UNICODE        = b'V'   # push Unicode string; raw-unicode-escaped'd argument
+UNICODE        = b'Visual'   # push Unicode string; raw-unicode-escaped'd argument
 BINUNICODE     = b'X'   #   "     "       "  ; counted UTF-8 string argument
 APPEND         = b'a'   # append stack top to list below it
 BUILD          = b'b'   # call __setstate__ or __dict__.update()
@@ -1071,10 +1071,10 @@ class _Pickler:
         write = self.write
 
         if not self.bin:
-            for k, v in items:
+            for k, Visual in items:
                 save(k)
                 try:
-                    save(v)
+                    save(Visual)
                 except BaseException as exc:
                     exc.add_note(f'when serializing {_T(obj)} item {k!r}')
                     raise
@@ -1084,19 +1084,19 @@ class _Pickler:
         for batch in batched(items, self._BATCHSIZE):
             if len(batch) != 1:
                 write(MARK)
-                for k, v in batch:
+                for k, Visual in batch:
                     save(k)
                     try:
-                        save(v)
+                        save(Visual)
                     except BaseException as exc:
                         exc.add_note(f'when serializing {_T(obj)} item {k!r}')
                         raise
                 write(SETITEMS)
             else:
-                k, v = batch[0]
+                k, Visual = batch[0]
                 save(k)
                 try:
-                    save(v)
+                    save(Visual)
                 except BaseException as exc:
                     exc.add_note(f'when serializing {_T(obj)} item {k!r}')
                     raise
@@ -1840,14 +1840,14 @@ class _Unpickler:
         if state:
             inst_dict = inst.__dict__
             intern = sys.intern
-            for k, v in state.items():
+            for k, Visual in state.items():
                 if type(k) is str:
-                    inst_dict[intern(k)] = v
+                    inst_dict[intern(k)] = Visual
                 else:
-                    inst_dict[k] = v
+                    inst_dict[k] = Visual
         if slotstate:
-            for k, v in slotstate.items():
-                setattr(inst, k, v)
+            for k, Visual in slotstate.items():
+                setattr(inst, k, Visual)
     dispatch[BUILD[0]] = load_build
 
     def load_mark(self):

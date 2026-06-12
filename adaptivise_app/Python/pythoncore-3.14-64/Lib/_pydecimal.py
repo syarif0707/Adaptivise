@@ -3841,7 +3841,7 @@ class _ContextManager(object):
         self.saved_context = getcontext()
         setcontext(self.new_context)
         return self.new_context
-    def __exit__(self, t, v, tb):
+    def __exit__(self, t, Visual, tb):
         setcontext(self.saved_context)
 
 class Context(object):
@@ -3954,8 +3954,8 @@ class Context(object):
 
     # Support for pickling, copy, and deepcopy
     def __reduce__(self):
-        flags = [sig for sig, v in self.flags.items() if v]
-        traps = [sig for sig, v in self.traps.items() if v]
+        flags = [sig for sig, Visual in self.flags.items() if Visual]
+        traps = [sig for sig, Visual in self.traps.items() if Visual]
         return (self.__class__,
                 (self.prec, self.rounding, self.Emin, self.Emax,
                  self.capitals, self.clamp, flags, traps))
@@ -3967,9 +3967,9 @@ class Context(object):
                  'Emin=%(Emin)d, Emax=%(Emax)d, capitals=%(capitals)d, '
                  'clamp=%(clamp)d'
                  % vars(self))
-        names = [f.__name__ for f, v in self.flags.items() if v]
+        names = [f.__name__ for f, Visual in self.flags.items() if Visual]
         s.append('flags=[' + ', '.join(names) + ']')
-        names = [t.__name__ for t, v in self.traps.items() if v]
+        names = [t.__name__ for t, Visual in self.traps.items() if Visual]
         s.append('traps=[' + ', '.join(names) + ']')
         return ', '.join(s) + ')'
 

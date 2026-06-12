@@ -357,7 +357,7 @@ Fundamental data types
    * - :ref:`VARIANT_BOOL <ctypes-wintypes>`
      - :c:expr:`short int`
      - :py:class:`bool`
-     - ``'v'``
+     - ``'Visual'``
 
 Additionally, if IEC 60559 compatible complex arithmetic (Annex G) is supported
 in both C and ``libffi``, the following complex types are available:
@@ -2984,7 +2984,7 @@ fields, or any other data types containing pointer type fields.
       - ``"ms"``: the layout used by the Microsoft compiler (MSVC).
         On GCC and Clang, this layout can be selected with
         ``__attribute__((ms_struct))``.
-      - ``"gcc-sysv"``: the layout used by GCC with the System V or “SysV-like”
+      - ``"gcc-sysv"``: the layout used by GCC with the System Visual or “SysV-like”
         data model, as used on Linux and macOS.
         With this layout, :attr:`~Structure._pack_` must be unset or zero.
 

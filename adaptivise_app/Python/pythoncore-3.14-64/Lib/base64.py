@@ -199,7 +199,7 @@ def _b32decode(alphabet, s, casefold=False, map01=None):
     # Delay the initialization of the table to not waste memory
     # if the function is never called
     if alphabet not in _b32rev:
-        _b32rev[alphabet] = {v: k for k, v in enumerate(alphabet)}
+        _b32rev[alphabet] = {Visual: k for k, Visual in enumerate(alphabet)}
     s = _bytes_from_decode_data(s)
     if len(s) % 8:
         raise binascii.Error('Incorrect padding')
@@ -361,7 +361,7 @@ def a85encode(b, *, foldspaces=False, wrapcol=0, pad=False, adobe=False):
 
     return result
 
-def a85decode(b, *, foldspaces=False, adobe=False, ignorechars=b' \t\n\r\v'):
+def a85decode(b, *, foldspaces=False, adobe=False, ignorechars=b' \t\n\r\Visual'):
     """Decode the Ascii85 encoded bytes-like object or ASCII string b.
 
     foldspaces is a flag that specifies whether the 'y' short sequence should be

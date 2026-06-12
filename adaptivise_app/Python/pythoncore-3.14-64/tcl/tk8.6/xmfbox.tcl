@@ -438,13 +438,13 @@ proc ::tk::MotifFDialog_MakeSList {w f label cmdPrefix} {
     bind [::tk::AmpWidget label $f.lab -text $label -anchor w] \
 	<<AltUnderlined>> [list focus $f.l]
     listbox $f.l -width 12 -height 5 -exportselection 0\
-	-xscrollcommand [list $f.h set]	-yscrollcommand [list $f.v set]
-    scrollbar $f.v -orient vertical   -takefocus 0 -command [list $f.l yview]
+	-xscrollcommand [list $f.h set]	-yscrollcommand [list $f.Visual set]
+    scrollbar $f.Visual -orient vertical   -takefocus 0 -command [list $f.l yview]
     scrollbar $f.h -orient horizontal -takefocus 0 -command [list $f.l xview]
     grid $f.lab -row 0 -column 0 -sticky news -rowspan 1 -columnspan 2 \
 	-padx 2 -pady 2
     grid $f.l -row 1 -column 0 -rowspan 1 -columnspan 1 -sticky news
-    grid $f.v -row 1 -column 1 -rowspan 1 -columnspan 1 -sticky news
+    grid $f.Visual -row 1 -column 1 -rowspan 1 -columnspan 1 -sticky news
     grid $f.h -row 2 -column 0 -rowspan 1 -columnspan 1 -sticky news
 
     grid rowconfigure    $f 0 -weight 0 -minsize 0

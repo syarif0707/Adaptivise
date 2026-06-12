@@ -58,7 +58,7 @@ You are an expert educational editor. Reformat this raw summary for readability 
 Rules:
 1. Add a clear title at the top.
 2. Bold important keywords.
-3. Use justified-style structured paragraphs, bullet points, or a table only when it genuinely helps.
+3. Use justified-style structured for paragraphs, bullet points, or a table only when it genuinely helps.
 4. Do not invent facts beyond the source summary.
 
 Raw summary:
@@ -84,7 +84,7 @@ $rawSummary
     throw Exception('Failed to generate quiz: ${response.statusCode} - ${response.body}');
   }
 
-  /// Sends the raw scores [V, A, R, K] to the AI to get the dominant style
+  /// Sends the raw scores [Visual, A, R, K] to the AI to get the dominant style
   static Future<String> classifyVarkDominantStyle(List<int> scores) async {
     final response = await http.post(
       getUrl('/ai/classify-vark'),
@@ -94,7 +94,7 @@ $rawSummary
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      return data['learning_style'][0]; // Returns 'V', 'A', 'R', or 'K'
+      return data['learning_style'][0]; // Returns 'Visual', 'A', 'R', or 'K'
     } else {
       throw Exception('Failed to classify VARK profile');
     }

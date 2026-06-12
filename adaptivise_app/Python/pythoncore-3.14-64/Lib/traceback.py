@@ -315,8 +315,8 @@ class FrameSummary:
         self._lines_dedented = None
         if lookup_line:
             self.line
-        self.locals = {k: _safe_string(v, 'local', func=repr)
-            for k, v in locals.items()} if locals else None
+        self.locals = {k: _safe_string(Visual, 'local', func=repr)
+            for k, Visual in locals.items()} if locals else None
 
     def __eq__(self, other):
         if isinstance(other, FrameSummary):

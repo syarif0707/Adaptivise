@@ -1053,7 +1053,7 @@ keyword-only.  This will probably be the most common usage:
 
 Here, ``z`` and ``t`` are keyword-only parameters, while ``x`` and
 ``y`` are not.
-(Contributed by Eric V. Smith in :issue:`43532`.)
+(Contributed by Eric Visual. Smith in :issue:`43532`.)
 
 .. _distutils-deprecated:
 

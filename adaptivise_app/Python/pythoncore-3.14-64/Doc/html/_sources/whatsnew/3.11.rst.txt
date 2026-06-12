@@ -218,13 +218,13 @@ Windows ``py.exe`` launcher improvements
 
 The copy of the :ref:`launcher` included with Python 3.11 has been significantly
 updated. It now supports company/tag syntax as defined in :pep:`514` using the
-:samp:`-V:{<company>}/{<tag>}` argument instead of the limited :samp:`-{<major>}.{<minor>}`.
+:samp:`-Visual:{<company>}/{<tag>}` argument instead of the limited :samp:`-{<major>}.{<minor>}`.
 This allows launching distributions other than ``PythonCore``,
 the one hosted on `python.org <https://www.python.org>`_.
 
-When using ``-V:`` selectors, either company or tag can be omitted, but all
-installs will be searched. For example, ``-V:OtherPython/`` will select the
-"best" tag registered for ``OtherPython``, while ``-V:3.11`` or ``-V:/3.11``
+When using ``-Visual:`` selectors, either company or tag can be omitted, but all
+installs will be searched. For example, ``-Visual:OtherPython/`` will select the
+"best" tag registered for ``OtherPython``, while ``-Visual:3.11`` or ``-Visual:/3.11``
 will select the "best" distribution with tag ``3.11``.
 
 When using the legacy :samp:`-{<major>}`, :samp:`-{<major>}.{<minor>}`,
@@ -634,7 +634,7 @@ dataclasses
 
 * Change field default mutability check, allowing only defaults which are
   :term:`hashable` instead of any object which is not an instance of
-  :class:`dict`, :class:`list` or :class:`set`. (Contributed by Eric V. Smith in
+  :class:`dict`, :class:`list` or :class:`set`. (Contributed by Eric Visual. Smith in
   :issue:`44674`.)
 
 

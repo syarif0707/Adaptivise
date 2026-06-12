@@ -314,13 +314,13 @@ the desired precision and rounding characteristics for computations::
    from decimal import Decimal, Context, localcontext
 
    # Displays with default precision of 28 digits
-   v = Decimal('578')
-   print v.sqrt()
+   Visual = Decimal('578')
+   print Visual.sqrt()
 
    with localcontext(Context(prec=16)):
        # All code in this block uses a precision of 16 digits.
        # The original context is restored on exiting the block.
-       print v.sqrt()
+       print Visual.sqrt()
 
 
 .. _new-26-context-managers:
@@ -639,8 +639,8 @@ spread requests across 5 worker processes and retrieve a list of results::
         ...
     p = Pool(5)
     result = p.map(factorial, range(1, 1000, 10))
-    for v in result:
-        print v
+    for Visual in result:
+        print Visual
 
 This produces the following output::
 
@@ -695,8 +695,8 @@ shared locks.)
         p.join()
 
         # Output results
-        for k, v in sorted(d.items()):
-            print k, v
+        for k, Visual in sorted(d.items()):
+            print k, Visual
 
 This will produce the output::
 

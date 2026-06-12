@@ -880,8 +880,8 @@ Here are all of the changes that Python 2.4 makes to the core Python language.
 
      >>> # List the contents of a dict sorted by key values
      >>> colormap = dict(red=1, blue=2, green=3, black=4, yellow=5)
-     >>> for k, v in sorted(colormap.iteritems()):
-     ...     print k, v
+     >>> for k, Visual in sorted(colormap.iteritems()):
+     ...     print k, Visual
      ...
      black 4
      blue 2

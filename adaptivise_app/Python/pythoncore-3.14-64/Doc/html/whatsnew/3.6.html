@@ -18,14 +18,14 @@
 
     <title>What’s New In Python 3.6 &#8212; Python 3.14.4 documentation</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
-    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=82640b3f" />
-    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?Visual=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?Visual=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?Visual=82640b3f" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?Visual=5349f25f" />
     
-    <script src="../_static/documentation_options.js?v=1885ab2e"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?Visual=1885ab2e"></script>
+    <script src="../_static/doctools.js?Visual=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?Visual=dc90522c"></script>
     
     <script src="../_static/sidebar.js"></script>
     
@@ -472,7 +472,7 @@ which are evaluated at run time, and then formatted using the
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <dl class="simple">
-<dt><span class="target" id="index-4"></span><a class="pep reference external" href="https://peps.python.org/pep-0498/"><strong>PEP 498</strong></a> – Literal String Interpolation.</dt><dd><p>PEP written and implemented by Eric V. Smith.</p>
+<dt><span class="target" id="index-4"></span><a class="pep reference external" href="https://peps.python.org/pep-0498/"><strong>PEP 498</strong></a> – Literal String Interpolation.</dt><dd><p>PEP written and implemented by Eric Visual. Smith.</p>
 </dd>
 </dl>
 <p><a class="reference internal" href="../reference/lexical_analysis.html#f-strings"><span class="std std-ref">Feature documentation</span></a>.</p>
@@ -1135,7 +1135,7 @@ information.
 (Contributed by Alexander Belopolsky in <a class="reference external" href="https://bugs.python.org/issue?&#64;action=redirect&amp;bpo=24773">bpo-24773</a>.)</p>
 <p>The <a class="reference internal" href="../library/datetime.html#datetime.datetime.strftime" title="datetime.datetime.strftime"><code class="xref py py-meth docutils literal notranslate"><span class="pre">datetime.strftime()</span></code></a> and
 <a class="reference internal" href="../library/datetime.html#datetime.date.strftime" title="datetime.date.strftime"><code class="xref py py-meth docutils literal notranslate"><span class="pre">date.strftime()</span></code></a> methods now support
-ISO 8601 date directives <code class="docutils literal notranslate"><span class="pre">%G</span></code>, <code class="docutils literal notranslate"><span class="pre">%u</span></code> and <code class="docutils literal notranslate"><span class="pre">%V</span></code>.
+ISO 8601 date directives <code class="docutils literal notranslate"><span class="pre">%G</span></code>, <code class="docutils literal notranslate"><span class="pre">%u</span></code> and <code class="docutils literal notranslate"><span class="pre">%Visual</span></code>.
 (Contributed by Ashley Anderson in <a class="reference external" href="https://bugs.python.org/issue?&#64;action=redirect&amp;bpo=12006">bpo-12006</a>.)</p>
 <p>The <a class="reference internal" href="../library/datetime.html#datetime.datetime.isoformat" title="datetime.datetime.isoformat"><code class="xref py py-func docutils literal notranslate"><span class="pre">datetime.isoformat()</span></code></a> function
 now accepts an optional <em>timespec</em> argument that specifies the number
@@ -1420,7 +1420,7 @@ specified size from the given population with optional weights.
 <h3>re<a class="headerlink" href="#re" title="Link to this heading">¶</a></h3>
 <p>Added support of modifier spans in regular expressions.  Examples:
 <code class="docutils literal notranslate"><span class="pre">'(?i:p)ython'</span></code> matches <code class="docutils literal notranslate"><span class="pre">'python'</span></code> and <code class="docutils literal notranslate"><span class="pre">'Python'</span></code>, but not <code class="docutils literal notranslate"><span class="pre">'PYTHON'</span></code>;
-<code class="docutils literal notranslate"><span class="pre">'(?i)g(?-i:v)r'</span></code> matches <code class="docutils literal notranslate"><span class="pre">'GvR'</span></code> and <code class="docutils literal notranslate"><span class="pre">'gvr'</span></code>, but not <code class="docutils literal notranslate"><span class="pre">'GVR'</span></code>.
+<code class="docutils literal notranslate"><span class="pre">'(?i)g(?-i:Visual)r'</span></code> matches <code class="docutils literal notranslate"><span class="pre">'GvR'</span></code> and <code class="docutils literal notranslate"><span class="pre">'gvr'</span></code>, but not <code class="docutils literal notranslate"><span class="pre">'GVR'</span></code>.
 (Contributed by Serhiy Storchaka in <a class="reference external" href="https://bugs.python.org/issue?&#64;action=redirect&amp;bpo=433028">bpo-433028</a>.)</p>
 <p>Match object groups can be accessed by <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code>, which is
 equivalent to <code class="docutils literal notranslate"><span class="pre">group()</span></code>.  So <code class="docutils literal notranslate"><span class="pre">mo['name']</span></code> is now equivalent to
@@ -1858,7 +1858,7 @@ functions will now accept <a class="reference internal" href="../glossary.html#t
 <section id="other-improvements">
 <h2>Other Improvements<a class="headerlink" href="#other-improvements" title="Link to this heading">¶</a></h2>
 <ul>
-<li><p>When <a class="reference internal" href="../using/cmdline.html#cmdoption-version"><code class="xref std std-option docutils literal notranslate"><span class="pre">--version</span></code></a> (short form: <a class="reference internal" href="../using/cmdline.html#cmdoption-V"><code class="xref std std-option docutils literal notranslate"><span class="pre">-V</span></code></a>) is supplied twice,
+<li><p>When <a class="reference internal" href="../using/cmdline.html#cmdoption-version"><code class="xref std std-option docutils literal notranslate"><span class="pre">--version</span></code></a> (short form: <a class="reference internal" href="../using/cmdline.html#cmdoption-Visual"><code class="xref std std-option docutils literal notranslate"><span class="pre">-Visual</span></code></a>) is supplied twice,
 Python prints <a class="reference internal" href="../library/sys.html#sys.version" title="sys.version"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.version</span></code></a> for detailed information.</p>
 <div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./python<span class="w"> </span>-VV
 <span class="go">Python 3.6.0b4+ (3.6:223967b49e49+, Nov 21 2016, 20:55:04)</span>

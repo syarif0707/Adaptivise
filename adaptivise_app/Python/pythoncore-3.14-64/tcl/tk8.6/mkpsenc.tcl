@@ -91,7 +91,7 @@ namespace eval ::tk {
 	0053 S
 	0054 T
 	0055 U
-	0056 V
+	0056 Visual
 	0057 W
 	0058 X
 	0059 Y
@@ -123,7 +123,7 @@ namespace eval ::tk {
 	0073 s
 	0074 t
 	0075 u
-	0076 v
+	0076 Visual
 	0077 w
 	0078 x
 	0079 y

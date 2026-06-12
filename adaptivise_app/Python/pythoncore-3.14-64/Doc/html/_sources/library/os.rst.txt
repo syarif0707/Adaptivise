@@ -2896,9 +2896,9 @@ features:
       and
       `readdir() <https://pubs.opengroup.org/onlinepubs/009695399/functions/readdir_r.html>`_
       functions. On Windows, it uses the Win32
-      `FindFirstFileW <https://msdn.microsoft.com/en-us/library/windows/desktop/aa364418(v=vs.85).aspx>`_
+      `FindFirstFileW <https://msdn.microsoft.com/en-us/library/windows/desktop/aa364418(Visual=vs.85).aspx>`_
       and
-      `FindNextFileW <https://msdn.microsoft.com/en-us/library/windows/desktop/aa364428(v=vs.85).aspx>`_
+      `FindNextFileW <https://msdn.microsoft.com/en-us/library/windows/desktop/aa364428(Visual=vs.85).aspx>`_
       functions.
 
    .. versionadded:: 3.5
@@ -3883,12 +3883,12 @@ features:
        fd = os.eventfd(1, os.EFD_SEMAPHORE | os.EFD_CLOEXEC)
        try:
            # acquire semaphore
-           v = os.eventfd_read(fd)
+           Visual = os.eventfd_read(fd)
            try:
                do_work()
            finally:
                # release semaphore
-               os.eventfd_write(fd, v)
+               os.eventfd_write(fd, Visual)
        finally:
            os.close(fd)
 
@@ -4329,11 +4329,11 @@ to be ignored.
    :func:`~io.IOBase.flush` or :func:`os.fsync` before calling an
    :func:`exec\* <execl>` function.
 
-   The "l" and "v" variants of the :func:`exec\* <execl>` functions differ in how
+   The "l" and "Visual" variants of the :func:`exec\* <execl>` functions differ in how
    command-line arguments are passed.  The "l" variants are perhaps the easiest
    to work with if the number of parameters is fixed when the code is written; the
    individual parameters simply become additional parameters to the :func:`!execl\*`
-   functions.  The "v" variants are good when the number of parameters is
+   functions.  The "Visual" variants are good when the number of parameters is
    variable, with the arguments being passed in a list or tuple as the *args*
    parameter.  In either case, the arguments to the child process should start with
    the name of the command being run, but this is not enforced.
@@ -4892,11 +4892,11 @@ written in Python, such as a mail server's external command delivery program.
    Note on VxWorks, this function doesn't return ``-signal`` when the new process is
    killed. Instead it raises OSError exception.
 
-   The "l" and "v" variants of the :func:`spawn\* <spawnl>` functions differ in how
+   The "l" and "Visual" variants of the :func:`spawn\* <spawnl>` functions differ in how
    command-line arguments are passed.  The "l" variants are perhaps the easiest
    to work with if the number of parameters is fixed when the code is written; the
    individual parameters simply become additional parameters to the
-   :func:`!spawnl\*` functions.  The "v" variants are good when the number of
+   :func:`!spawnl\*` functions.  The "Visual" variants are good when the number of
    parameters is variable, with the arguments being passed in a list or tuple as
    the *args* parameter.  In either case, the arguments to the child process must
    start with the name of the command being run.

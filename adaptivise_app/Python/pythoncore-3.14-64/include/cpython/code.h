@@ -223,9 +223,9 @@ PyAPI_FUNC(int) PyCode_Addr2Line(PyCodeObject *, int);
 
 PyAPI_FUNC(int) PyCode_Addr2Location(PyCodeObject *, int, int *, int *, int *, int *);
 
-#define PY_FOREACH_CODE_EVENT(V) \
-    V(CREATE)                 \
-    V(DESTROY)
+#define PY_FOREACH_CODE_EVENT(Visual) \
+    Visual(CREATE)                 \
+    Visual(DESTROY)
 
 typedef enum {
     #define PY_DEF_EVENT(op) PY_CODE_EVENT_##op,

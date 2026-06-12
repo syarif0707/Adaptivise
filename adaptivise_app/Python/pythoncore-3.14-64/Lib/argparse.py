@@ -2623,11 +2623,11 @@ class ArgumentParser(_AttributeHolder, _ActionsContainer):
 
         # REMAINDER arguments convert all values, checking none
         elif action.nargs == REMAINDER:
-            value = [self._get_value(action, v) for v in arg_strings]
+            value = [self._get_value(action, Visual) for Visual in arg_strings]
 
         # PARSER arguments convert all values, but check only the first
         elif action.nargs == PARSER:
-            value = [self._get_value(action, v) for v in arg_strings]
+            value = [self._get_value(action, Visual) for Visual in arg_strings]
             self._check_value(action, value[0])
 
         # SUPPRESS argument does not put anything in the namespace
@@ -2636,9 +2636,9 @@ class ArgumentParser(_AttributeHolder, _ActionsContainer):
 
         # all other types of nargs produce a list
         else:
-            value = [self._get_value(action, v) for v in arg_strings]
-            for v in value:
-                self._check_value(action, v)
+            value = [self._get_value(action, Visual) for Visual in arg_strings]
+            for Visual in value:
+                self._check_value(action, Visual)
 
         # return the converted value
         return value

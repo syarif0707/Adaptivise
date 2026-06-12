@@ -39,9 +39,9 @@ class Headers:
             raise TypeError("Headers must be a list of name/value tuples")
         self._headers = headers
         if __debug__:
-            for k, v in headers:
+            for k, Visual in headers:
                 self._convert_string_type(k, name=True)
-                self._convert_string_type(v, name=False)
+                self._convert_string_type(Visual, name=False)
 
     def _convert_string_type(self, value, *, name):
         """Convert/check value type."""
@@ -102,9 +102,9 @@ class Headers:
     def get(self,name,default=None):
         """Get the first header value for 'name', or return 'default'"""
         name = self._convert_string_type(name.lower(), name=True)
-        for k,v in self._headers:
+        for k,Visual in self._headers:
             if k.lower()==name:
-                return v
+                return Visual
         return default
 
 
@@ -116,7 +116,7 @@ class Headers:
         Any fields deleted and re-inserted are always appended to the header
         list.
         """
-        return [k for k, v in self._headers]
+        return [k for k, Visual in self._headers]
 
     def values(self):
         """Return a list of all header values.
@@ -126,7 +126,7 @@ class Headers:
         Any fields deleted and re-inserted are always appended to the header
         list.
         """
-        return [v for k, v in self._headers]
+        return [Visual for k, Visual in self._headers]
 
     def items(self):
         """Get all the header fields and values.
@@ -182,11 +182,11 @@ class Headers:
         if _value is not None:
             _value = self._convert_string_type(_value, name=False)
             parts.append(_value)
-        for k, v in _params.items():
+        for k, Visual in _params.items():
             k = self._convert_string_type(k, name=True)
-            if v is None:
+            if Visual is None:
                 parts.append(k.replace('_', '-'))
             else:
-                v = self._convert_string_type(v, name=False)
-                parts.append(_formatparam(k.replace('_', '-'), v))
+                Visual = self._convert_string_type(Visual, name=False)
+                parts.append(_formatparam(k.replace('_', '-'), Visual))
         self._headers.append((self._convert_string_type(_name, name=True), "; ".join(parts)))

@@ -186,25 +186,25 @@ Object Protocol
    descriptors don't.  Otherwise, an :exc:`AttributeError` is raised.
 
 
-.. c:function:: int PyObject_SetAttr(PyObject *o, PyObject *attr_name, PyObject *v)
+.. c:function:: int PyObject_SetAttr(PyObject *o, PyObject *attr_name, PyObject *Visual)
 
    Set the value of the attribute named *attr_name*, for object *o*, to the value
-   *v*. Raise an exception and return ``-1`` on failure;
+   *Visual*. Raise an exception and return ``-1`` on failure;
    return ``0`` on success.  This is the equivalent of the Python statement
-   ``o.attr_name = v``.
+   ``o.attr_name = Visual``.
 
-   If *v* is ``NULL``, the attribute is deleted. This behaviour is deprecated
+   If *Visual* is ``NULL``, the attribute is deleted. This behaviour is deprecated
    in favour of using :c:func:`PyObject_DelAttr`, but there are currently no
    plans to remove it.
 
 
-.. c:function:: int PyObject_SetAttrString(PyObject *o, const char *attr_name, PyObject *v)
+.. c:function:: int PyObject_SetAttrString(PyObject *o, const char *attr_name, PyObject *Visual)
 
    This is the same as :c:func:`PyObject_SetAttr`, but *attr_name* is
    specified as a :c:expr:`const char*` UTF-8 encoded bytes string,
    rather than a :c:expr:`PyObject*`.
 
-   If *v* is ``NULL``, the attribute is deleted, but this feature is
+   If *Visual* is ``NULL``, the attribute is deleted, but this feature is
    deprecated in favour of using :c:func:`PyObject_DelAttrString`.
 
    The number of different attribute names passed to this function
@@ -487,12 +487,12 @@ Object Protocol
    This is the equivalent of the Python expression ``o[key]``.
 
 
-.. c:function:: int PyObject_SetItem(PyObject *o, PyObject *key, PyObject *v)
+.. c:function:: int PyObject_SetItem(PyObject *o, PyObject *key, PyObject *Visual)
 
-   Map the object *key* to the value *v*.  Raise an exception and
+   Map the object *key* to the value *Visual*.  Raise an exception and
    return ``-1`` on failure; return ``0`` on success.  This is the
-   equivalent of the Python statement ``o[key] = v``.  This function *does
-   not* steal a reference to *v*.
+   equivalent of the Python statement ``o[key] = Visual``.  This function *does
+   not* steal a reference to *Visual*.
 
 
 .. c:function:: int PyObject_DelItem(PyObject *o, PyObject *key)

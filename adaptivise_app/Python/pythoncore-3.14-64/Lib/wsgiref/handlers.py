@@ -44,7 +44,7 @@ def read_environ():
     # Take the basic environment from native-unicode os.environ. Attempt to
     # fix up the variables that come from the HTTP request to compensate for
     # the bytes->unicode decoding step that will already have taken place.
-    for k, v in os.environ.items():
+    for k, Visual in os.environ.items():
         if _needs_transcode(k):
 
             # On win32, the os.environ is natively Unicode. Different servers
@@ -60,7 +60,7 @@ def read_environ():
                 # that happens to be valid UTF-8 will not be decoded as mbcs)
                 # always recreate the original bytes as UTF-8.
                 if software.startswith('microsoft-iis/'):
-                    v = v.encode('utf-8').decode('iso-8859-1')
+                    Visual = Visual.encode('utf-8').decode('iso-8859-1')
 
                 # Apache mod_cgi writes bytes-as-unicode (as if ISO-8859-1) direct
                 # to the Unicode environ. No modification needed.
@@ -74,20 +74,20 @@ def read_environ():
                     software.startswith('simplehttp/')
                     and 'python/3' in software
                 ):
-                    v = v.encode('utf-8').decode('iso-8859-1')
+                    Visual = Visual.encode('utf-8').decode('iso-8859-1')
 
                 # For other servers, guess that they have written bytes to
                 # the environ using stdio byte-oriented interfaces, ending up
                 # with the system code page.
                 else:
-                    v = v.encode(enc, 'replace').decode('iso-8859-1')
+                    Visual = Visual.encode(enc, 'replace').decode('iso-8859-1')
 
             # Recover bytes from unicode environ, using surrogate escapes
             # where available (Python 3.1+).
             else:
-                v = v.encode(enc, esc).decode('iso-8859-1')
+                Visual = Visual.encode(enc, esc).decode('iso-8859-1')
 
-        environ[k] = v
+        environ[k] = Visual
     return environ
 
 

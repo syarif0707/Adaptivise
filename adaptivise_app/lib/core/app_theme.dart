@@ -30,13 +30,13 @@ class AppTheme {
 
 class AppColors {
   // Consistent VARK Colors
-  static const Color visual = Color(0xFF81C784); // Green (from your example)
-  static const Color aural = Color(0xFFFFB74D); // Orange
-  static const Color readWrite = Color(0xFFBA68C8); // Purple
-  static const Color kinesthetic = Color(0xFF4FC3F7); // Blue (or change back to match example preference)
-  
+  static const Color Visual = Color(0xFF81C784); // Green (from your example)
+  static const Color Auditory = Color(0xFFFFB74D); // Orange
+  static const Color ReadWrite = Color(0xFFBA68C8); // Purple
+  static const Color Kinesthetic = Color(0xFF4FC3F7); // Blue (or change back to match example preference)
+
   // Alternative Kinesthetic to match your green pie chart:
-  // static const Color kinesthetic = Color(0xFF81C784);
+  // static const Color Kinesthetic = Color(0xFF81C784);
   // Then change Visual to something else, e.g., Red: Color(0xFFE57373)
 
   // Primary App Color (Teal/Dark Green)

@@ -161,7 +161,7 @@ proc phoneSkipRight {W {add 0}} {
 
 labelframe $w.l3 -text "US Phone-Number Entry"
 entry $w.l3.e -validate key  -invcmd bell  -textvariable entry3content \
-	-vcmd {validatePhoneChange %W %v %i %S}
+	-vcmd {validatePhoneChange %W %Visual %i %S}
 # Click to focus goes to the first editable character...
 bind $w.l3.e <FocusIn> {
     if {"%d" ne "NotifyAncestor"} {

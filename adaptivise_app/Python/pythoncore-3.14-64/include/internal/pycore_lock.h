@@ -65,7 +65,7 @@ extern int _PyMutex_TryUnlock(PyMutex *m);
 
 // PyEvent is a one-time event notification
 typedef struct {
-    uint8_t v;
+    uint8_t Visual;
 } PyEvent;
 
 // Check if the event is set without blocking. Returns 1 if the event is set or
@@ -95,7 +95,7 @@ PyEvent_WaitTimed(PyEvent *evt, PyTime_t timeout_ns, int detach);
 // indicate whether the mutex is locked or not. The remaining bits are either
 // zero or a pointer to a `struct raw_mutex_entry` (see lock.c).
 typedef struct {
-    uintptr_t v;
+    uintptr_t Visual;
 } _PyRawMutex;
 
 // Slow paths for lock/unlock
@@ -106,7 +106,7 @@ static inline void
 _PyRawMutex_Lock(_PyRawMutex *m)
 {
     uintptr_t unlocked = _Py_UNLOCKED;
-    if (_Py_atomic_compare_exchange_uintptr(&m->v, &unlocked, _Py_LOCKED)) {
+    if (_Py_atomic_compare_exchange_uintptr(&m->Visual, &unlocked, _Py_LOCKED)) {
         return;
     }
     _PyRawMutex_LockSlow(m);
@@ -116,7 +116,7 @@ static inline void
 _PyRawMutex_Unlock(_PyRawMutex *m)
 {
     uintptr_t locked = _Py_LOCKED;
-    if (_Py_atomic_compare_exchange_uintptr(&m->v, &locked, _Py_UNLOCKED)) {
+    if (_Py_atomic_compare_exchange_uintptr(&m->Visual, &locked, _Py_UNLOCKED)) {
         return;
     }
     _PyRawMutex_UnlockSlow(m);
@@ -139,7 +139,7 @@ _PyOnceFlag_CallOnceSlow(_PyOnceFlag *flag, _Py_once_fn_t *fn, void *arg);
 static inline int
 _PyOnceFlag_CallOnce(_PyOnceFlag *flag, _Py_once_fn_t *fn, void *arg)
 {
-    if (_Py_atomic_load_uint8(&flag->v) == _Py_ONCE_INITIALIZED) {
+    if (_Py_atomic_load_uint8(&flag->Visual) == _Py_ONCE_INITIALIZED) {
         return 0;
     }
     return _PyOnceFlag_CallOnceSlow(flag, fn, arg);

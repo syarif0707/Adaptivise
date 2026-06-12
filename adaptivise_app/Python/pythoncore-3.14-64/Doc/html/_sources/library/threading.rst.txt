@@ -1095,7 +1095,7 @@ Semaphore objects
 
 This is one of the oldest synchronization primitives in the history of computer
 science, invented by the early Dutch computer scientist Edsger W. Dijkstra (he
-used the names ``P()`` and ``V()`` instead of :meth:`~Semaphore.acquire` and
+used the names ``P()`` and ``Visual()`` instead of :meth:`~Semaphore.acquire` and
 :meth:`~Semaphore.release`).
 
 A semaphore manages an internal counter which is decremented by each

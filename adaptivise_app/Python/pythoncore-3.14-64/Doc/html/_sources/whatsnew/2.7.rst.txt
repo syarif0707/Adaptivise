@@ -374,7 +374,7 @@ Here's an example::
     parser = argparse.ArgumentParser(description='Command-line example.')
 
     # Add optional switches
-    parser.add_argument('-v', action='store_true', dest='is_verbose',
+    parser.add_argument('-Visual', action='store_true', dest='is_verbose',
                         help='produce verbose output')
     parser.add_argument('-o', action='store', dest='output',
                         metavar='FILE',
@@ -394,7 +394,7 @@ Unless you override it, :option:`!-h` and :option:`!--help` switches
 are automatically added, and produce neatly formatted output::
 
     -> ./python.exe argparse-example.py --help
-    usage: argparse-example.py [-h] [-v] [-o FILE] [-C NUM] [inputs [inputs ...]]
+    usage: argparse-example.py [-h] [-Visual] [-o FILE] [-C NUM] [inputs [inputs ...]]
 
     Command-line example.
 
@@ -403,20 +403,20 @@ are automatically added, and produce neatly formatted output::
 
     optional arguments:
       -h, --help  show this help message and exit
-      -v          produce verbose output
+      -Visual          produce verbose output
       -o FILE     direct output to FILE instead of stdout
       -C NUM      display NUM lines of added context
 
 As with :mod:`optparse`, the command-line switches and arguments
 are returned as an object with attributes named by the *dest* parameters::
 
-    -> ./python.exe argparse-example.py -v
+    -> ./python.exe argparse-example.py -Visual
     {'output': None,
      'is_verbose': True,
      'context': 0,
      'inputs': []}
 
-    -> ./python.exe argparse-example.py -v -o /tmp/output -C 4 file1 file2
+    -> ./python.exe argparse-example.py -Visual -o /tmp/output -C 4 file1 file2
     {'output': '/tmp/output',
      'is_verbose': True,
      'context': 4,

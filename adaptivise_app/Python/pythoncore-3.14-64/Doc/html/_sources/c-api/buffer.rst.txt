@@ -399,7 +399,7 @@ this function:
            return False
        if offset < 0 or offset+itemsize > memlen:
            return False
-       if any(v % itemsize for v in strides):
+       if any(Visual % itemsize for Visual in strides):
            return False
 
        if ndim <= 0:
@@ -420,9 +420,9 @@ PIL-style: shape, strides and suboffsets
 
 In addition to the regular items, PIL-style arrays can contain pointers
 that must be followed in order to get to the next element in a dimension.
-For example, the regular three-dimensional C-array ``char v[2][2][3]`` can
+For example, the regular three-dimensional C-array ``char Visual[2][2][3]`` can
 also be viewed as an array of 2 pointers to 2 two-dimensional arrays:
-``char (*v[2])[2][3]``. In suboffsets representation, those two pointers
+``char (*Visual[2])[2][3]``. In suboffsets representation, those two pointers
 can be embedded at the start of :c:member:`~Py_buffer.buf`, pointing
 to two ``char x[2][3]`` arrays that can be located anywhere in memory.
 

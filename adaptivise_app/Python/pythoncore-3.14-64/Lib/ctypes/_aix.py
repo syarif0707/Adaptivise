@@ -7,7 +7,7 @@ dlopen() is an interface to AIX initAndLoad() - primary documentation at:
 https://www.ibm.com/support/knowledgecenter/en/ssw_aix_61/com.ibm.aix.basetrf1/dlopen.htm
 https://www.ibm.com/support/knowledgecenter/en/ssw_aix_61/com.ibm.aix.basetrf1/load.htm
 
-AIX supports two styles for dlopen(): svr4 (System V Release 4) which is common on posix
+AIX supports two styles for dlopen(): svr4 (System Visual Release 4) which is common on posix
 platforms, but also a BSD style - aka SVR3.
 
 From AIX 5.3 Difference Addendum (December 2004)

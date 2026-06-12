@@ -18,14 +18,14 @@
 
     <title>doctest — Test interactive Python examples &#8212; Python 3.14.4 documentation</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
-    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=82640b3f" />
-    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?Visual=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?Visual=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?Visual=82640b3f" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?Visual=5349f25f" />
     
-    <script src="../_static/documentation_options.js?v=1885ab2e"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?Visual=1885ab2e"></script>
+    <script src="../_static/doctools.js?Visual=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?Visual=dc90522c"></script>
     
     <script src="../_static/sidebar.js"></script>
     
@@ -316,9 +316,9 @@ works its magic:</p>
 </pre></div>
 </div>
 <p>There’s no output!  That’s normal, and it means all the examples worked.  Pass
-<code class="docutils literal notranslate"><span class="pre">-v</span></code> to the script, and <code class="xref py py-mod docutils literal notranslate"><span class="pre">doctest</span></code> prints a detailed log of what
+<code class="docutils literal notranslate"><span class="pre">-Visual</span></code> to the script, and <code class="xref py py-mod docutils literal notranslate"><span class="pre">doctest</span></code> prints a detailed log of what
 it’s trying, and prints a summary at the end:</p>
-<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>example.py<span class="w"> </span>-v
+<div class="highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python<span class="w"> </span>example.py<span class="w"> </span>-Visual
 <span class="go">Trying:</span>
 <span class="go">    factorial(5)</span>
 <span class="go">Expecting:</span>
@@ -376,15 +376,15 @@ executed and verified:</p>
 example(s) and the cause(s) of the failure(s) are printed to stdout, and the
 final line of output is <code class="docutils literal notranslate"><span class="pre">***Test</span> <span class="pre">Failed***</span> <span class="pre">N</span> <span class="pre">failures.</span></code>, where <em>N</em> is the
 number of examples that failed.</p>
-<p>Run it with the <code class="docutils literal notranslate"><span class="pre">-v</span></code> switch instead:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">M</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">v</span>
+<p>Run it with the <code class="docutils literal notranslate"><span class="pre">-Visual</span></code> switch instead:</p>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">M</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">Visual</span>
 </pre></div>
 </div>
 <p>and a detailed report of all examples tried is printed to standard output, along
 with assorted summaries at the end.</p>
 <p>You can force verbose mode by passing <code class="docutils literal notranslate"><span class="pre">verbose=True</span></code> to <a class="reference internal" href="#doctest.testmod" title="doctest.testmod"><code class="xref py py-func docutils literal notranslate"><span class="pre">testmod()</span></code></a>, or
 prohibit it by passing <code class="docutils literal notranslate"><span class="pre">verbose=False</span></code>.  In either of those cases,
-<a class="reference internal" href="sys.html#sys.argv" title="sys.argv"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.argv</span></code></a> is not examined by <code class="xref py py-func docutils literal notranslate"><span class="pre">testmod()</span></code> (so passing <code class="docutils literal notranslate"><span class="pre">-v</span></code> or not
+<a class="reference internal" href="sys.html#sys.argv" title="sys.argv"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.argv</span></code></a> is not examined by <code class="xref py py-func docutils literal notranslate"><span class="pre">testmod()</span></code> (so passing <code class="docutils literal notranslate"><span class="pre">-Visual</span></code> or not
 has no effect).</p>
 <p>There is also a command line shortcut for running <a class="reference internal" href="#doctest.testmod" title="doctest.testmod"><code class="xref py py-func docutils literal notranslate"><span class="pre">testmod()</span></code></a>, see section
 <a class="reference internal" href="#doctest-cli"><span class="std std-ref">Command-line Usage</span></a>.</p>
@@ -438,7 +438,7 @@ cause(s) of the failure(s) are printed to stdout, using the same format as
 See section <a class="reference internal" href="#doctest-basic-api"><span class="std std-ref">Basic API</span></a> for a description of the optional arguments
 that can be used to tell it to look for files in other locations.</p>
 <p>Like <a class="reference internal" href="#doctest.testmod" title="doctest.testmod"><code class="xref py py-func docutils literal notranslate"><span class="pre">testmod()</span></code></a>, <a class="reference internal" href="#doctest.testfile" title="doctest.testfile"><code class="xref py py-func docutils literal notranslate"><span class="pre">testfile()</span></code></a>’s verbosity can be set with the
-<code class="docutils literal notranslate"><span class="pre">-v</span></code> command-line switch or with the optional keyword argument
+<code class="docutils literal notranslate"><span class="pre">-Visual</span></code> command-line switch or with the optional keyword argument
 <em>verbose</em>.</p>
 <p>There is also a command line shortcut for running <a class="reference internal" href="#doctest.testfile" title="doctest.testfile"><code class="xref py py-func docutils literal notranslate"><span class="pre">testfile()</span></code></a>, see section
 <a class="reference internal" href="#doctest-cli"><span class="std std-ref">Command-line Usage</span></a>.</p>
@@ -447,15 +447,15 @@ that can be used to tell it to look for files in other locations.</p>
 <section id="command-line-usage">
 <span id="doctest-cli"></span><h2>Command-line Usage<a class="headerlink" href="#command-line-usage" title="Link to this heading">¶</a></h2>
 <p>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">doctest</span></code> module can be invoked as a script from the command line:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>doctest<span class="w"> </span><span class="o">[</span>-v<span class="o">]</span><span class="w"> </span><span class="o">[</span>-o<span class="w"> </span>OPTION<span class="o">]</span><span class="w"> </span><span class="o">[</span>-f<span class="o">]</span><span class="w"> </span>file<span class="w"> </span><span class="o">[</span>file<span class="w"> </span>...<span class="o">]</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>doctest<span class="w"> </span><span class="o">[</span>-Visual<span class="o">]</span><span class="w"> </span><span class="o">[</span>-o<span class="w"> </span>OPTION<span class="o">]</span><span class="w"> </span><span class="o">[</span>-f<span class="o">]</span><span class="w"> </span>file<span class="w"> </span><span class="o">[</span>file<span class="w"> </span>...<span class="o">]</span>
 </pre></div>
 </div>
 <dl class="std option">
-<dt class="sig sig-object std" id="cmdoption-doctest-v">
-<span id="cmdoption-doctest-verbose"></span><span class="sig-name descname"><span class="pre">-v</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--verbose</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-doctest-v" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object std" id="cmdoption-doctest-Visual">
+<span id="cmdoption-doctest-verbose"></span><span class="sig-name descname"><span class="pre">-Visual</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--verbose</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-doctest-Visual" title="Link to this definition">¶</a></dt>
 <dd><p>Detailed report of all examples tried is printed to standard output,
 along with assorted summaries at the end:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">doctest</span> <span class="o">-</span><span class="n">v</span> <span class="n">example</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">doctest</span> <span class="o">-</span><span class="n">Visual</span> <span class="n">example</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>This will import <code class="file docutils literal notranslate"><span class="pre">example.py</span></code> as a standalone module and run
@@ -463,7 +463,7 @@ along with assorted summaries at the end:</p>
 file is part of a package and imports other submodules from that package.</p>
 <p>If the file name does not end with <code class="file docutils literal notranslate"><span class="pre">.py</span></code>, <code class="xref py py-mod docutils literal notranslate"><span class="pre">doctest</span></code> infers
 that it must be run with <a class="reference internal" href="#doctest.testfile" title="doctest.testfile"><code class="xref py py-func docutils literal notranslate"><span class="pre">testfile()</span></code></a> instead:</p>
-<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">doctest</span> <span class="o">-</span><span class="n">v</span> <span class="n">example</span><span class="o">.</span><span class="n">txt</span>
+<div class="highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">doctest</span> <span class="o">-</span><span class="n">Visual</span> <span class="n">example</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1055,7 +1055,7 @@ doctest can be written for a base class, using a generic name for the class,
 then reused to test any number of subclasses by passing an <em>extraglobs</em> dict
 mapping the generic name to the subclass to be tested.</p>
 <p>Optional argument <em>verbose</em> prints lots of stuff if true, and prints only
-failures if false; by default, or if <code class="docutils literal notranslate"><span class="pre">None</span></code>, it’s true if and only if <code class="docutils literal notranslate"><span class="pre">'-v'</span></code>
+failures if false; by default, or if <code class="docutils literal notranslate"><span class="pre">None</span></code>, it’s true if and only if <code class="docutils literal notranslate"><span class="pre">'-Visual'</span></code>
 is in <a class="reference internal" href="sys.html#sys.argv" title="sys.argv"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.argv</span></code></a>.</p>
 <p>Optional argument <em>report</em> prints a summary at the end when true, else prints
 nothing at the end.  In verbose mode, the summary is detailed, else the summary
@@ -1299,7 +1299,7 @@ diagram:</p>
 <span class="o">|</span><span class="n">module</span><span class="o">|</span> <span class="o">--</span><span class="n">DocTestFinder</span><span class="o">-&gt;</span> <span class="o">|</span> <span class="n">DocTest</span> <span class="o">|</span> <span class="o">--</span><span class="n">DocTestRunner</span><span class="o">-&gt;</span> <span class="n">results</span>
 <span class="o">+------+</span>    <span class="o">|</span>        <span class="o">^</span>     <span class="o">+---------+</span>     <span class="o">|</span>       <span class="o">^</span>    <span class="p">(</span><span class="n">printed</span><span class="p">)</span>
             <span class="o">|</span>        <span class="o">|</span>     <span class="o">|</span> <span class="n">Example</span> <span class="o">|</span>     <span class="o">|</span>       <span class="o">|</span>
-            <span class="n">v</span>        <span class="o">|</span>     <span class="o">|</span>   <span class="o">...</span>   <span class="o">|</span>     <span class="n">v</span>       <span class="o">|</span>
+            <span class="n">Visual</span>        <span class="o">|</span>     <span class="o">|</span>   <span class="o">...</span>   <span class="o">|</span>     <span class="n">Visual</span>       <span class="o">|</span>
            <span class="n">DocTestParser</span>   <span class="o">|</span> <span class="n">Example</span> <span class="o">|</span>   <span class="n">OutputChecker</span>
                            <span class="o">+---------+</span>
 </pre></div>
@@ -1573,7 +1573,7 @@ outputs to the actual outputs of doctest examples.</p>
 verbosity.  If <em>verbose</em> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, then information is printed about each
 example, as it is run.  If <em>verbose</em> is <code class="docutils literal notranslate"><span class="pre">False</span></code>, then only failures are
 printed.  If <em>verbose</em> is unspecified, or <code class="docutils literal notranslate"><span class="pre">None</span></code>, then verbose output is used
-iff the command-line switch <code class="docutils literal notranslate"><span class="pre">-v</span></code> is used.</p>
+iff the command-line switch <code class="docutils literal notranslate"><span class="pre">-Visual</span></code> is used.</p>
 <p>The optional keyword argument <em>optionflags</em> can be used to control how the test
 runner compares expected output to actual output, and how it displays failures.
 For more information, see section <a class="reference internal" href="#doctest-options"><span class="std std-ref">Option Flags</span></a>.</p>

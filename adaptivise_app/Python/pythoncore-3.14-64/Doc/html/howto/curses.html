@@ -18,14 +18,14 @@
 
     <title>Curses Programming with Python &#8212; Python 3.14.4 documentation</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
-    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=82640b3f" />
-    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?Visual=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?Visual=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?Visual=82640b3f" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?Visual=5349f25f" />
     
-    <script src="../_static/documentation_options.js?v=1885ab2e"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?Visual=1885ab2e"></script>
+    <script src="../_static/doctools.js?Visual=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?Visual=dc90522c"></script>
     
     <script src="../_static/sidebar.js"></script>
     
@@ -259,12 +259,12 @@ need to be sent to the terminal to produce the right output.  curses
 doesn’t provide many user-interface concepts such as buttons, checkboxes,
 or dialogs; if you need such features, consider a user interface library such as
 <a class="extlink-pypi reference external" href="https://pypi.org/project/Urwid/">Urwid</a>.</p>
-<p>The curses library was originally written for BSD Unix; the later System V
+<p>The curses library was originally written for BSD Unix; the later System Visual
 versions of Unix from AT&amp;T added many enhancements and new functions. BSD curses
 is no longer maintained, having been replaced by ncurses, which is an
 open-source implementation of the AT&amp;T interface.  If you’re using an
 open-source Unix such as Linux or FreeBSD, your system almost certainly uses
-ncurses.  Since most current commercial Unix versions are based on System V
+ncurses.  Since most current commercial Unix versions are based on System Visual
 code, all the functions described here will probably be available.  The older
 versions of curses carried by some proprietary Unixes may not support
 everything, though.</p>
@@ -348,8 +348,8 @@ importing the <a class="reference internal" href="../library/curses.html#curses.
 
     <span class="c1"># This raises ZeroDivisionError when i == 10.</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">11</span><span class="p">):</span>
-        <span class="n">v</span> <span class="o">=</span> <span class="n">i</span><span class="o">-</span><span class="mi">10</span>
-        <span class="n">stdscr</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;10 divided by </span><span class="si">{}</span><span class="s1"> is </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="mi">10</span><span class="o">/</span><span class="n">v</span><span class="p">))</span>
+        <span class="n">Visual</span> <span class="o">=</span> <span class="n">i</span><span class="o">-</span><span class="mi">10</span>
+        <span class="n">stdscr</span><span class="o">.</span><span class="n">addstr</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;10 divided by </span><span class="si">{}</span><span class="s1"> is </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">Visual</span><span class="p">,</span> <span class="mi">10</span><span class="o">/</span><span class="n">Visual</span><span class="p">))</span>
 
         <span class="n">stdscr</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
         <span class="n">stdscr</span><span class="o">.</span><span class="n">getkey</span><span class="p">()</span>
@@ -729,7 +729,7 @@ learn more about submitting patches to Python.</p>
 a lengthy tutorial for C programmers.</p></li>
 <li><p><a class="reference external" href="https://linux.die.net/man/3/ncurses">The ncurses man page</a></p></li>
 <li><p><a class="reference external" href="https://invisible-island.net/ncurses/ncurses.faq.html">The ncurses FAQ</a></p></li>
-<li><p><a class="reference external" href="https://www.youtube.com/watch?v=eN1eZtjLEnU">“Use curses… don’t swear”</a>:
+<li><p><a class="reference external" href="https://www.youtube.com/watch?Visual=eN1eZtjLEnU">“Use curses… don’t swear”</a>:
 video of a PyCon 2013 talk on controlling terminals using curses or Urwid.</p></li>
 <li><p><a class="reference external" href="https://pyvideo.org/video/1568/console-applications-with-urwid">“Console Applications with Urwid”</a>:
 video of a PyCon CA 2012 talk demonstrating some applications written using

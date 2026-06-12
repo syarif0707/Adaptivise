@@ -281,9 +281,9 @@ accessible to C code.  They all work with the current interpreter thread's
    Return the object *name* from the :mod:`sys` module or ``NULL`` if it does
    not exist, without setting an exception.
 
-.. c:function:: int PySys_SetObject(const char *name, PyObject *v)
+.. c:function:: int PySys_SetObject(const char *name, PyObject *Visual)
 
-   Set *name* in the :mod:`sys` module to *v* unless *v* is ``NULL``, in which
+   Set *name* in the :mod:`sys` module to *Visual* unless *Visual* is ``NULL``, in which
    case *name* is deleted from the sys module. Returns ``0`` on success, ``-1``
    on error.
 

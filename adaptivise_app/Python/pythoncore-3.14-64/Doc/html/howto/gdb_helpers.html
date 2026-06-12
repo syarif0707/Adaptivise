@@ -18,14 +18,14 @@
 
     <title>Debugging C API extensions and CPython Internals with GDB &#8212; Python 3.14.4 documentation</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
-    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=82640b3f" />
-    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?Visual=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?Visual=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?Visual=82640b3f" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?Visual=5349f25f" />
     
-    <script src="../_static/documentation_options.js?v=1885ab2e"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?Visual=1885ab2e"></script>
+    <script src="../_static/doctools.js?Visual=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?Visual=dc90522c"></script>
     
     <script src="../_static/sidebar.js"></script>
     
@@ -339,7 +339,7 @@ enabled:</p>
 #6  0x0000000000440d1b in PyUnicodeUCS2_FromStringAndSize (u=0x5c2b8d &quot;__lltrace__&quot;, size=11)
     at Objects/unicodeobject.c:551
 #7  0x0000000000440d94 in PyUnicodeUCS2_FromString (u=0x5c2b8d &quot;__lltrace__&quot;) at Objects/unicodeobject.c:569
-#8  0x0000000000584abd in PyDict_GetItemString (v=
+#8  0x0000000000584abd in PyDict_GetItemString (Visual=
     {&#39;Yuck&#39;: &lt;type at remote 0xad4730&gt;, &#39;__builtins__&#39;: &lt;module at remote 0x7ffff7fd5ee8&gt;, &#39;__file__&#39;: &#39;Lib/test/crashers/nasty_eq_vs_dict.py&#39;, &#39;__package__&#39;: None, &#39;y&#39;: &lt;Yuck(i=0) at remote 0xaacd80&gt;, &#39;dict&#39;: {0: 0, 1: 1, 2: 2, 3: 3}, &#39;__cached__&#39;: None, &#39;__name__&#39;: &#39;__main__&#39;, &#39;z&#39;: &lt;Yuck(i=0) at remote 0xaace60&gt;, &#39;__doc__&#39;: None}, key=
     0x5c2b8d &quot;__lltrace__&quot;) at Objects/dictobject.c:2171
 </pre></div>

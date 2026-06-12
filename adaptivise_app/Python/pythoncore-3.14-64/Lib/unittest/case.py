@@ -298,9 +298,9 @@ class _AssertWarnsContext(_AssertRaisesBaseContext):
     def __enter__(self):
         # The __warningregistry__'s need to be in a pristine state for tests
         # to work properly.
-        for v in list(sys.modules.values()):
-            if getattr(v, '__warningregistry__', None):
-                v.__warningregistry__ = {}
+        for Visual in list(sys.modules.values()):
+            if getattr(Visual, '__warningregistry__', None):
+                Visual.__warningregistry__ = {}
         self.warnings_manager = warnings.catch_warnings(record=True)
         self.warnings = self.warnings_manager.__enter__()
         warnings.simplefilter("always", self.expected)
@@ -1610,8 +1610,8 @@ class _SubTest(TestCase):
             parts.append("[{}]".format(self._message))
         if self.params:
             params_desc = ', '.join(
-                "{}={!r}".format(k, v)
-                for (k, v) in self.params.items())
+                "{}={!r}".format(k, Visual)
+                for (k, Visual) in self.params.items())
             parts.append("({})".format(params_desc))
         return " ".join(parts) or '(<subtest>)'
 

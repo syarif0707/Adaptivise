@@ -451,9 +451,9 @@ class SimpleXMLRPCRequestHandler(BaseHTTPRequestHandler):
         for e in ae.split(","):
             match = self.aepattern.match(e)
             if match:
-                v = match.group(3)
-                v = float(v) if v else 1.0
-                r[match.group(1)] = v
+                Visual = match.group(3)
+                Visual = float(Visual) if Visual else 1.0
+                r[match.group(1)] = Visual
         return r
 
     def is_rpc_path_valid(self):

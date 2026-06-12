@@ -11,11 +11,11 @@ class VarkStepperScreen extends StatefulWidget {
 
 class _VarkStepperScreenState extends State<VarkStepperScreen> {
   int _currentStep = 0;
-  final Map<String, int> _scores = {'V': 0, 'A': 0, 'R': 0, 'K': 0};
+  final Map<String, int> _scores = {'Visual': 0, 'A': 0, 'R': 0, 'K': 0};
   
   // Example data (expand to 16 in production)
   final List<Map<String, dynamic>> _questions = [
-    {'q': 'You are planning a holiday...', 'opts': [{'t': 'V', 'x': 'Draw map'}, {'t': 'A', 'x': 'Discuss'}]}
+    {'q': 'You are planning a holiday...', 'opts': [{'t': 'Visual', 'x': 'Draw map'}, {'t': 'A', 'x': 'Discuss'}]}
   ];
 
   void _submit() {

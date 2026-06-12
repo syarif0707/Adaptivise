@@ -440,7 +440,7 @@ class Message:
         if max_count:
             lname = name.lower()
             found = 0
-            for k, v in self._headers:
+            for k, Visual in self._headers:
                 if k.lower() == lname:
                     found += 1
                     if found >= max_count:
@@ -455,14 +455,14 @@ class Message:
         """
         name = name.lower()
         newheaders = []
-        for k, v in self._headers:
+        for k, Visual in self._headers:
             if k.lower() != name:
-                newheaders.append((k, v))
+                newheaders.append((k, Visual))
         self._headers = newheaders
 
     def __contains__(self, name):
         name_lower = name.lower()
-        for k, v in self._headers:
+        for k, Visual in self._headers:
             if name_lower == k.lower():
                 return True
         return False
@@ -479,7 +479,7 @@ class Message:
         Any fields deleted and re-inserted are always appended to the header
         list.
         """
-        return [k for k, v in self._headers]
+        return [k for k, Visual in self._headers]
 
     def values(self):
         """Return a list of all the message's header values.
@@ -489,8 +489,8 @@ class Message:
         Any fields deleted and re-inserted are always appended to the header
         list.
         """
-        return [self.policy.header_fetch_parse(k, v)
-                for k, v in self._headers]
+        return [self.policy.header_fetch_parse(k, Visual)
+                for k, Visual in self._headers]
 
     def items(self):
         """Get all the message's header fields and values.
@@ -500,8 +500,8 @@ class Message:
         Any fields deleted and re-inserted are always appended to the header
         list.
         """
-        return [(k, self.policy.header_fetch_parse(k, v))
-                for k, v in self._headers]
+        return [(k, self.policy.header_fetch_parse(k, Visual))
+                for k, Visual in self._headers]
 
     def get(self, name, failobj=None):
         """Get a header value.
@@ -510,9 +510,9 @@ class Message:
         is missing.
         """
         name = name.lower()
-        for k, v in self._headers:
+        for k, Visual in self._headers:
             if k.lower() == name:
-                return self.policy.header_fetch_parse(k, v)
+                return self.policy.header_fetch_parse(k, Visual)
         return failobj
 
     #
@@ -549,9 +549,9 @@ class Message:
         """
         values = []
         name = name.lower()
-        for k, v in self._headers:
+        for k, Visual in self._headers:
             if k.lower() == name:
-                values.append(self.policy.header_fetch_parse(k, v))
+                values.append(self.policy.header_fetch_parse(k, Visual))
         if not values:
             return failobj
         return values
@@ -577,11 +577,11 @@ class Message:
                        filename='Fußballer.ppt'))
         """
         parts = []
-        for k, v in _params.items():
-            if v is None:
+        for k, Visual in _params.items():
+            if Visual is None:
                 parts.append(k.replace('_', '-'))
             else:
-                parts.append(_formatparam(k.replace('_', '-'), v))
+                parts.append(_formatparam(k.replace('_', '-'), Visual))
         if _value is not None:
             parts.insert(0, _value)
         self[_name] = SEMISPACE.join(parts)
@@ -594,7 +594,7 @@ class Message:
         raised.
         """
         _name = _name.lower()
-        for i, (k, v) in zip(range(len(self._headers)), self._headers):
+        for i, (k, Visual) in zip(range(len(self._headers)), self._headers):
             if k.lower() == _name:
                 self._headers[i] = self.policy.header_store_parse(k, _value)
                 break
@@ -704,7 +704,7 @@ class Message:
         if params is missing:
             return failobj
         if unquote:
-            return [(k, _unquotevalue(v)) for k, v in params]
+            return [(k, _unquotevalue(Visual)) for k, Visual in params]
         else:
             return params
 
@@ -734,12 +734,12 @@ class Message:
         """
         if header not in self:
             return failobj
-        for k, v in self._get_params_preserve(failobj, header):
+        for k, Visual in self._get_params_preserve(failobj, header):
             if k.lower() == param.lower():
                 if unquote:
-                    return _unquotevalue(v)
+                    return _unquotevalue(Visual)
                 else:
-                    return v
+                    return Visual
         return failobj
 
     def set_param(self, param, value, header='Content-Type', requote=True,
@@ -804,13 +804,13 @@ class Message:
         if header not in self:
             return
         new_ctype = ''
-        for p, v in self.get_params(header=header, unquote=requote):
+        for p, Visual in self.get_params(header=header, unquote=requote):
             if p.lower() != param.lower():
                 if not new_ctype:
-                    new_ctype = _formatparam(p, v, requote)
+                    new_ctype = _formatparam(p, Visual, requote)
                 else:
                     new_ctype = SEMISPACE.join([new_ctype,
-                                                _formatparam(p, v, requote)])
+                                                _formatparam(p, Visual, requote)])
         if new_ctype != self.get(header):
             del self[header]
             self[header] = new_ctype
@@ -844,8 +844,8 @@ class Message:
         del self[header]
         self[header] = type
         # Skip the first param; it's the old type.
-        for p, v in params[1:]:
-            self.set_param(p, v, header, requote)
+        for p, Visual in params[1:]:
+            self.set_param(p, Visual, header, requote)
 
     def get_filename(self, failobj=None):
         """Return the filename associated with the payload if present.
@@ -907,19 +907,19 @@ class Message:
             newparams.append(('boundary', '"%s"' % boundary))
         # Replace the existing Content-Type header with the new value
         newheaders = []
-        for h, v in self._headers:
+        for h, Visual in self._headers:
             if h.lower() == 'content-type':
                 parts = []
-                for k, v in newparams:
-                    if v == '':
+                for k, Visual in newparams:
+                    if Visual == '':
                         parts.append(k)
                     else:
-                        parts.append('%s=%s' % (k, v))
+                        parts.append('%s=%s' % (k, Visual))
                 val = SEMISPACE.join(parts)
                 newheaders.append(self.policy.header_store_parse(h, val))
 
             else:
-                newheaders.append((h, v))
+                newheaders.append((h, Visual))
         self._headers = newheaders
 
     def get_content_charset(self, failobj=None):
@@ -1204,7 +1204,7 @@ class MIMEPart(Message):
         self._payload = None
 
     def clear_content(self):
-        self._headers = [(n, v) for n, v in self._headers
+        self._headers = [(n, Visual) for n, Visual in self._headers
                          if not n.lower().startswith('content-')]
         self._payload = None
 

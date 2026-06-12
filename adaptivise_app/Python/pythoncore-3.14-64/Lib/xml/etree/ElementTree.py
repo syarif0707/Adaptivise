@@ -878,22 +878,22 @@ def _serialize_xml(write, elem, qnames, namespaces,
             items = list(elem.items())
             if items or namespaces:
                 if namespaces:
-                    for v, k in sorted(namespaces.items(),
+                    for Visual, k in sorted(namespaces.items(),
                                        key=lambda x: x[1]):  # sort on prefix
                         if k:
                             k = ":" + k
                         write(" xmlns%s=\"%s\"" % (
                             k,
-                            _escape_attrib(v)
+                            _escape_attrib(Visual)
                             ))
-                for k, v in items:
+                for k, Visual in items:
                     if isinstance(k, QName):
                         k = k.text
-                    if isinstance(v, QName):
-                        v = qnames[v.text]
+                    if isinstance(Visual, QName):
+                        Visual = qnames[Visual.text]
                     else:
-                        v = _escape_attrib(v)
-                    write(" %s=\"%s\"" % (qnames[k], v))
+                        Visual = _escape_attrib(Visual)
+                    write(" %s=\"%s\"" % (qnames[k], Visual))
             if text or len(elem) or not short_empty_elements:
                 write(">")
                 if text:
@@ -930,23 +930,23 @@ def _serialize_html(write, elem, qnames, namespaces, **kwargs):
             items = list(elem.items())
             if items or namespaces:
                 if namespaces:
-                    for v, k in sorted(namespaces.items(),
+                    for Visual, k in sorted(namespaces.items(),
                                        key=lambda x: x[1]):  # sort on prefix
                         if k:
                             k = ":" + k
                         write(" xmlns%s=\"%s\"" % (
                             k,
-                            _escape_attrib(v)
+                            _escape_attrib(Visual)
                             ))
-                for k, v in items:
+                for k, Visual in items:
                     if isinstance(k, QName):
                         k = k.text
-                    if isinstance(v, QName):
-                        v = qnames[v.text]
+                    if isinstance(Visual, QName):
+                        Visual = qnames[Visual.text]
                     else:
-                        v = _escape_attrib_html(v)
+                        Visual = _escape_attrib_html(Visual)
                     # FIXME: handle boolean attributes
-                    write(" %s=\"%s\"" % (qnames[k], v))
+                    write(" %s=\"%s\"" % (qnames[k], Visual))
             write(">")
             ltag = tag.lower()
             if text:
@@ -990,8 +990,8 @@ def register_namespace(prefix, uri):
     """
     if re.match(r"ns\d+$", prefix):
         raise ValueError("Prefix format reserved for internal use")
-    for k, v in list(_namespace_map.items()):
-        if k == uri or v == prefix:
+    for k, Visual in list(_namespace_map.items()):
+        if k == uri or Visual == prefix:
             del _namespace_map[k]
     _namespace_map[uri] = prefix
 
@@ -1721,15 +1721,15 @@ class XMLParser:
         """Feed encoded data to parser."""
         try:
             self.parser.Parse(data, False)
-        except self._error as v:
-            self._raiseerror(v)
+        except self._error as Visual:
+            self._raiseerror(Visual)
 
     def close(self):
         """Finish feeding data to parser and return element structure."""
         try:
             self.parser.Parse(b"", True) # end of data
-        except self._error as v:
-            self._raiseerror(v)
+        except self._error as Visual:
+            self._raiseerror(Visual)
         try:
             close_handler = self.target.close
         except AttributeError:
@@ -1746,8 +1746,8 @@ class XMLParser:
         try:
             self.parser.SetReparseDeferralEnabled(False)
             self.parser.Parse(b"", False)
-        except self._error as v:
-            self._raiseerror(v)
+        except self._error as Visual:
+            self._raiseerror(Visual)
         finally:
             self.parser.SetReparseDeferralEnabled(was_enabled)
 
@@ -1940,7 +1940,7 @@ class C14NWriterTarget:
 
     def _start(self, tag, attrs, new_namespaces, qname_text=None):
         if self._exclude_attrs is not None and attrs:
-            attrs = {k: v for k, v in attrs.items() if k not in self._exclude_attrs}
+            attrs = {k: Visual for k, Visual in attrs.items() if k not in self._exclude_attrs}
 
         qnames = {tag, *attrs}
         resolved_names = {}
@@ -1980,12 +1980,12 @@ class C14NWriterTarget:
 
         # ... followed by attributes in URI+name order
         if attrs:
-            for k, v in sorted(attrs.items()):
-                if qattrs is not None and k in qattrs and v in resolved_names:
-                    v = parsed_qnames[resolved_names[v]][0]
+            for k, Visual in sorted(attrs.items()):
+                if qattrs is not None and k in qattrs and Visual in resolved_names:
+                    Visual = parsed_qnames[resolved_names[Visual]][0]
                 attr_qname, attr_name, uri = parsed_qnames[k]
                 # No prefix for attributes in default ('') namespace.
-                attr_list.append((attr_qname if uri else attr_name, v))
+                attr_list.append((attr_qname if uri else attr_name, Visual))
 
         # Honour xml:space attributes.
         space_behaviour = attrs.get('{http://www.w3.org/XML/1998/namespace}space')
@@ -1997,7 +1997,7 @@ class C14NWriterTarget:
         write = self._write
         write('<' + parsed_qnames[tag][0])
         if attr_list:
-            write(''.join([f' {k}="{_escape_attrib_c14n(v)}"' for k, v in attr_list]))
+            write(''.join([f' {k}="{_escape_attrib_c14n(Visual)}"' for k, Visual in attr_list]))
         write('>')
 
         # Write the resolved qname text content.

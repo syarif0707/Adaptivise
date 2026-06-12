@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:adaptivise_prototype/core/api_service.dart';
-import 'package:adaptivise_prototype/presentation/adaptive_content/adaptive_note_container.dart';
+import 'package:adaptivise_prototype/core/debug_log.dart';
+import 'package:adaptivise_prototype/core/note_actions.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:http/http.dart' as http;
@@ -24,10 +27,10 @@ class FolderContentScreen extends StatefulWidget {
 class _FolderContentScreenState extends State<FolderContentScreen> {
   final _supabase = Supabase.instance.client;
   bool _isProcessing = false;
+  String _filter = 'all';
 
   @override
   Widget build(BuildContext context) {
-    // 2. FIXED THE STREAM: Now it actually filters by the specific Folder ID!
     final notesStream = _supabase
         .from('lecture_notes')
         .stream(primaryKey: ['id'])
@@ -37,25 +40,32 @@ class _FolderContentScreenState extends State<FolderContentScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text(widget.folderName, // Changed this to show the actual folder name!
-            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
+        title: Text(
+          widget.folderName,
+          style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+        ),
         elevation: 0,
         backgroundColor: Colors.transparent,
-        iconTheme: const IconThemeData(color: Colors.black), // Makes the back arrow visible
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
-
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _isProcessing ? null : _pickAndUploadNote,
         backgroundColor: const Color(0xFF00695C),
         icon: _isProcessing
-            ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                  strokeWidth: 2,
+                ),
+              )
             : const Icon(Icons.add_circle_outline, color: Colors.white),
         label: Text(
-          _isProcessing ? "Processing..." : "Adapt Notes",
+          _isProcessing ? 'Processing...' : 'Adapt Notes',
           style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
-
       body: Column(
         children: [
           _buildFilterChips(),
@@ -63,52 +73,45 @@ class _FolderContentScreenState extends State<FolderContentScreen> {
             child: StreamBuilder<List<Map<String, dynamic>>>(
               stream: notesStream,
               builder: (context, snapshot) {
-                if (snapshot.hasError) return Center(child: Text("Error: ${snapshot.error}"));
-                if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+                if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-                final notes = snapshot.data!;
-                
-                if (notes.isEmpty) return const Center(child: Text("No notes yet. Tap Adapt Notes to add one!"));
+                final allNotes = snapshot.data!
+                    .where((note) => note['folder_id']?.toString() == widget.folderId)
+                    .toList();
+                final notes = _applyFilter(allNotes);
 
-                return ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: notes.length,
-                  itemBuilder: (context, index) {
-                    final note = notes[index];
-                    return Card(
-                      elevation: 2,
-                      margin: const EdgeInsets.only(bottom: 12),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                      child: ListTile(
-                        leading: const Icon(Icons.description, color: Colors.teal, size: 40),
-                        title: Text(note['file_name'] ?? 'Untitled Note', style: const TextStyle(fontWeight: FontWeight.bold)),
-                        subtitle: const Text("Tap to start Adaptive Study"),
-                        trailing: const Icon(Icons.play_circle_fill, color: Colors.teal),
-                        
-                        // 3. UPDATED ONTAP LOGIC
-                        onTap: () async {
-                          final userId = _supabase.auth.currentUser!.id;
-                          final profile = await _supabase.from('profiles').select('primary_vark_style').eq('id', userId).single();
-                          
-                          if (!context.mounted) return;
-
-                          // Safely grab the style as a string
-                          final userStyle = profile['primary_vark_style']?.toString() ?? "Read/Write";
-
-                          // Navigate to our new Tabbed Container
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AdaptiveNoteContainer(
-                                note: note, 
-                                initialStyle: userStyle, 
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    );
+                agentDebugLog(
+                  location: 'folder_content_screen.dart:build',
+                  message: 'Notes stream filtered for folder',
+                  hypothesisId: 'B',
+                  data: {
+                    'folderId': widget.folderId,
+                    'totalFromStream': snapshot.data!.length,
+                    'inFolder': allNotes.length,
+                    'afterFilter': notes.length,
+                    'filter': _filter,
                   },
+                );
+
+                if (notes.isEmpty) {
+                  return const Center(
+                    child: Text('No notes yet. Tap Adapt Notes to add one!'),
+                  );
+                }
+
+                return SlidableAutoCloseBehavior(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: notes.length,
+                    itemBuilder: (context, index) {
+                      return NoteSlidableTile(note: notes[index]);
+                    },
+                  ),
                 );
               },
             ),
@@ -118,27 +121,52 @@ class _FolderContentScreenState extends State<FolderContentScreen> {
     );
   }
 
+  List<Map<String, dynamic>> _applyFilter(List<Map<String, dynamic>> notes) {
+    switch (_filter) {
+      case 'favorite':
+        return notes.where((n) => n['is_starred'] == true).toList();
+      case 'recent':
+        return notes;
+      default:
+        return notes;
+    }
+  }
+
   Widget _buildFilterChips() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _chip("Recently", Icons.history),
-          _chip("Frequently", Icons.trending_up),
-          _chip("Favorite", Icons.favorite),
+          _chip('Recently', Icons.history, 'recent'),
+          _chip('Frequently', Icons.trending_up, 'all'),
+          _chip('Favorite', Icons.favorite, 'favorite'),
         ],
       ),
     );
   }
 
-  Widget _chip(String label, IconData icon) {
-    return Column(
-      children: [
-        CircleAvatar(backgroundColor: Colors.grey[100], child: Icon(icon, color: Colors.teal, size: 20)),
-        const SizedBox(height: 4),
-        Text(label, style: const TextStyle(fontSize: 11, color: Colors.grey)),
-      ],
+  Widget _chip(String label, IconData icon, String filterKey) {
+    final selected = _filter == filterKey;
+    return GestureDetector(
+      onTap: () => setState(() => _filter = filterKey),
+      child: Column(
+        children: [
+          CircleAvatar(
+            backgroundColor: selected ? Colors.teal[50] : Colors.grey[100],
+            child: Icon(icon, color: Colors.teal, size: 20),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              color: selected ? Colors.teal : Colors.grey,
+              fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -155,28 +183,29 @@ class _FolderContentScreenState extends State<FolderContentScreen> {
 
       if (userId == null) return;
 
-      if (fileName.toLowerCase().endsWith('.pptx')) {
+      if (fileName.toLowerCase().endsWith('.pptx') && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text("Reading slides and generating adaptive content..."),
+            content: Text('Reading slides and generating adaptive content...'),
             duration: Duration(seconds: 2),
           ),
         );
       }
 
+      if (!mounted) return;
       setState(() => _isProcessing = true);
 
       try {
         var request = http.MultipartRequest(
           'POST',
-          Uri.parse(ApiService.processNoteUrl)
+          Uri.parse(ApiService.processNoteUrl),
         );
 
         request.fields['user_id'] = userId;
-        request.fields['folder_id'] = widget.folderId; // Matches the note to THIS folder
+        request.fields['folder_id'] = widget.folderId;
         request.fields['storage_path'] = 'uploads/$fileName';
         request.files.add(await http.MultipartFile.fromPath('file', file.path));
-        
+
         var response = await request.send();
         final respBody = await response.stream.bytesToString();
 
@@ -202,19 +231,22 @@ class _FolderContentScreenState extends State<FolderContentScreen> {
             'raw_text': decodedData['raw_text'] ?? '',
             'summary': summaryToSave,
             'quiz_content': quizContent,
+            'is_starred': false,
           });
 
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text("AI processing complete!")),
+              const SnackBar(content: Text('AI processing complete!')),
             );
           }
         } else {
-          throw Exception("Server Error: ${response.statusCode} - $respBody");
+          throw Exception('Server Error: ${response.statusCode} - $respBody');
         }
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Upload failed: $e")));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Upload failed: $e')),
+          );
         }
       } finally {
         if (mounted) setState(() => _isProcessing = false);

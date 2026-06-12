@@ -187,7 +187,7 @@ class EditorWindow:
         #         false -> tab characters are converted to spaces by indent
         #                  and dedent cmds, and ditto TAB keystrokes
         # Although use-spaces=0 can be configured manually in config-main.def,
-        # configuration of tabs v. spaces is not supported in the configuration
+        # configuration of tabs Visual. spaces is not supported in the configuration
         # dialog.  IDLE promotes the preferred Python indentation: use spaces!
         usespaces = idleConf.GetOption('main', 'Indent',
                                        'use-spaces', type='bool')

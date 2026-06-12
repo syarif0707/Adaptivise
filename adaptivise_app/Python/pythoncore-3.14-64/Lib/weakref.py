@@ -172,9 +172,9 @@ class WeakValueDictionary(_collections_abc.MutableMapping):
 
     def items(self):
         for k, wr in self.data.copy().items():
-            v = wr()
-            if v is not None:
-                yield k, v
+            Visual = wr()
+            if Visual is not None:
+                yield k, Visual
 
     def keys(self):
         for k, wr in self.data.copy().items():

@@ -116,8 +116,8 @@ def _cnfmerge(cnfs):
                 cnf.update(c)
             except (AttributeError, TypeError) as msg:
                 print("_cnfmerge: fallback due to:", msg)
-                for k, v in c.items():
-                    cnf[k] = v
+                for k, Visual in c.items():
+                    cnf[k] = Visual
         return cnf
 
 
@@ -125,7 +125,7 @@ try: _cnfmerge = _tkinter._cnfmerge
 except AttributeError: pass
 
 
-def _splitdict(tk, v, cut_minus=True, conv=None):
+def _splitdict(tk, Visual, cut_minus=True, conv=None):
     """Return a properly formatted dict built from Tcl list pairs.
 
     If cut_minus is True, the supposed '-' prefix will be removed from
@@ -133,7 +133,7 @@ def _splitdict(tk, v, cut_minus=True, conv=None):
 
     Tcl list is expected to contain an even number of elements.
     """
-    t = tk.splitlist(v)
+    t = tk.splitlist(Visual)
     if len(t) % 2:
         raise RuntimeError('Tcl list representing a dict is expected '
                            'to contain an even number of elements')
@@ -258,7 +258,7 @@ class Event:
     """
 
     def __repr__(self):
-        attrs = {k: v for k, v in self.__dict__.items() if v != '??'}
+        attrs = {k: Visual for k, Visual in self.__dict__.items() if Visual != '??'}
         if not self.char:
             del attrs['char']
         elif self.char != '??':
@@ -488,7 +488,7 @@ class Variable:
     def trace_info(self):
         """Return all trace callback information."""
         splitlist = self._tk.splitlist
-        return [(splitlist(k), v) for k, v in map(splitlist,
+        return [(splitlist(k), Visual) for k, Visual in map(splitlist,
             splitlist(self._tk.call('trace', 'info', 'variable', self._name)))]
 
     def trace_variable(self, mode, callback):
@@ -1656,14 +1656,14 @@ class Misc:
         else:
             cnf = _cnfmerge(cnf)
         res = ()
-        for k, v in cnf.items():
-            if v is not None:
+        for k, Visual in cnf.items():
+            if Visual is not None:
                 if k[-1] == '_': k = k[:-1]
-                if callable(v):
-                    v = self._register(v)
-                elif isinstance(v, (tuple, list)):
+                if callable(Visual):
+                    Visual = self._register(Visual)
+                elif isinstance(Visual, (tuple, list)):
                     nv = []
-                    for item in v:
+                    for item in Visual:
                         if isinstance(item, int):
                             nv.append(str(item))
                         elif isinstance(item, str):
@@ -1671,8 +1671,8 @@ class Misc:
                         else:
                             break
                     else:
-                        v = ' '.join(nv)
-                res = res + ('-'+k, v)
+                        Visual = ' '.join(nv)
+                res = res + ('-'+k, Visual)
         return res
 
     def nametowidget(self, name):
@@ -1745,7 +1745,7 @@ class Misc:
             args = [s[0] if isinstance(s, tuple) and len(s) == 1 else s
                     for s in args]
         nsign, b, f, h, k, s, t, w, x, y, A, E, K, N, W, T, X, Y, D = args
-        # Missing: (a, c, d, m, o, v, B, R)
+        # Missing: (a, c, d, m, o, Visual, B, R)
         e = Event()
         # serial field: valid for all events
         # number of button: ButtonPress and ButtonRelease events only
@@ -2054,8 +2054,8 @@ class Misc:
         keyword arguments specify parameter of the event
         (e.g. x, y, rootx, rooty)."""
         args = ('event', 'generate', self._w, sequence)
-        for k, v in kw.items():
-            args = args + ('-%s' % k, str(v))
+        for k, Visual in kw.items():
+            args = args + ('-%s' % k, str(Visual))
         self.tk.call(args)
 
     def event_info(self, virtual=None):
@@ -2799,13 +2799,13 @@ class BaseWidget(Misc):
         self._setup(master, cnf)
         if self._tclCommands is None:
             self._tclCommands = []
-        classes = [(k, v) for k, v in cnf.items() if isinstance(k, type)]
-        for k, v in classes:
+        classes = [(k, Visual) for k, Visual in cnf.items() if isinstance(k, type)]
+        for k, Visual in classes:
             del cnf[k]
         self.tk.call(
             (widgetName, self._w) + extra + self._options(cnf))
-        for k, v in classes:
-            k.configure(self, v)
+        for k, Visual in classes:
+            k.configure(self, Visual)
 
     def destroy(self):
         """Destroy this and all descendants widgets."""
@@ -4239,9 +4239,9 @@ class OptionMenu(Menubutton):
             raise TclError('unknown option -'+next(iter(kwargs)))
         menu.add_command(label=value,
                  command=_setit(variable, value, callback))
-        for v in values:
-            menu.add_command(label=v,
-                     command=_setit(variable, v, callback))
+        for Visual in values:
+            menu.add_command(label=Visual,
+                     command=_setit(variable, Visual, callback))
         self["menu"] = menu
 
     def __getitem__(self, name):
@@ -4270,8 +4270,8 @@ class Image:
         if kw and cnf: cnf = _cnfmerge((cnf, kw))
         elif kw: cnf = kw
         options = ()
-        for k, v in cnf.items():
-            options = options + ('-'+k, v)
+        for k, Visual in cnf.items():
+            options = options + ('-'+k, Visual)
         self.tk.call(('image', 'create', imgtype, name,) + options)
         self.name = name
 
@@ -4294,10 +4294,10 @@ class Image:
     def configure(self, **kw):
         """Configure the image."""
         res = ()
-        for k, v in _cnfmerge(kw).items():
-            if v is not None:
+        for k, Visual in _cnfmerge(kw).items():
+            if Visual is not None:
                 if k[-1] == '_': k = k[:-1]
-                res = res + ('-'+k, v)
+                res = res + ('-'+k, Visual)
         self.tk.call((self.name, 'config') + res)
 
     config = configure

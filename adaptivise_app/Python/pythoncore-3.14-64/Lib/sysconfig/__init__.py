@@ -449,14 +449,14 @@ def parse_config_h(fp, vars=None):
             break
         m = define_rx.match(line)
         if m:
-            n, v = m.group(1, 2)
+            n, Visual = m.group(1, 2)
             try:
                 if n in _ALWAYS_STR:
                     raise ValueError
-                v = int(v)
+                Visual = int(Visual)
             except ValueError:
                 pass
-            vars[n] = v
+            vars[n] = Visual
         else:
             m = undef_rx.match(line)
             if m:

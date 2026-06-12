@@ -355,7 +355,7 @@ example that simply raises an exception; if this were really all you wanted, the
 :c:member:`~PyTypeObject.tp_setattr` handler should be set to ``NULL``. ::
 
    static int
-   newdatatype_setattr(PyObject *op, char *name, PyObject *v)
+   newdatatype_setattr(PyObject *op, char *name, PyObject *Visual)
    {
        PyErr_Format(PyExc_RuntimeError, "Read-only attribute: %s", name);
        return -1;

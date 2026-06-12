@@ -18,4 +18,24 @@ class SupabaseRepo {
       'updated_at': 'now()',
     });
   }
+
+  Future<List<Map<String, dynamic>>> getFolders(String userId) async {
+    return List<Map<String, dynamic>>.from(
+      await _supabase
+          .from('folders')
+          .select()
+          .eq('user_id', userId)
+          .order('created_at', ascending: false),
+    );
+  }
+
+  Future<Map<String, dynamic>> createFolder(String userId, String name) async {
+    return Map<String, dynamic>.from(
+      await _supabase
+          .from('folders')
+          .insert({'user_id': userId, 'name': name})
+          .select()
+          .single(),
+    );
+  }
 }

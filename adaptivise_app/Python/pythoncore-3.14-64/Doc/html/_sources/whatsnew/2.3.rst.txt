@@ -114,7 +114,7 @@ whether one set is a subset or superset of another::
 .. seealso::
 
    :pep:`218` - Adding a Built-In Set Object Type
-      PEP written by Greg V. Wilson. Implemented by Greg V. Wilson, Alex Martelli, and
+      PEP written by Greg Visual. Wilson. Implemented by Greg Visual. Wilson, Alex Martelli, and
       GvR.
 
 .. ======================================================================
@@ -1286,10 +1286,10 @@ complete list of changes, or look through the CVS logs for all the details.
   soon as a non-option argument is encountered, but in GNU-style mode processing
   continues, meaning that options and arguments can be mixed.  For example::
 
-     >>> getopt.getopt(['-f', 'filename', 'output', '-v'], 'f:v')
-     ([('-f', 'filename')], ['output', '-v'])
-     >>> getopt.gnu_getopt(['-f', 'filename', 'output', '-v'], 'f:v')
-     ([('-f', 'filename'), ('-v', '')], ['output'])
+     >>> getopt.getopt(['-f', 'filename', 'output', '-Visual'], 'f:Visual')
+     ([('-f', 'filename')], ['output', '-Visual'])
+     >>> getopt.gnu_getopt(['-f', 'filename', 'output', '-Visual'], 'f:Visual')
+     ([('-f', 'filename'), ('-Visual', '')], ['output'])
 
   (Contributed by Peter Åstrand.)
 

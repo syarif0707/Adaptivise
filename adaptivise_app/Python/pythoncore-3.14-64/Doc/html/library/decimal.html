@@ -18,14 +18,14 @@
 
     <title>decimal — Decimal fixed-point and floating-point arithmetic &#8212; Python 3.14.4 documentation</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
-    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
-    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=82640b3f" />
-    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?Visual=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?Visual=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?Visual=82640b3f" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?Visual=5349f25f" />
     
-    <script src="../_static/documentation_options.js?v=1885ab2e"></script>
-    <script src="../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/documentation_options.js?Visual=1885ab2e"></script>
+    <script src="../_static/doctools.js?Visual=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?Visual=dc90522c"></script>
     
     <script src="../_static/sidebar.js"></script>
     
@@ -2194,32 +2194,32 @@ properties of addition:</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">getcontext</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">getcontext</span><span class="p">()</span><span class="o">.</span><span class="n">prec</span> <span class="o">=</span> <span class="mi">8</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="mi">11111113</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="o">-</span><span class="mi">11111111</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;7.51111111&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">u</span> <span class="o">+</span> <span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">w</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">,</span> <span class="n">Visual</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="mi">11111113</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="o">-</span><span class="mi">11111111</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;7.51111111&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">u</span> <span class="o">+</span> <span class="n">Visual</span><span class="p">)</span> <span class="o">+</span> <span class="n">w</span>
 <span class="go">Decimal(&#39;9.5111111&#39;)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">+</span> <span class="p">(</span><span class="n">v</span> <span class="o">+</span> <span class="n">w</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">+</span> <span class="p">(</span><span class="n">Visual</span> <span class="o">+</span> <span class="n">w</span><span class="p">)</span>
 <span class="go">Decimal(&#39;10&#39;)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="mi">20000</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="o">-</span><span class="mi">6</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;6.0000003&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">w</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">,</span> <span class="n">Visual</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="mi">20000</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="o">-</span><span class="mi">6</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;6.0000003&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">Visual</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">w</span><span class="p">)</span>
 <span class="go">Decimal(&#39;0.01&#39;)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span><span class="o">+</span><span class="n">w</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">*</span> <span class="p">(</span><span class="n">Visual</span><span class="o">+</span><span class="n">w</span><span class="p">)</span>
 <span class="go">Decimal(&#39;0.0060000&#39;)</span>
 </pre></div>
 </div>
 <p>The <code class="xref py py-mod docutils literal notranslate"><span class="pre">decimal</span></code> module makes it possible to restore the identities by
 expanding the precision sufficiently to avoid loss of significance:</p>
 <div class="highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">getcontext</span><span class="p">()</span><span class="o">.</span><span class="n">prec</span> <span class="o">=</span> <span class="mi">20</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="mi">11111113</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="o">-</span><span class="mi">11111111</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;7.51111111&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">u</span> <span class="o">+</span> <span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="n">w</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">,</span> <span class="n">Visual</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="mi">11111113</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="o">-</span><span class="mi">11111111</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;7.51111111&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">u</span> <span class="o">+</span> <span class="n">Visual</span><span class="p">)</span> <span class="o">+</span> <span class="n">w</span>
 <span class="go">Decimal(&#39;9.51111111&#39;)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">+</span> <span class="p">(</span><span class="n">v</span> <span class="o">+</span> <span class="n">w</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">+</span> <span class="p">(</span><span class="n">Visual</span> <span class="o">+</span> <span class="n">w</span><span class="p">)</span>
 <span class="go">Decimal(&#39;9.51111111&#39;)</span>
 <span class="gp">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="mi">20000</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="o">-</span><span class="mi">6</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;6.0000003&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">v</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">w</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="p">,</span> <span class="n">Visual</span><span class="p">,</span> <span class="n">w</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="mi">20000</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="o">-</span><span class="mi">6</span><span class="p">),</span> <span class="n">Decimal</span><span class="p">(</span><span class="s1">&#39;6.0000003&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">Visual</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="n">w</span><span class="p">)</span>
 <span class="go">Decimal(&#39;0.0060000&#39;)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">*</span> <span class="p">(</span><span class="n">v</span><span class="o">+</span><span class="n">w</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">*</span> <span class="p">(</span><span class="n">Visual</span><span class="o">+</span><span class="n">w</span><span class="p">)</span>
 <span class="go">Decimal(&#39;0.0060000&#39;)</span>
 </pre></div>
 </div>
@@ -2536,7 +2536,7 @@ canonical value?</p>
 <p>A: The <a class="reference internal" href="#decimal.Decimal.normalize" title="decimal.Decimal.normalize"><code class="xref py py-meth docutils literal notranslate"><span class="pre">normalize()</span></code></a> method maps all equivalent values to a single
 representative:</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">values</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="n">Decimal</span><span class="p">,</span> <span class="s1">&#39;200 200.000 2E2 .02E+4&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">())</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">Visual</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span> <span class="k">for</span> <span class="n">Visual</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
 <span class="go">[Decimal(&#39;2E+2&#39;), Decimal(&#39;2E+2&#39;), Decimal(&#39;2E+2&#39;), Decimal(&#39;2E+2&#39;)]</span>
 </pre></div>
 </div>

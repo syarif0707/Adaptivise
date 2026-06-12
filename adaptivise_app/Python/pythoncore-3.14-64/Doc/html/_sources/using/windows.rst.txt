@@ -151,17 +151,17 @@ The default runtime can be overridden with the :envvar:`PYTHON_MANAGER_DEFAULT`
 environment variable, or a configuration file. See :ref:`pymanager-config` for
 information about configuration settings.
 
-To launch a specific runtime, the ``py`` command accepts a ``-V:<TAG>`` option.
+To launch a specific runtime, the ``py`` command accepts a ``-Visual:<TAG>`` option.
 This option must be specified before any others. The tag is part or all of the
 identifier for the runtime; for those from the CPython team, it looks like the
-version, potentially with the platform. For compatibility, the ``V:`` may be
+version, potentially with the platform. For compatibility, the ``Visual:`` may be
 omitted in cases where the tag refers to an official release and starts with
 ``3``.
 
 .. code::
 
-   $> py -V:3.14 ...
-   $> py -V:3-arm64 ...
+   $> py -Visual:3.14 ...
+   $> py -Visual:3-arm64 ...
 
 Runtimes from other distributors may require the *company* to be included as
 well. This should be separated from the tag by a slash, and may be a prefix.
@@ -171,8 +171,8 @@ specific company.
 
 .. code::
 
-   $> py -V:Distributor\1.0 ...
-   $> py -V:distrib/ ...
+   $> py -Visual:Distributor\1.0 ...
+   $> py -Visual:distrib/ ...
 
 If no version is specified, but a script file is passed, the script will be
 inspected for a *shebang line*. This is a special format for the first line in
@@ -208,7 +208,7 @@ help, or its name passed to ``py help``.
 
 
 All commands support some common options, which will be shown by ``py help``.
-These options must be specified after any subcommand. Specifying ``-v`` or
+These options must be specified after any subcommand. Specifying ``-Visual`` or
 ``--verbose`` will increase the amount of output shown, and ``-vv`` will
 increase it further for debugging purposes. Passing ``-q`` or ``--quiet`` will
 reduce output, and ``-qq`` will reduce it further.
@@ -239,7 +239,7 @@ The ``--one`` or ``-1`` option only displays a single result. If the default
 runtime is included, it will be the one. Otherwise, the "best" result is shown
 ("best" is deliberately vaguely defined, but will usually be the most recent
 version). The result shown by ``py list --one <TAG>`` will match the runtime
-that would be launched by ``py -V:<TAG>``.
+that would be launched by ``py -Visual:<TAG>``.
 
 The ``--only-managed`` option excludes results that were not installed by the
 Python install manager. This is useful when determining which runtimes may be
@@ -427,7 +427,7 @@ customization.
    * - ``default_platform``
      - ``PYTHON_MANAGER_DEFAULT_PLATFORM``
      - The preferred default platform to launch or install.
-       This is treated as a suffix to the specified tag, such that ``py -V:3.14``
+       This is treated as a suffix to the specified tag, such that ``py -Visual:3.14``
        would prefer an install for ``3.14-64`` if it exists
        (and ``default_platform`` is ``-64``),
        but will use ``3.14`` if no tagged install exists.
@@ -798,7 +798,7 @@ by installing tags with the ``t`` suffix.
 
 This will install and register as normal. If you have no other runtimes
 installed, then ``python`` will launch this one. Otherwise, you will need to use
-``py -V:3.14t ...`` or, if you have added the global aliases directory to your
+``py -Visual:3.14t ...`` or, if you have added the global aliases directory to your
 :envvar:`PATH` environment variable, the ``python3.14t.exe`` commands.
 
 .. _pymanager-troubleshoot:
@@ -1060,11 +1060,11 @@ contains the Python installation:
 .. code-block:: doscon
 
    # Without -ExcludeVersion
-   > .\python.3.5.2\tools\python.exe -V
+   > .\python.3.5.2\tools\python.exe -Visual
    Python 3.5.2
 
    # With -ExcludeVersion
-   > .\python\tools\python.exe -V
+   > .\python\tools\python.exe -Visual
    Python 3.5.2
 
 In general, nuget packages are not upgradeable, and newer versions should be
@@ -1732,34 +1732,34 @@ The command::
 
 displays the currently installed version(s) of Python.
 
-The ``-x.y`` argument is the short form of the ``-V:Company/Tag`` argument,
+The ``-x.y`` argument is the short form of the ``-Visual:Company/Tag`` argument,
 which allows selecting a specific Python runtime, including those that may have
 come from somewhere other than python.org. Any runtime registered by following
 :pep:`514` will be discoverable. The ``--list`` command lists all available
-runtimes using the ``-V:`` format.
+runtimes using the ``-Visual:`` format.
 
-When using the ``-V:`` argument, specifying the Company will limit selection to
+When using the ``-Visual:`` argument, specifying the Company will limit selection to
 runtimes from that provider, while specifying only the Tag will select from all
 providers. Note that omitting the slash implies a tag::
 
   # Select any '3.*' tagged runtime
-  py -V:3
+  py -Visual:3
 
   # Select any 'PythonCore' released runtime
-  py -V:PythonCore/
+  py -Visual:PythonCore/
 
   # Select PythonCore's latest Python 3 runtime
-  py -V:PythonCore/3
+  py -Visual:PythonCore/3
 
 The short form of the argument (``-3``) only ever selects from core Python
-releases, and not other distributions. However, the longer form (``-V:3``) will
+releases, and not other distributions. However, the longer form (``-Visual:3``) will
 select from any.
 
 The Company is matched on the full string, case-insensitive. The Tag is matched
 on either the full string, or a prefix, provided the next character is a dot or a
-hyphen. This allows ``-V:3.1`` to match ``3.1-32``, but not ``3.10``. Tags are
+hyphen. This allows ``-Visual:3.1`` to match ``3.1-32``, but not ``3.10``. Tags are
 sorted using numerical ordering (``3.10`` is newer than ``3.1``), but are
-compared using text (``-V:3.01`` does not match ``3.1``).
+compared using text (``-Visual:3.01`` does not match ``3.1``).
 
 
 Virtual environments
@@ -1868,7 +1868,7 @@ ignored and the environment will be used.
 
    The "-64" suffix is deprecated, and now implies "any architecture that is
    not provably i386/32-bit". To request a specific environment, use the new
-   :samp:`-V:{TAG}` argument with the complete tag.
+   :samp:`-Visual:{TAG}` argument with the complete tag.
 
 .. versionchanged:: 3.13
 
@@ -1917,9 +1917,9 @@ Python interpreter.  For example, if you have a shebang line:
 
 .. code-block:: sh
 
-  #! /usr/bin/python -v
+  #! /usr/bin/python -Visual
 
-Then Python will be started with the ``-v`` option
+Then Python will be started with the ``-Visual`` option
 
 Customization
 -------------

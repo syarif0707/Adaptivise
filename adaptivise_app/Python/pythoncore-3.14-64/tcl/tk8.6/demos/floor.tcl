@@ -1309,20 +1309,20 @@ pack $btns -side bottom -fill x
 set f [frame $w.frame]
 pack $f -side top -fill both -expand yes
 set h [ttk::scrollbar $f.hscroll -orient horizontal]
-set v [ttk::scrollbar $f.vscroll -orient vertical]
+set Visual [ttk::scrollbar $f.vscroll -orient vertical]
 set f1 [frame $f.f1 -borderwidth 2 -relief sunken]
 set c [canvas $f1.c -width 900 -height 500 -highlightthickness 0 \
 	   -xscrollcommand [list $h set] \
-	   -yscrollcommand [list $v set]]
+	   -yscrollcommand [list $Visual set]]
 pack $c -expand yes -fill both
 grid $f1 -padx 1 -pady 1 -row 0 -column 0 -rowspan 1 -columnspan 1 -sticky news
-grid $v -padx 1 -pady 1 -row 0 -column 1 -rowspan 1 -columnspan 1 -sticky news
+grid $Visual -padx 1 -pady 1 -row 0 -column 1 -rowspan 1 -columnspan 1 -sticky news
 grid $h -padx 1 -pady 1 -row 1 -column 0 -rowspan 1 -columnspan 1 -sticky news
 grid rowconfig    $f 0 -weight 1 -minsize 0
 grid columnconfig $f 0 -weight 1 -minsize 0
 pack $f -expand yes -fill both -padx 1 -pady 1
 
-$v configure -command [list $c yview]
+$Visual configure -command [list $c yview]
 $h configure -command [list $c xview]
 
 # Create an entry for displaying and typing in current room.

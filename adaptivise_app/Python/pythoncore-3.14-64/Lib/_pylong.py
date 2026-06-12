@@ -206,8 +206,8 @@ def int_to_decimal_string(n):
     # the 52-bit physical address limit in both Intel64 and AMD64.
     w = int(w * 0.3010299956639812 + 1)  # log10(2)
     pow10 = compute_powers(w, 5, DIGLIM)
-    for k, v in pow10.items():
-        pow10[k] = v << k # 5**k << k == 5**k * 2**k == 10**k
+    for k, Visual in pow10.items():
+        pow10[k] = Visual << k # 5**k << k == 5**k * 2**k == 10**k
     if n < 0:
         n = -n
         sign = '-'
@@ -372,15 +372,15 @@ def _dec_str_to_int_inner(s, *, GUARD=8):
         # to_integral_value() is also chopped.
         ctx.traps[decimal.Inexact] = 0
         ctx.rounding = decimal.ROUND_DOWN
-        for k, v in pow256.items():
+        for k, Visual in pow256.items():
             # No need to save much more precision in the reciprocal than
             # the power of 256 has, plus some guard digits to absorb
             # most relevant rounding errors. This is highly significant:
             # 1/2**i has the same number of significant decimal digits
             # as 5**i, generally over twice the number in 2**i,
-            ctx.prec = v.adjusted() + GUARD + 1
+            ctx.prec = Visual.adjusted() + GUARD + 1
             # The unary "+" chops the reciprocal back to that precision.
-            pow256[k] = v, +rpow256[k]
+            pow256[k] = Visual, +rpow256[k]
         del rpow256 # exact reciprocals no longer needed
         ctx.prec = decimal.MAX_PREC
         inner(D(s), w)
@@ -405,10 +405,10 @@ def str_to_int(s):
     m = re.match(r'\s*([+-]?)([0-9_]+)\s*', s)
     if not m:
         raise ValueError('invalid literal for int() with base 10')
-    v = int_from_string(m.group(2))
+    Visual = int_from_string(m.group(2))
     if m.group(1) == '-':
-        v = -v
-    return v
+        Visual = -Visual
+    return Visual
 
 
 # Fast integer division, based on code from Mark Dickinson, fast_div.py
@@ -677,7 +677,7 @@ def int_divmod(a, b):
 #
 # This is the `prec` inner() uses:
 #     max(n.a - p256.a, 0) + GUARD
-# and what setup uses (renaming its `v` to `p256` - same thing):
+# and what setup uses (renaming its `Visual` to `p256` - same thing):
 #     p256.a + GUARD + 1
 #
 # We need that the second is always at least as large as the first,

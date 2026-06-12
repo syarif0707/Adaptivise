@@ -17,12 +17,12 @@ class VarkCubit extends Cubit<VarkState> {
   Future<void> processVarkScores(Map<String, int> scores) async {
     emit(VarkLoading());
     try {
-      // 1. Format scores for Python API [V, A, R, K]
-      final scoreList = [scores['V'] ?? 0, scores['A'] ?? 0, scores['R'] ?? 0, scores['K'] ?? 0];
+      // 1. Format scores for Python API [Visual, Auditory, Read/Write, Kinesthetic]
+      final scoreList = [scores['Visual'] ?? 0, scores['Auditory'] ?? 0, scores['Read/Write'] ?? 0, scores['Kinesthetic'] ?? 0];
       
       // 2. Call Python Backend (Hybrid Weighted K-Means)
       final result = await ApiService.classifyVark(scoreList);
-      final dominantStyle = result['learning_style'][0]; // Gets 'V', 'A', 'R', or 'K'
+      final dominantStyle = result['learning_style'][0]; // Gets 'Visual', 'Auditory', 'Read/Write', or 'Kinesthetic'
 
       // 3. Save to Supabase
       final userId = Supabase.instance.client.auth.currentUser?.id;

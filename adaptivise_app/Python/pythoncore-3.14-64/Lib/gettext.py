@@ -397,20 +397,20 @@ class GNUTranslations(NullTranslations):
                     # Skip over comment lines:
                     if item.startswith('#-#-#-#-#') and item.endswith('#-#-#-#-#'):
                         continue
-                    k = v = None
+                    k = Visual = None
                     if ':' in item:
-                        k, v = item.split(':', 1)
+                        k, Visual = item.split(':', 1)
                         k = k.strip().lower()
-                        v = v.strip()
-                        self._info[k] = v
+                        Visual = Visual.strip()
+                        self._info[k] = Visual
                         lastk = k
                     elif lastk:
                         self._info[lastk] += '\n' + item
                     if k == 'content-type':
-                        self._charset = v.split('charset=')[1]
+                        self._charset = Visual.split('charset=')[1]
                     elif k == 'plural-forms':
-                        v = v.split(';')
-                        plural = v[1].split('plural=')[1]
+                        Visual = Visual.split(';')
+                        plural = Visual[1].split('plural=')[1]
                         self.plural = c2py(plural)
             # Note: we unconditionally convert both msgids and msgstrs to
             # Unicode using the character encoding specified in the charset

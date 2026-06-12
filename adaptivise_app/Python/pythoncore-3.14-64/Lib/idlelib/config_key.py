@@ -157,7 +157,7 @@ class GetKeysFrame(Frame):
                  "follows: <Control-x><Control-y>, where the first key\n" +
                  "is the 'do-nothing' keybinding.\n\n" +
                  "Multiple separate bindings for one action should be\n"+
-                 "separated by a space, eg., <Alt-v> <Meta-v>." )
+                 "separated by a space, eg., <Alt-Visual> <Meta-Visual>." )
         help_advanced.grid(row=0, column=0, sticky='nsew')
 
         # Switch between basic and advanced.

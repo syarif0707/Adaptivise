@@ -408,8 +408,8 @@ class BaseConfigurator(object):
                     found = getattr(found, frag)
             return found
         except ImportError as e:
-            v = ValueError('Cannot resolve %r: %s' % (s, e))
-            raise v from e
+            Visual = ValueError('Cannot resolve %r: %s' % (s, e))
+            raise Visual from e
 
     def ext_convert(self, value):
         """Default converter for the ext:// protocol."""

@@ -1,4 +1,5 @@
 import 'package:adaptivise_prototype/logic/profile_cubit.dart';
+import 'package:adaptivise_prototype/logic/settings_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -61,6 +62,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   );
                 },
+              ),
+              const Divider(),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Text("App Settings", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+              ),
+              ListTile(
+                leading: const Icon(Icons.format_size, color: Colors.teal),
+                title: const Text('Adjust Text Size'),
+                subtitle: Slider(
+                  value: context.watch<SettingsCubit>().state,
+                  min: 0.8, // Smallest
+                  max: 1.5, // Largest
+                  divisions: 7,
+                  activeColor: Colors.teal,
+                  onChanged: (val) => context.read<SettingsCubit>().updateFontSize(val),
+                ),
               ),
               const Divider(),
               ListTile(

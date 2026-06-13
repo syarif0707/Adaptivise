@@ -65,7 +65,7 @@ class NoteSlidableTile extends StatelessWidget {
       ),
       child: Card(
         elevation: 2,
-        margin: const EdgeInsets.only(bottom: 12),
+        margin: const EdgeInsets.only(top: 4,bottom: 12),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: ListTile(
           leading: Icon(

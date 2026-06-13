@@ -1,3 +1,4 @@
+import 'package:adaptivise_prototype/logic/settings_cubit.dart';
 import 'package:adaptivise_prototype/presentation/analytics_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,19 +42,30 @@ class AdaptiviseApp extends StatelessWidget {
         BlocProvider(create: (_) => FoldersCubit()),
         BlocProvider(create: (_) => NotesCubit()),
         BlocProvider(create: (_) => ProfileCubit()),
+        BlocProvider(create: (_) => SettingsCubit()),
       ],
-      child: MaterialApp(
+      child: BlocBuilder<SettingsCubit, double>( // <-- Wrap MaterialApp
+        builder: (context, textScale) {
+          return MaterialApp(
         title: 'Adaptivise',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
           useMaterial3: true,
         ),
+        builder: (context, child) {
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                  textScaler: TextScaler.linear(textScale),
+                ),
+                child: child!,
+              );
+            },
         home: const AuthWrapper(),
         // ADD THIS SECTION:
         routes: {
           '/analytics': (context) => const AnalyticsScreen(),
-          // Note: These usually need data passed to them, so we call them via 
-          // MaterialPageRoute, but you can define static routes here too.
+        },
+      );
         },
       ),
     );

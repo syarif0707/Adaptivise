@@ -58,7 +58,7 @@ app = FastAPI(title="Adaptivise AI Engine")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # Allows your browser to talk to the server
+    allow_origins=["*"], # Allows browser to talk to the server
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -88,78 +88,105 @@ def generate_distractors(answer, all_sentences, count=3):
         return pool
     return random.sample(pool, count)
 
+def _fallback_quiz():
+    """Provides a safe fallback question if the text is unreadable or too short."""
+    return [{
+        "question": "Review the uploaded material to understand the core concepts.",
+        "answer": "Understood the material.",
+        "options": [
+            "Understood the material.",
+            "I need to read it again.",
+            "The material was too complex.",
+            "None of the above."
+        ]
+    }]
+
 
 def generate_semantic_quiz(text: str, max_questions: int = 5) -> list:
     """
     Semantic question generation using BM25 sentence ranking.
-    Picks the most relevant sentences and builds multiple-choice items.
+    Includes chunking fallbacks for PDFs with bad punctuation.
     """
-    cleaned = " ".join(text.split())
-    sentences = [
-        s.strip()
-        for s in re.split(r"(?<=[.!?]) +", cleaned)
-        if len(s.strip()) > 12
-    ]
-    if len(sentences) < 1:
-        return []
+    try:
+        cleaned = " ".join(text.split())
+        if len(cleaned) < 15:
+            return _fallback_quiz()
 
-    if len(sentences) == 1:
-        sentence = sentences[0]
-        return [{
-            "question": "Which statement best matches the material?",
-            "answer": sentence,
-            "options": [
-                sentence,
-                "This topic is unrelated to the uploaded material.",
-                "The material contradicts this statement.",
-                "None of the above.",
-            ],
-        }]
-
-    tokenized = [s.lower().split() for s in sentences]
-    bm25 = BM25Okapi(tokenized)
-    scores = list(bm25.get_scores(cleaned.lower().split()))
-    ranked = sorted(range(len(sentences)), key=lambda i: scores[i], reverse=True)
-    selected = ranked[: min(max_questions, len(ranked))]
-
-    quiz = []
-    for idx in selected:
-        sentence = sentences[idx]
-        keywords = [
-            w for w in re.findall(r"\b[A-Za-z]{4,}\b", sentence)
-            if w.lower() not in _STOPWORDS
+        # Try to split by punctuation
+        sentences = [
+            s.strip() for s in re.split(r"(?<=[.!?]) +", cleaned)
+            if len(s.strip()) > 12
         ]
 
-        if keywords:
-            key_term = max(keywords, key=len)
-            question = f"According to the material, which statement is correct about {key_term}?"
-        else:
-            question = "According to the material, which statement is correct?"
+        # FIX: If no punctuation was found, artificially chunk the text!
+        if len(sentences) == 0:
+            sentences = [cleaned[i:i+120] for i in range(0, len(cleaned), 120) if len(cleaned[i:i+120]) > 12]
 
-        answer = sentence
+        if len(sentences) == 1:
+            sentence = sentences[0][:150] + "..." if len(sentences[0]) > 150 else sentences[0]
+            return [{
+                "question": "Which statement best matches the material?",
+                "answer": sentence,
+                "options": [
+                    sentence,
+                    "This topic is unrelated to the uploaded material.",
+                    "The material contradicts this statement.",
+                    "None of the above."
+                ],
+            }]
 
-        distractor_pool = [
-            sentences[i]
-            for i in ranked
-            if i != idx and sentences[i].strip().lower() != answer.strip().lower()
-        ]
-        distractors = generate_distractors(answer, distractor_pool, count=3)
-        if len(distractors) < 3:
-            distractors.extend([
-                "This statement is unrelated to the uploaded material.",
-                "The material contradicts this statement.",
-                "None of the above apply.",
-            ])
-        options = list(dict.fromkeys([answer] + distractors))[:4]
-        random.shuffle(options)
+        tokenized = [s.lower().split() for s in sentences if s.strip()]
+        if not tokenized:
+            return _fallback_quiz()
 
-        quiz.append({
-            "question": question,
-            "answer": answer,
-            "options": options,
-        })
+        bm25 = BM25Okapi(tokenized)
+        scores = list(bm25.get_scores(cleaned.lower().split()))
+        ranked = sorted(range(len(sentences)), key=lambda i: scores[i], reverse=True)
+        selected = ranked[: min(max_questions, len(ranked))]
 
-    return quiz
+        quiz = []
+        for idx in selected:
+            sentence = sentences[idx]
+            keywords = [
+                w for w in re.findall(r"\b[A-Za-z]{4,}\b", sentence)
+                if w.lower() not in _STOPWORDS
+            ]
+
+            if keywords:
+                key_term = max(keywords, key=len)
+                question = f"According to the material, which statement is correct about '{key_term}'?"
+            else:
+                question = "According to the material, which statement is correct?"
+
+            answer = sentence
+            distractor_pool = [
+                sentences[i] for i in ranked
+                if i != idx and sentences[i].strip().lower() != answer.strip().lower()
+            ]
+            
+            distractors = generate_distractors(answer, distractor_pool, count=3)
+            if len(distractors) < 3:
+                distractors.extend([
+                    "This statement is unrelated to the uploaded material.",
+                    "The material contradicts this statement.",
+                    "None of the above apply.",
+                ])
+                
+            options = list(dict.fromkeys([answer] + distractors))[:4]
+            random.shuffle(options)
+
+            quiz.append({
+                "question": question,
+                "answer": answer,
+                "options": options,
+            })
+
+        return quiz if quiz else _fallback_quiz()
+
+    except Exception as e:
+        print(f"======== CRITICAL ERROR IN SEMANTIC QUIZ: {e} ========")
+        traceback.print_exc()
+        return _fallback_quiz()
 
 def extract_text_from_pptx(content: bytes) -> str:
     text_runs = []
@@ -404,9 +431,12 @@ async def generate_quiz(request: NotesRequest):
     """Semantic question generation for kinesthetic learners (BM25-based)."""
     try:
         cleaned_text = " ".join(request.text.split())
+        #guarantees an array is returned, never crashing!
         return {"quiz_content": generate_semantic_quiz(cleaned_text)}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print("======== FASTAPI ROUTE ERROR ========")
+        traceback.print_exc()
+        return {"quiz_content": _fallback_quiz()}
 
 @app.post("/ai/classify-vark")
 async def classify_vark(request: VarkScores):

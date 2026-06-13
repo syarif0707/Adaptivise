@@ -102,11 +102,26 @@ class _AuditoryPlayerBody extends StatelessWidget {
                     'Segment ${state.currentIndex + 1} of ${state.segments.length}',
                     style: TextStyle(color: Colors.grey[600], fontSize: 13),
                   ),
-                  const SizedBox(height: 8),
-                  Slider(
-                    value: state.progress.clamp(0.0, 1.0),
-                    onChanged: null,
-                    activeColor: AppColors.Auditory,
+                  const SizedBox(height: 12),
+                  
+                  Row(
+                    children: [
+                      const Icon(Icons.speed, size: 20, color: Colors.grey),
+                      const SizedBox(width: 8),
+                      const Text("Speed", style: TextStyle(color: Colors.grey)),
+                      Expanded(
+                        child: Slider(
+                          value: context.read<AuditoryCubit>()._currentRate, // Quick access
+                          min: 0.2,
+                          max: 1.0,
+                          divisions: 8,
+                          activeColor: AppColors.Auditory,
+                          onChanged: (val) {
+                            context.read<AuditoryCubit>().setSpeechRate(val);
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 12),
                   Expanded(

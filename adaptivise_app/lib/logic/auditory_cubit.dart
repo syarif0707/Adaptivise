@@ -64,6 +64,16 @@ class AuditoryCubit extends Cubit<AuditoryState> {
 
   final FlutterTts _tts = FlutterTts();
   bool _speaking = false;
+  double _currentRate = 0.48;
+
+  Future<void> setSpeechRate(double rate) async {
+    _currentRate = rate;
+    await _tts.setSpeechRate(rate);
+    // Trigger UI rebuild
+    if (state is AuditoryReady) {
+      emit((state as AuditoryReady).copyWith()); 
+    }
+  }
 
   Future<void> init({required String title, required String text}) async {
     await _tts.setSpeechRate(0.48);
@@ -82,7 +92,12 @@ class AuditoryCubit extends Cubit<AuditoryState> {
   }
 
   List<String> _splitIntoSegments(String text) {
-    final cleaned = text.replaceAll(RegExp(r'[#*_`]'), ' ').trim();
+    final cleaned = text
+        .replaceAll(RegExp(r'https?://[^\s]+'), ' ') // Remove URLs
+        .replaceAll(RegExp(r'[^\w\s.,!?\'"-]'), ' ') // Remove special chars except basic punctuation
+        .replaceAll(RegExp(r'\s+'), ' ') // Normalize spaces
+        .trim(); 
+
     if (cleaned.isEmpty) return ['No content available to listen.'];
 
     final parts = cleaned

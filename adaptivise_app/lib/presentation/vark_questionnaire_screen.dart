@@ -1,4 +1,6 @@
+import 'package:adaptivise_prototype/logic/profile_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../core/api_service.dart';
 import 'dashboard_screen.dart';
@@ -138,6 +140,8 @@ class _VarkQuestionnaireScreenState extends State<VarkQuestionnaireScreen> {
 
       // 4. Navigation
       if (mounted) {
+        context.read<ProfileCubit>().watchProfile(); 
+
         if (widget.isRetest) {
           Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(
@@ -164,6 +168,25 @@ class _VarkQuestionnaireScreenState extends State<VarkQuestionnaireScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.isRetest ? 'Retest VARK Profile' : 'Discover Your Learning Style'),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(24),
+          child: Column(
+            children: [
+              LinearProgressIndicator(
+                value: _selectedAnswers.length / _questions.length,
+                backgroundColor: Colors.grey[300],
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.teal),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: Text(
+                  '${_selectedAnswers.length} of ${_questions.length} Answered',
+                  style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.teal),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
       body: _isProcessing
           ? const Center(child: CircularProgressIndicator())

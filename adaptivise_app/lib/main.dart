@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'logic/auth_cubit.dart' hide AuthState;
+import 'logic/folders_cubit.dart';
+import 'logic/notes_cubit.dart';
+import 'logic/profile_cubit.dart';
 import 'logic/study_cubit.dart';
 import 'presentation/auth/login_screen.dart';
 import 'presentation/main_navigation_screen.dart';
@@ -35,6 +38,9 @@ class AdaptiviseApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => AuthCubit()),
         BlocProvider(create: (_) => StudyCubit()),
+        BlocProvider(create: (_) => FoldersCubit()),
+        BlocProvider(create: (_) => NotesCubit()),
+        BlocProvider(create: (_) => ProfileCubit()),
       ],
       child: MaterialApp(
         title: 'Adaptivise',

@@ -1,7 +1,10 @@
-import 'package:adaptivise_prototype/core/debug_log.dart';
-import 'package:adaptivise_prototype/presentation/folder_content_screen.dart';
+import 'package:adaptivise_prototype/core/note_actions.dart';
+import 'package:adaptivise_prototype/logic/folders_cubit.dart';
+import 'package:adaptivise_prototype/logic/notes_cubit.dart';
+import 'package:adaptivise_prototype/presentation/widgets/adapt_notes_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class NotesLibraryScreen extends StatefulWidget {
   const NotesLibraryScreen({super.key});
@@ -11,270 +14,366 @@ class NotesLibraryScreen extends StatefulWidget {
 }
 
 class _NotesLibraryScreenState extends State<NotesLibraryScreen> {
-  final _supabase = Supabase.instance.client;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  
+  String _searchQuery = '';
+  bool _showFavoritesOnly = false;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<FoldersCubit>().watchFolders();
+    context.read<NotesCubit>().watchNotes();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final userId = _supabase.auth.currentUser!.id;
-    final foldersStream = _supabase
-        .from('folders')
-        .stream(primaryKey: ['id'])
-        .eq('user_id', userId)
-        .order('created_at', ascending: false);
-
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Text(
-          'My Subjects',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-        ),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        actions: [
-          IconButton(
-            tooltip: 'Create folder',
-            onPressed: _showCreateFolderDialog,
-            icon: const Icon(Icons.create_new_folder, color: Colors.teal),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _showCreateFolderDialog,
-        backgroundColor: const Color(0xFF00695C),
-        icon: const Icon(Icons.add, color: Colors.white),
-        label: const Text(
-          'New Subject',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-      ),
-      body: StreamBuilder<List<Map<String, dynamic>>>(
-        stream: foldersStream,
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          final folders = snapshot.data!;
-
-          agentDebugLog(
-            location: 'smart_note_view.dart:build',
-            message: 'Folders stream update',
-            hypothesisId: 'B',
-            data: {'folderCount': folders.length},
+    return BlocListener<FoldersCubit, FoldersState>(
+      listener: (context, state) {
+        if (state is FoldersActionSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
           );
+        } else if (state is FoldersError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      child: BlocConsumer<NotesCubit, NotesState>(
+      listener: (context, state) {
+        if (state is NotesActionMessage) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        } else if (state is NotesError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      builder: (context, notesState) {
+        final isUploading =
+            notesState is NotesLoaded ? notesState.isUploading : false;
+        final selectedFolderName = notesState is NotesLoaded
+            ? notesState.selectedFolderName
+            : notesState is NotesActionMessage
+                ? notesState.selectedFolderName
+                : null;
+        final notes = switch (notesState) {
+          NotesLoaded(:final notes) => notes,
+          NotesActionMessage(:final notes) => notes,
+          _ => <Map<String, dynamic>>[],
+        };
 
-          if (folders.isEmpty) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(32),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+        final folders = switch (context.watch<FoldersCubit>().state) {
+          FoldersLoaded(:final folders) => folders,
+          FoldersActionSuccess(:final folders) => folders,
+          _ => <Map<String, dynamic>>[],
+        };
+
+        final folderNames = {
+          for (final f in folders) f['id'].toString(): f['name']?.toString() ?? 'Subject',
+        };
+
+        return Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: Colors.white,
+          endDrawer: _SubjectDrawer(folders: folders),
+          appBar: AppBar(
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'My Files',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                if (selectedFolderName != null)
+                  Text(
+                    selectedFolderName,
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+              ],
+            ),
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            actions: [
+              IconButton(
+                tooltip: 'Filter by subject',
+                onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
+                icon: const Icon(Icons.filter_list, color: Colors.teal),
+              ),
+            ],
+          ),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: isUploading ? null : () => showAdaptNotesFlow(context),
+            backgroundColor: const Color(0xFF00695C),
+            icon: isUploading
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : const Icon(Icons.add_circle_outline, color: Colors.white),
+            label: Text(
+              isUploading ? 'Processing...' : 'Adapt Notes',
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          body: Column(
+            children: [
+              // Search Bar & Favorite Toggle
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                child: Row(
                   children: [
-                    Icon(Icons.folder_open, size: 72, color: Colors.grey[300]),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'No subjects yet',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search notes...',
+                          prefixIcon: const Icon(Icons.search, color: Colors.teal),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: BorderSide(color: Colors.grey.shade300),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: const BorderSide(color: Colors.teal),
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey.shade50,
+                        ),
+                        onChanged: (val) {
+                          setState(() {
+                            _searchQuery = val.toLowerCase();
+                          });
+                        },
+                      ),
                     ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Create a folder for each subject (e.g. Biology, Math) and upload notes inside it.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton.icon(
-                      onPressed: _showCreateFolderDialog,
-                      icon: const Icon(Icons.create_new_folder),
-                      label: const Text('Create Subject Folder'),
+                    const SizedBox(width: 12),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: _showFavoritesOnly ? Colors.teal.shade50 : Colors.grey.shade100,
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        icon: Icon(
+                          _showFavoritesOnly ? Icons.favorite : Icons.favorite_border,
+                          color: _showFavoritesOnly ? Colors.teal : Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _showFavoritesOnly = !_showFavoritesOnly;
+                            context.read<NotesCubit>().setFilter(
+                              _showFavoritesOnly ? NotesFilter.favorite : NotesFilter.all,
+                            );
+                          });
+                        },
+                      ),
                     ),
                   ],
                 ),
               ),
-            );
-          }
+              Expanded(
+                child: switch (notesState) {
+                  NotesLoading() || NotesInitial() =>
+                    const Center(child: CircularProgressIndicator()),
+                  NotesError(:final message) => Center(child: Text(message)),
+                  _ => Builder(
+                    builder: (context) {
+                      // Apply local search filter
+                      final displayedNotes = notes.where((n) {
+                        if (_searchQuery.isEmpty) return true;
+                        final name = (n['file_name'] ?? '').toString().toLowerCase();
+                        return name.contains(_searchQuery);
+                      }).toList();
 
-          return ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: folders.length,
-            itemBuilder: (context, index) {
-              final folder = folders[index];
-              return Card(
-                elevation: 2,
-                margin: const EdgeInsets.only(bottom: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: ListTile(
-                  leading: const Icon(
-                    Icons.folder,
-                    color: Colors.teal,
-                    size: 40,
-                  ),
-                  title: Text(
-                    folder['name'] ?? 'Untitled Folder',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: const Text('Tap to view and adapt notes'),
-                  trailing: PopupMenuButton<String>(
-                    onSelected: (value) {
-                      if (value == 'rename') {
-                        _showRenameFolderDialog(folder);
-                      } else if (value == 'delete') {
-                        _confirmDeleteFolder(folder);
+                      if (displayedNotes.isEmpty) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(32),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.folder_open,
+                                    size: 72, color: Colors.grey[300]),
+                                const SizedBox(height: 16),
+                                Text(
+                                  selectedFolderName == null
+                                      ? 'No notes found'
+                                      : 'No notes in $selectedFolderName',
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                const Text(
+                                  'Tap Adapt Notes to upload PDF, Word, PowerPoint, or a web link.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
                       }
-                    },
-                    itemBuilder: (context) => const [
-                      PopupMenuItem(value: 'rename', child: Text('Rename')),
-                      PopupMenuItem(value: 'delete', child: Text('Delete folder')),
-                    ],
-                  ),
-                  onTap: () {
-                    agentDebugLog(
-                      location: 'smart_note_view.dart:onTap',
-                      message: 'Opening folder',
-                      hypothesisId: 'B',
-                      data: {
-                        'folderId': folder['id']?.toString(),
-                        'folderName': folder['name'],
-                      },
-                    );
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FolderContentScreen(
-                          folderId: folder['id'].toString(),
-                          folderName: folder['name'] ?? 'Folder',
+
+                      return SlidableAutoCloseBehavior(
+                        child: ListView.builder(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: displayedNotes.length,
+                          itemBuilder: (context, index) {
+                            final note = displayedNotes[index];
+                            final subject = folderNames[note['folder_id']?.toString()] ??
+                                'Unsorted';
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (selectedFolderName == null)
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 4,
+                                      bottom: 6,
+                                    ),
+                                    child: Text(
+                                      subject,
+                                      style: const TextStyle(
+                                        fontSize: 11,
+                                        color: Colors.teal,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                NoteSlidableTile(note: note),
+                              ],
+                            );
+                          },
                         ),
+                      );
+                    },
+                  ),
+                },
+              ),
+            ],
+          ),
+        );
+      },
+      ),
+    );
+  }
+}
+
+class _SubjectDrawer extends StatelessWidget {
+  final List<Map<String, dynamic>> folders;
+
+  const _SubjectDrawer({required this.folders});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                'Subjects',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.all_inbox, color: Colors.teal),
+              title: const Text('All subjects'),
+              onTap: () {
+                context.read<NotesCubit>().selectSubject();
+                Navigator.pop(context);
+              },
+            ),
+            const Divider(),
+            Expanded(
+              child: folders.isEmpty
+                  ? const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text('Create your first subject below.'),
                       ),
-                    );
+                    )
+                  : ListView.builder(
+                      itemCount: folders.length,
+                      itemBuilder: (context, index) {
+                        final folder = folders[index];
+                        return ListTile(
+                          leading: const Icon(Icons.folder, color: Colors.teal),
+                          title: Text(folder['name']?.toString() ?? 'Subject'),
+                          onTap: () {
+                            context.read<NotesCubit>().selectSubject(
+                                  folderId: folder['id'].toString(),
+                                  folderName:
+                                      folder['name']?.toString() ?? 'Subject',
+                                );
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
+                    ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () async {
+                    final name = await _promptFolderName(context);
+                    if (name != null && name.trim().isNotEmpty && context.mounted) {
+                      await context.read<FoldersCubit>().createFolder(name.trim());
+                    }
                   },
+                  icon: const Icon(Icons.create_new_folder),
+                  label: const Text('New Subject'),
                 ),
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-
-  Future<void> _showCreateFolderDialog() async {
-    final name = await _promptFolderName(title: 'New Subject Folder');
-    if (name == null || name.trim().isEmpty) return;
-
-    final userId = _supabase.auth.currentUser?.id;
-    if (userId == null) return;
-
-    try {
-      await _supabase.from('folders').insert({
-        'user_id': userId,
-        'name': name.trim(),
-      });
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Folder "$name" created.')),
-        );
-      }
-    } catch (error) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not create folder: $error')),
-        );
-      }
-    }
-  }
-
-  Future<void> _showRenameFolderDialog(Map<String, dynamic> folder) async {
-    final name = await _promptFolderName(
-      title: 'Rename Folder',
-      initialValue: folder['name']?.toString() ?? '',
-    );
-    if (name == null || name.trim().isEmpty) return;
-
-    try {
-      await _supabase
-          .from('folders')
-          .update({'name': name.trim()})
-          .eq('id', folder['id']);
-    } catch (error) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not rename folder: $error')),
-        );
-      }
-    }
-  }
-
-  Future<void> _confirmDeleteFolder(Map<String, dynamic> folder) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete folder?'),
-        content: Text(
-          'Delete "${folder['name']}"? Notes inside will remain but lose this folder link.',
+              ),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete', style: TextStyle(color: Colors.red)),
-          ),
-        ],
       ),
     );
-
-    if (confirmed != true) return;
-
-    try {
-      await _supabase.from('folders').delete().eq('id', folder['id']);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Folder deleted.')),
-        );
-      }
-    } catch (error) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not delete folder: $error')),
-        );
-      }
-    }
   }
 
-  Future<String?> _promptFolderName({
-    required String title,
-    String initialValue = '',
-  }) async {
-    final controller = TextEditingController(text: initialValue);
-
+  Future<String?> _promptFolderName(BuildContext context) async {
+    final controller = TextEditingController();
     return showDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
+      builder: (ctx) => AlertDialog(
+        title: const Text('New Subject'),
         content: TextField(
           controller: controller,
           autofocus: true,
           decoration: const InputDecoration(
-            hintText: 'e.g. Biology, Calculus, History',
+            hintText: 'e.g. Biology, History',
             border: OutlineInputBorder(),
           ),
-          textCapitalization: TextCapitalization.words,
-          onSubmitted: (_) => Navigator.pop(context, controller.text),
         ),
         actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
           TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, controller.text),
+            onPressed: () => Navigator.pop(ctx, controller.text),
             child: const Text('Save'),
           ),
         ],

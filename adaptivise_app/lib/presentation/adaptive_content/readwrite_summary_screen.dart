@@ -1,64 +1,62 @@
 import 'package:adaptivise_prototype/core/app_theme.dart';
+import 'package:adaptivise_prototype/core/note_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 
-class SummaryModeScreen extends StatefulWidget {
+class SummaryModeScreen extends StatelessWidget {
   final String summary;
+
   const SummaryModeScreen({super.key, required this.summary});
 
   @override
-  State<SummaryModeScreen> createState() => _SummaryModeScreenState();
-}
-
-class _SummaryModeScreenState extends State<SummaryModeScreen> {
-  final FlutterTts _tts = FlutterTts();
-  bool isSpeaking = false;
-
-  void _toggleSpeech() async {
-    if (isSpeaking) {
-      await _tts.stop();
-      setState(() => isSpeaking = false);
-    } else {
-      await _tts.speak(widget.summary);
-      setState(() => isSpeaking = true);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("SUMMARY MODE")),
-      body: Padding(
+    final formatted = formatSummaryForDisplay(summary);
+
+    return Container(
+      color: AppColors.background,
+      child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(12)),
-                child: Markdown(
-                  data: widget.summary, 
-                  selectable: true, // Allows users to copy text
-                  styleSheet: MarkdownStyleSheet(
-                    p: const TextStyle(fontSize: 16, color: Colors.black),
-                    h1: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                    strong: const TextStyle(fontWeight: FontWeight.bold, color: Colors.teal),
-                    listBullet: const TextStyle(fontSize: 16, color: Colors.teal),
-                    tableBorder: TableBorder.all(color: Colors.grey.shade300, width: 1),
-                    tableBody: const TextStyle(fontSize: 14),
-                  ),
-                  ),
-                ),
-              ),  
-            const SizedBox(height: 20),
-            const SizedBox(height: 20),
-            FloatingActionButton(
-              onPressed: _toggleSpeech,
-              backgroundColor: AppColors.ReadWrite,
-              child: Icon(isSpeaking ? Icons.stop : Icons.volume_up),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 10,
+              ),
+            ],
+          ),
+          child: MarkdownBody(
+            data: formatted,
+            selectable: true,
+            styleSheet: MarkdownStyleSheet(
+              h1: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                height: 1.3,
+              ),
+              h2: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                height: 1.3,
+              ),
+              p: const TextStyle(
+                fontSize: 16,
+                height: 1.6,
+                color: Colors.black87,
+              ),
+              listBullet: const TextStyle(fontSize: 16, color: Colors.teal),
+              strong: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF00695C),
+              ),
+              blockSpacing: 12,
+              listIndent: 24,
             ),
-          ],
+          ),
         ),
       ),
     );

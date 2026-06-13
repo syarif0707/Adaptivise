@@ -1,6 +1,6 @@
 import 'package:adaptivise_prototype/presentation/smart_note_view.dart';
 import 'package:flutter/material.dart';
-import 'dashboard_screen.dart'; // Fixed the import path
+import 'dashboard_screen.dart';
 import 'profile_screen.dart';
 
 class MainNavigationScreen extends StatefulWidget {
@@ -13,7 +13,6 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _currentIndex = 0;
 
-  // Now pointing to your actual screen classes
   final List<Widget> _screens = [
     const DashboardScreen(),
     const NotesLibraryScreen(),
@@ -23,7 +22,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // IndexedStack keeps the state of your screens alive
       body: IndexedStack(
         index: _currentIndex,
         children: _screens,
@@ -31,9 +29,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
         onDestinationSelected: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
+          setState(() => _currentIndex = index);
         },
         destinations: const [
           NavigationDestination(
@@ -42,9 +38,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             label: 'Analytics',
           ),
           NavigationDestination(
-            icon: Icon(Icons.library_books_outlined),
-            selectedIcon: Icon(Icons.library_books),
-            label: 'Subjects',
+            icon: Icon(Icons.folder_copy_outlined),
+            selectedIcon: Icon(Icons.folder_copy),
+            label: 'My Files',
           ),
           NavigationDestination(
             icon: Icon(Icons.person_outline),

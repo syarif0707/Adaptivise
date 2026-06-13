@@ -7,6 +7,7 @@ class ApiService {
   // Use a getter so it always checks the latest value from dotenv
   static String get baseUrl => dotenv.env['API_BASE_URL'] ?? 'https://adaptivise-engine-396176311722.us-central1.run.app';
   static String get processNoteUrl => '$baseUrl/ai/process-note';
+  static String get processUrlUrl => '$baseUrl/ai/process-url';
   /// Call function for the Python Hybrid Weighted K-Means algorithm
   static Uri getUrl(String path) {
   // Ensure the path starts with a / but baseUrl doesn't end with one
@@ -24,7 +25,11 @@ static Future<Map<String, dynamic>> classifyVark(List<int> scores) async {
   );
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      final styles = data['learning_style'];
+      final formatted = data['formatted_style'] ??
+          (styles is List ? styles.join(' & ') : styles?.toString() ?? 'Read/Write');
+      return {...data, 'formatted_style': formatted};
     } else {
       throw Exception('Failed to classify VARK: ${response.statusCode} - ${response.body}');
     }

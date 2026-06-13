@@ -20,6 +20,8 @@ from pptx import Presentation
 import uvicorn
 from dotenv import load_dotenv
 import nltk
+import httpx
+from html.parser import HTMLParser
 
 def _ensure_nltk_data():
     """Download NLTK data to a writable path (required on Cloud Run)."""
@@ -96,10 +98,23 @@ def generate_semantic_quiz(text: str, max_questions: int = 5) -> list:
     sentences = [
         s.strip()
         for s in re.split(r"(?<=[.!?]) +", cleaned)
-        if len(s.strip()) > 25
+        if len(s.strip()) > 12
     ]
-    if len(sentences) < 2:
+    if len(sentences) < 1:
         return []
+
+    if len(sentences) == 1:
+        sentence = sentences[0]
+        return [{
+            "question": "Which statement best matches the material?",
+            "answer": sentence,
+            "options": [
+                sentence,
+                "This topic is unrelated to the uploaded material.",
+                "The material contradicts this statement.",
+                "None of the above.",
+            ],
+        }]
 
     tokenized = [s.lower().split() for s in sentences]
     bm25 = BM25Okapi(tokenized)
@@ -111,14 +126,16 @@ def generate_semantic_quiz(text: str, max_questions: int = 5) -> list:
     for idx in selected:
         sentence = sentences[idx]
         keywords = [
-            w for w in re.findall(r"\b[A-Za-z]{5,}\b", sentence)
+            w for w in re.findall(r"\b[A-Za-z]{4,}\b", sentence)
             if w.lower() not in _STOPWORDS
         ]
-        if not keywords:
-            continue
 
-        key_term = max(keywords, key=len)
-        question = f"According to the material, which statement is correct about {key_term}?"
+        if keywords:
+            key_term = max(keywords, key=len)
+            question = f"According to the material, which statement is correct about {key_term}?"
+        else:
+            question = "According to the material, which statement is correct?"
+
         answer = sentence
 
         distractor_pool = [
@@ -127,7 +144,13 @@ def generate_semantic_quiz(text: str, max_questions: int = 5) -> list:
             if i != idx and sentences[i].strip().lower() != answer.strip().lower()
         ]
         distractors = generate_distractors(answer, distractor_pool, count=3)
-        options = [answer] + distractors
+        if len(distractors) < 3:
+            distractors.extend([
+                "This statement is unrelated to the uploaded material.",
+                "The material contradicts this statement.",
+                "None of the above apply.",
+            ])
+        options = list(dict.fromkeys([answer] + distractors))[:4]
         random.shuffle(options)
 
         quiz.append({
@@ -176,6 +199,36 @@ def extract_text_from_file(content: bytes, filename: str) -> str:
         text = content.decode("utf-8", errors="replace")
 
     return text
+
+class _HTMLTextExtractor(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self._parts = []
+
+    def handle_data(self, data):
+        text = data.strip()
+        if text:
+            self._parts.append(text)
+
+    def get_text(self):
+        return " ".join(self._parts)
+
+
+def extract_text_from_html(content: bytes) -> str:
+    html = content.decode("utf-8", errors="replace")
+    parser = _HTMLTextExtractor()
+    parser.feed(html)
+    return parser.get_text()
+
+
+def extract_text_from_url(url: str) -> str:
+    with httpx.Client(timeout=20.0, follow_redirects=True) as client:
+        response = client.get(url)
+        response.raise_for_status()
+        content_type = response.headers.get("content-type", "").lower()
+        if "html" in content_type or url.lower().endswith((".html", ".htm")):
+            return extract_text_from_html(response.content)
+        return response.text
 
 def simple_summarize(text_input: str, num_sentences=3):
     """A lightweight summarizer based on word frequency."""
@@ -254,6 +307,42 @@ async def process_note(
     except Exception as e:
         error_trace = traceback.format_exc()
         logging.error("CRASHED during processing: %s", error_trace)
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/ai/process-url")
+async def process_url(
+    url: str = Form(...),
+    user_id: str = Form(...),
+    storage_path: str = Form(...),
+    folder_id: str = Form(None),
+):
+    """Fetch a web page and generate adaptive study content."""
+    logging.info("Processing URL: %s", url)
+    try:
+        raw_text = extract_text_from_url(url.strip())
+        if not raw_text.strip():
+            raise HTTPException(status_code=400, detail="Could not extract text from URL.")
+
+        cleaned_text = " ".join(raw_text.split())
+        summary_text = simple_summarize(cleaned_text)
+        quiz_content = generate_semantic_quiz(cleaned_text)
+
+        response = {
+            "status": "success",
+            "user_id": user_id,
+            "storage_path": storage_path,
+            "file_name": url.split("/")[-1] or "web-page.html",
+            "raw_text": cleaned_text,
+            "summary": summary_text,
+            "quiz_content": quiz_content,
+        }
+        if folder_id:
+            response["folder_id"] = folder_id
+        return response
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error("URL processing failed: %s", traceback.format_exc())
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/ai/summarize")

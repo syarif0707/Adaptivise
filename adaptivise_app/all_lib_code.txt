@@ -1,0 +1,3906 @@
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\main.dart -----
+import 'package:adaptivise_prototype/presentation/analytics_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'logic/auth_cubit.dart' hide AuthState;
+import 'logic/folders_cubit.dart';
+import 'logic/notes_cubit.dart';
+import 'logic/profile_cubit.dart';
+import 'logic/study_cubit.dart';
+import 'presentation/auth/login_screen.dart';
+import 'presentation/main_navigation_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 1. Initialize Supabase Data Layer
+  await Supabase.initialize(
+    url: 'https://nnqafyfydbpspywuxhtk.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ucWFmeWZ5ZGJwc3B5d3V4aHRrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxMTIwMjcsImV4cCI6MjA5MTY4ODAyN30.SV_aAWiGMioj5GMbJ26AHpbn5TRFRUxekh7pBYcMFjE',
+  );
+
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e) {
+    print("Error loading .env file: $e");
+  }
+  
+  runApp(const AdaptiviseApp());
+}
+
+class AdaptiviseApp extends StatelessWidget {
+  const AdaptiviseApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => AuthCubit()),
+        BlocProvider(create: (_) => StudyCubit()),
+        BlocProvider(create: (_) => FoldersCubit()),
+        BlocProvider(create: (_) => NotesCubit()),
+        BlocProvider(create: (_) => ProfileCubit()),
+      ],
+      child: MaterialApp(
+        title: 'Adaptivise',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+          useMaterial3: true,
+        ),
+        home: const AuthWrapper(),
+        // ADD THIS SECTION:
+        routes: {
+          '/analytics': (context) => const AnalyticsScreen(),
+          // Note: These usually need data passed to them, so we call them via 
+          // MaterialPageRoute, but you can define static routes here too.
+        },
+      ),
+    );
+  }
+}
+
+/// Automatically routes users based on their login status
+class AuthWrapper extends StatelessWidget {
+  const AuthWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<AuthState>(
+      stream: Supabase.instance.client.auth.onAuthStateChange,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        }
+        
+        final session = snapshot.data?.session;
+        if (session != null) {
+          // User is logged in, go to the Main Shell
+          return const MainNavigationScreen();
+        } else {
+          // User needs to log in
+          return const LoginScreen();
+        }
+      },
+    );
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\core\api_service.dart -----
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
+
+class ApiService {
+  // Use a getter so it always checks the latest value from dotenv
+  static String get baseUrl => dotenv.env['API_BASE_URL'] ?? 'https://adaptivise-engine-396176311722.us-central1.run.app';
+  static String get processNoteUrl => '$baseUrl/ai/process-note';
+  static String get processUrlUrl => '$baseUrl/ai/process-url';
+  /// Call function for the Python Hybrid Weighted K-Means algorithm
+  static Uri getUrl(String path) {
+  // Ensure the path starts with a / but baseUrl doesn't end with one
+  final cleanBase = baseUrl.replaceAll(RegExp(r'/$'), '');
+  final cleanPath = path.startsWith('/') ? path : '/$path';
+  return Uri.parse('$cleanBase$cleanPath');
+}
+
+// Then call it like this:
+static Future<Map<String, dynamic>> classifyVark(List<int> scores) async {
+  final response = await http.post(
+    getUrl('/ai/classify-vark'), // Safe concatenation
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode({'scores': scores}),
+  );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      final styles = data['learning_style'];
+      final formatted = data['formatted_style'] ??
+          (styles is List ? styles.join(' & ') : styles?.toString() ?? 'Read/Write');
+      return {...data, 'formatted_style': formatted};
+    } else {
+      throw Exception('Failed to classify VARK: ${response.statusCode} - ${response.body}');
+    }
+  }
+
+  /// Call function for the Python TextRank algorithm
+  static Future<Map<String, dynamic>> summarizeText(String extractedText) async {
+    final response = await http.post(
+      getUrl('/ai/summarize'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'text': extractedText}),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to generate summary');
+    }
+  }
+
+  /// Gemini is used only to format summaries (title, layout, bullets).
+  static Future<String> formatWithGemini(String rawSummary) async {
+    final apiKey = dotenv.env['GEMINI_API_KEY'];
+    if (apiKey == null) throw Exception('Gemini API Key not found');
+
+    final modelName = dotenv.env['GEMINI_MODEL'] ?? 'gemini-2.5-flash';
+    final model = GenerativeModel(model: modelName, apiKey: apiKey);
+
+    final prompt = '''
+You are an expert educational editor. Reformat this raw summary for readability using Markdown only.
+Rules:
+1. Add a clear title at the top.
+2. Bold important keywords.
+3. Use justified-style structured for paragraphs, bullet points, or a table only when it genuinely helps.
+4. Do not invent facts beyond the source summary.
+
+Raw summary:
+$rawSummary
+''';
+
+    final response = await model.generateContent([Content.text(prompt)]);
+    return response.text ?? rawSummary;
+  }
+
+  /// Semantic question generation runs on the Python server (not Gemini).
+  static Future<List<dynamic>> generateQuiz(String extractedText) async {
+    final response = await http.post(
+      getUrl('/ai/generate-quiz'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'text': extractedText}),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      return data['quiz_content'] as List<dynamic>? ?? [];
+    }
+    throw Exception('Failed to generate quiz: ${response.statusCode} - ${response.body}');
+  }
+
+  /// Sends the raw scores [Visual, A, R, K] to the AI to get the dominant style
+  static Future<String> classifyVarkDominantStyle(List<int> scores) async {
+    final response = await http.post(
+      getUrl('/ai/classify-vark'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'scores': scores}),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data['learning_style'][0]; // Returns 'Visual', 'A', 'R', or 'K'
+    } else {
+      throw Exception('Failed to classify VARK profile');
+    }
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\core\app_theme.dart -----
+import 'package:flutter/material.dart';
+
+class AppTheme {
+  static ThemeData get lightTheme {
+    return ThemeData(
+      useMaterial3: true,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xFF2563EB), // A professional tech blue
+        brightness: Brightness.light,
+      ),
+      appBarTheme: const AppBarTheme(
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.black87,
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          minimumSize: const Size.fromHeight(50),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+      ),
+      cardTheme: CardThemeData(
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
+    );
+  }
+}
+
+class AppColors {
+  // Consistent VARK Colors
+  static const Color Visual = Color(0xFF81C784); // Green (from your example)
+  static const Color Auditory = Color(0xFFFFB74D); // Orange
+  static const Color ReadWrite = Color(0xFFBA68C8); // Purple
+  static const Color Kinesthetic = Color(0xFF4FC3F7); // Blue (or change back to match example preference)
+
+  // Alternative Kinesthetic to match your green pie chart:
+  // static const Color Kinesthetic = Color(0xFF81C784);
+  // Then change Visual to something else, e.g., Red: Color(0xFFE57373)
+
+  // Primary App Color (Teal/Dark Green)
+  static const Color primary = Color(0xFF00796B); 
+  static const Color background = Color(0xFFF5F7FA);
+
+  static Color? get primaryTeal => null;
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\core\debug_log.dart -----
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
+/// Session debug logger (folded in IDE via #region).
+void agentDebugLog({
+  required String location,
+  required String message,
+  required Map<String, dynamic> data,
+  required String hypothesisId,
+  String runId = 'pre-fix',
+}) {
+  // #region agent log
+  http
+      .post(
+        Uri.parse(
+          'http://127.0.0.1:7548/ingest/f0d67597-6b37-4d01-b5d3-faf1ba1ddd1a',
+        ),
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Debug-Session-Id': 'a2f396',
+        },
+        body: jsonEncode({
+          'sessionId': 'a2f396',
+          'runId': runId,
+          'hypothesisId': hypothesisId,
+          'location': location,
+          'message': message,
+          'data': data,
+          'timestamp': DateTime.now().millisecondsSinceEpoch,
+        }),
+      )
+      .catchError((_) => http.Response('', 500));
+  // #endregion
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\core\note_actions.dart -----
+import 'package:adaptivise_prototype/logic/notes_cubit.dart';
+import 'package:adaptivise_prototype/presentation/adaptive_content/adaptive_note_container.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+class NoteSlidableTile extends StatelessWidget {
+  final Map<String, dynamic> note;
+
+  const NoteSlidableTile({super.key, required this.note});
+
+  @override
+  Widget build(BuildContext context) {
+    final isStarred = note['is_starred'] == true;
+
+    return Slidable(
+      key: ValueKey(note['id']),
+      groupTag: 'lecture_notes',
+      endActionPane: ActionPane(
+        motion: const DrawerMotion(),
+        extentRatio: 0.65,
+        children: [
+          SlidableAction(
+            onPressed: (_) => _runAction(
+              context,
+              () => context.read<NotesCubit>().toggleStar(note),
+            ),
+            backgroundColor: Colors.amber,
+            foregroundColor: Colors.white,
+            icon: isStarred ? Icons.star : Icons.star_border,
+            label: isStarred ? 'Unstar' : 'Star',
+          ),
+          SlidableAction(
+            onPressed: (_) => _runAction(
+              context,
+              () => context.read<NotesCubit>().downloadNote(note),
+            ),
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+            icon: Icons.download,
+            label: 'Save',
+          ),
+          SlidableAction(
+            onPressed: (_) => _runAction(
+              context,
+              () => context.read<NotesCubit>().deleteNote(note),
+            ),
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            label: 'Delete',
+          ),
+        ],
+      ),
+      child: Card(
+        elevation: 2,
+        margin: const EdgeInsets.only(bottom: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        child: ListTile(
+          leading: Icon(
+            isStarred ? Icons.star : Icons.description,
+            color: Colors.teal,
+            size: 40,
+          ),
+          title: Text(
+            note['file_name'] ?? 'Untitled Note',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          subtitle: const Text('Swipe left for actions · Tap to study'),
+          trailing: const Icon(Icons.play_circle_fill, color: Colors.teal),
+          onTap: () => _openNote(context, note),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _openNote(
+    BuildContext context,
+    Map<String, dynamic> note,
+  ) async {
+    final supabase = Supabase.instance.client;
+    final userId = supabase.auth.currentUser!.id;
+    final profile = await supabase
+        .from('profiles')
+        .select('primary_vark_style')
+        .eq('id', userId)
+        .single();
+
+    if (!context.mounted) return;
+
+    final userStyle =
+        profile['primary_vark_style']?.toString() ?? 'Read/Write';
+
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AdaptiveNoteContainer(
+          note: note,
+          initialStyle: userStyle,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _runAction(
+    BuildContext context,
+    Future<void> Function() action,
+  ) async {
+    try {
+      await action();
+    } catch (error) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Action failed: $error')),
+        );
+      }
+    }
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\core\note_utils.dart -----
+import 'dart:convert';
+
+/// Normalizes quiz payloads from Supabase/API into a usable list.
+List<Map<String, dynamic>> parseQuizContent(dynamic raw) {
+  if (raw == null) return [];
+
+  dynamic decoded = raw;
+  if (raw is String) {
+    try {
+      decoded = jsonDecode(raw);
+    } catch (_) {
+      return [];
+    }
+  }
+
+  if (decoded is! List) return [];
+
+  return decoded
+      .whereType<Map>()
+      .map((item) => Map<String, dynamic>.from(item))
+      .where((item) => (item['question'] ?? '').toString().isNotEmpty)
+      .map(_normalizeQuizItem)
+      .where((item) => (item['options'] as List).isNotEmpty)
+      .toList();
+}
+
+Map<String, dynamic> _normalizeQuizItem(Map<String, dynamic> item) {
+  final question = (item['question'] ?? item['prompt'] ?? 'Review this concept.')
+      .toString();
+  final answer = (item['answer'] ?? item['correct_answer'] ?? '').toString();
+
+  var options = <String>[];
+  final rawOptions = item['options'];
+  if (rawOptions is List) {
+    options = rawOptions.map((o) => o.toString().trim()).where((o) => o.isNotEmpty).toList();
+  }
+
+  if (answer.isNotEmpty && !options.contains(answer)) {
+    options.insert(0, answer);
+  }
+
+  if (options.length < 2 && answer.isNotEmpty) {
+    options = [
+      answer,
+      'This statement is unrelated to the material.',
+      'The opposite of the material is true.',
+      'None of the above apply.',
+    ];
+  }
+
+  options = options.toSet().toList();
+  if (options.length > 4) {
+    options = options.take(4).toList();
+  }
+
+  return {
+    'question': question,
+    'answer': answer.isNotEmpty ? answer : options.first,
+    'options': options,
+  };
+}
+
+/// Converts plain or lightly-marked summaries into readable markdown.
+String formatSummaryForDisplay(String summary) {
+  final trimmed = summary.trim();
+  if (trimmed.isEmpty) return 'No summary available.';
+
+  if (trimmed.contains('#') ||
+      trimmed.contains('**') ||
+      trimmed.contains('\n- ') ||
+      trimmed.contains('\n* ')) {
+    return trimmed;
+  }
+
+  final sentences = trimmed
+      .split(RegExp(r'(?<=[.!?])\s+'))
+      .map((s) => s.trim())
+      .where((s) => s.isNotEmpty)
+      .toList();
+
+  if (sentences.isEmpty) return trimmed;
+
+  final buffer = StringBuffer('## Summary\n\n');
+  for (var i = 0; i < sentences.length; i++) {
+    if (i == 0) {
+      buffer.writeln(sentences[i]);
+      buffer.writeln();
+    } else if (i == 1 || sentences[i].length > 80) {
+      buffer.writeln('- ${sentences[i]}');
+    } else {
+      buffer.writeln(sentences[i]);
+    }
+  }
+  return buffer.toString().trim();
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\core\pdf_export_service.dart -----
+import 'dart:io';
+
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+
+class PdfExportService {
+  static String _safeFileName(String name) =>
+      name.replaceAll(RegExp(r'[^\w\-. ]'), '_');
+
+  static String _plainText(String markdown) =>
+      markdown.replaceAll(RegExp(r'[#*_`\[\]]'), '').trim();
+
+  static Future<String> saveStudyPackPdf({
+    required String fileName,
+    required String summary,
+    required dynamic quizContent,
+  }) async {
+    final safeName = _safeFileName(fileName);
+    final pdf = pw.Document();
+
+    pdf.addPage(
+      pw.MultiPage(
+        pageFormat: PdfPageFormat.a4,
+        margin: const pw.EdgeInsets.all(32),
+        build: (context) {
+          final blocks = <pw.Widget>[
+            pw.Text(
+              fileName,
+              style: pw.TextStyle(
+                fontSize: 22,
+                fontWeight: pw.FontWeight.bold,
+              ),
+            ),
+            pw.SizedBox(height: 16),
+            pw.Text(
+              'Summary',
+              style: pw.TextStyle(
+                fontSize: 16,
+                fontWeight: pw.FontWeight.bold,
+              ),
+            ),
+            pw.SizedBox(height: 8),
+            pw.Text(_plainText(summary), style: const pw.TextStyle(fontSize: 12)),
+            pw.SizedBox(height: 24),
+            pw.Text(
+              'Quiz',
+              style: pw.TextStyle(
+                fontSize: 16,
+                fontWeight: pw.FontWeight.bold,
+              ),
+            ),
+            pw.SizedBox(height: 8),
+          ];
+
+          if (quizContent is List) {
+            for (var i = 0; i < quizContent.length; i++) {
+              final q = quizContent[i];
+              if (q is Map) {
+                blocks.add(
+                  pw.Padding(
+                    padding: const pw.EdgeInsets.only(bottom: 12),
+                    child: pw.Column(
+                      crossAxisAlignment: pw.CrossAxisAlignment.start,
+                      children: [
+                        pw.Text(
+                          'Q${i + 1}: ${q['question'] ?? q['prompt'] ?? 'Question'}',
+                          style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                        ),
+                        if (q['answer'] != null)
+                          pw.Text('Answer: ${q['answer']}'),
+                      ],
+                    ),
+                  ),
+                );
+              }
+            }
+          }
+
+          return blocks;
+        },
+      ),
+    );
+
+    final bytes = await pdf.save();
+    final directory = await _resolveSaveDirectory();
+    final outputPath = '${directory.path}/$safeName-study-pack.pdf';
+    final file = File(outputPath);
+    await file.writeAsBytes(bytes, flush: true);
+    return file.path;
+  }
+
+  static Future<Directory> _resolveSaveDirectory() async {
+    if (Platform.isAndroid) {
+      final downloads = await getDownloadsDirectory();
+      if (downloads != null) return downloads;
+    }
+    if (Platform.isIOS) {
+      return getApplicationDocumentsDirectory();
+    }
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      final downloads = await getDownloadsDirectory();
+      if (downloads != null) return downloads;
+    }
+    return getApplicationDocumentsDirectory();
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\data\supabase_repo.dart -----
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'user_profile.dart';
+
+class SupabaseRepo {
+  final _supabase = Supabase.instance.client;
+
+  Future<UserProfile?> getUserProfile(String userId) async {
+    final data = await _supabase.from('profiles').select().eq('id', userId).maybeSingle();
+    if (data == null) return null;
+    return UserProfile.fromJson(data);
+  }
+
+  Future<void> updateVarkProfile(String userId, String style, Map<String, int> scores) async {
+    await _supabase.from('profiles').upsert({
+      'id': userId,
+      'primary_vark_style': style,
+      'vark_scores': scores,
+      'updated_at': 'now()',
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> getFolders(String userId) async {
+    return List<Map<String, dynamic>>.from(
+      await _supabase
+          .from('folders')
+          .select()
+          .eq('user_id', userId)
+          .order('created_at', ascending: false),
+    );
+  }
+
+  Future<Map<String, dynamic>> createFolder(String userId, String name) async {
+    return Map<String, dynamic>.from(
+      await _supabase
+          .from('folders')
+          .insert({'user_id': userId, 'name': name})
+          .select()
+          .single(),
+    );
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\data\user_profile.dart -----
+class UserProfile {
+  final String id;
+  final String? fullName;
+  final String? primaryVarkStyle;
+  final Map<String, dynamic>? varkScores;
+
+  UserProfile({
+    required this.id,
+    this.fullName,
+    this.primaryVarkStyle,
+    this.varkScores,
+  });
+
+  factory UserProfile.fromJson(Map<String, dynamic> json) {
+    return UserProfile(
+      id: json['id'],
+      fullName: json['fullname'],
+      primaryVarkStyle: json['primary_vark_style'],
+      varkScores: json['vark_scores'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'fullname': fullName,
+      'primary_vark_style': primaryVarkStyle,
+      'vark_scores': varkScores,
+    };
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\logic\auditory_cubit.dart -----
+import 'dart:async';
+
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+
+enum AuditoryRepeatMode { off, one, all }
+
+sealed class AuditoryState extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
+
+class AuditoryInitial extends AuditoryState {}
+
+class AuditoryReady extends AuditoryState {
+  final List<String> segments;
+  final int currentIndex;
+  final bool isPlaying;
+  final bool isPaused;
+  final AuditoryRepeatMode repeatMode;
+  final String title;
+
+  AuditoryReady({
+    required this.segments,
+    this.currentIndex = 0,
+    this.isPlaying = false,
+    this.isPaused = false,
+    this.repeatMode = AuditoryRepeatMode.off,
+    required this.title,
+  });
+
+  double get progress =>
+      segments.isEmpty ? 0 : (currentIndex + 1) / segments.length;
+
+  String get currentText =>
+      segments.isEmpty ? '' : segments[currentIndex.clamp(0, segments.length - 1)];
+
+  AuditoryReady copyWith({
+    List<String>? segments,
+    int? currentIndex,
+    bool? isPlaying,
+    bool? isPaused,
+    AuditoryRepeatMode? repeatMode,
+    String? title,
+  }) {
+    return AuditoryReady(
+      segments: segments ?? this.segments,
+      currentIndex: currentIndex ?? this.currentIndex,
+      isPlaying: isPlaying ?? this.isPlaying,
+      isPaused: isPaused ?? this.isPaused,
+      repeatMode: repeatMode ?? this.repeatMode,
+      title: title ?? this.title,
+    );
+  }
+
+  @override
+  List<Object?> get props =>
+      [segments, currentIndex, isPlaying, isPaused, repeatMode, title];
+}
+
+class AuditoryCubit extends Cubit<AuditoryState> {
+  AuditoryCubit() : super(AuditoryInitial());
+
+  final FlutterTts _tts = FlutterTts();
+  bool _speaking = false;
+
+  Future<void> init({required String title, required String text}) async {
+    await _tts.setSpeechRate(0.48);
+    await _tts.setVolume(1.0);
+    await _tts.setPitch(1.0);
+    _tts.setCompletionHandler(_onSegmentComplete);
+    _tts.setCancelHandler(_onCancelled);
+
+    final segments = _splitIntoSegments(text);
+    emit(
+      AuditoryReady(
+        segments: segments,
+        title: title,
+      ),
+    );
+  }
+
+  List<String> _splitIntoSegments(String text) {
+    final cleaned = text.replaceAll(RegExp(r'[#*_`]'), ' ').trim();
+    if (cleaned.isEmpty) return ['No content available to listen.'];
+
+    final parts = cleaned
+        .split(RegExp(r'(?<=[.!?])\s+'))
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
+
+    if (parts.isEmpty) return [cleaned];
+    return parts;
+  }
+
+  Future<void> play() async {
+    final current = state;
+    if (current is! AuditoryReady) return;
+
+    if (current.isPaused) {
+      await _tts.speak(current.currentText);
+      emit(current.copyWith(isPlaying: true, isPaused: false));
+      return;
+    }
+
+    await _speakCurrent(current);
+  }
+
+  Future<void> pause() async {
+    final current = state;
+    if (current is! AuditoryReady) return;
+
+    await _tts.stop();
+    _speaking = false;
+    emit(current.copyWith(isPlaying: false, isPaused: true));
+  }
+
+  Future<void> stop() async {
+    final current = state;
+    if (current is! AuditoryReady) return;
+
+    await _tts.stop();
+    _speaking = false;
+    emit(
+      current.copyWith(
+        isPlaying: false,
+        isPaused: false,
+        currentIndex: 0,
+      ),
+    );
+  }
+
+  Future<void> rewind() async {
+    final current = state;
+    if (current is! AuditoryReady || current.segments.isEmpty) return;
+
+    await _tts.stop();
+    _speaking = false;
+    final nextIndex = (current.currentIndex - 1).clamp(0, current.segments.length - 1);
+    final updated = current.copyWith(
+      currentIndex: nextIndex,
+      isPlaying: false,
+      isPaused: false,
+    );
+    emit(updated);
+    if (current.isPlaying) await _speakCurrent(updated);
+  }
+
+  Future<void> fastForward() async {
+    final current = state;
+    if (current is! AuditoryReady || current.segments.isEmpty) return;
+
+    await _tts.stop();
+    _speaking = false;
+    final nextIndex =
+        (current.currentIndex + 1).clamp(0, current.segments.length - 1);
+    final updated = current.copyWith(
+      currentIndex: nextIndex,
+      isPlaying: false,
+      isPaused: false,
+    );
+    emit(updated);
+    if (current.isPlaying) await _speakCurrent(updated);
+  }
+
+  void toggleRepeat() {
+    final current = state;
+    if (current is! AuditoryReady) return;
+
+    final next = switch (current.repeatMode) {
+      AuditoryRepeatMode.off => AuditoryRepeatMode.one,
+      AuditoryRepeatMode.one => AuditoryRepeatMode.all,
+      AuditoryRepeatMode.all => AuditoryRepeatMode.off,
+    };
+    emit(current.copyWith(repeatMode: next));
+  }
+
+  Future<void> _speakCurrent(AuditoryReady current) async {
+    if (_speaking) return;
+    _speaking = true;
+    emit(current.copyWith(isPlaying: true, isPaused: false));
+    await _tts.speak(current.currentText);
+  }
+
+  void _onSegmentComplete() {
+    _speaking = false;
+    final current = state;
+    if (current is! AuditoryReady) return;
+
+    if (current.repeatMode == AuditoryRepeatMode.one) {
+      unawaited(_speakCurrent(current));
+      return;
+    }
+
+    if (current.currentIndex >= current.segments.length - 1) {
+      if (current.repeatMode == AuditoryRepeatMode.all) {
+        final reset = current.copyWith(currentIndex: 0, isPlaying: true);
+        emit(reset);
+        unawaited(_speakCurrent(reset));
+        return;
+      }
+      emit(current.copyWith(isPlaying: false, isPaused: false));
+      return;
+    }
+
+    final next = current.copyWith(
+      currentIndex: current.currentIndex + 1,
+      isPlaying: true,
+    );
+    emit(next);
+    unawaited(_speakCurrent(next));
+  }
+
+  void _onCancelled() {
+    _speaking = false;
+  }
+
+  @override
+  Future<void> close() {
+    _tts.stop();
+    return super.close();
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\logic\auth_cubit.dart -----
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+abstract class AuthState {}
+class AuthInitial extends AuthState {}
+class AuthLoading extends AuthState {}
+class Authenticated extends AuthState { final User user; Authenticated(this.user); }
+class AuthError extends AuthState { final String message; AuthError(this.message); }
+
+class AuthCubit extends Cubit<AuthState> {
+  final _supabase = Supabase.instance.client;
+
+  AuthCubit() : super(AuthInitial());
+
+  Future<void> login(String email, String password) async {
+    emit(AuthLoading());
+    try {
+      final response = await _supabase.auth.signInWithPassword(email: email, password: password);
+      if (response.user != null) emit(Authenticated(response.user!));
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
+  }
+
+  Future<void> signUp(String email, String password) async {
+    emit(AuthLoading());
+    try {
+      final response = await _supabase.auth.signUp(email: email, password: password);
+      if (response.user != null) emit(Authenticated(response.user!));
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\logic\folders_cubit.dart -----
+import 'dart:async';
+
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+sealed class FoldersState extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
+
+class FoldersInitial extends FoldersState {}
+
+class FoldersLoading extends FoldersState {}
+
+class FoldersLoaded extends FoldersState {
+  final List<Map<String, dynamic>> folders;
+
+  FoldersLoaded(this.folders);
+
+  @override
+  List<Object?> get props => [folders];
+}
+
+class FoldersActionSuccess extends FoldersState {
+  final List<Map<String, dynamic>> folders;
+  final String message;
+
+  FoldersActionSuccess(this.folders, this.message);
+
+  @override
+  List<Object?> get props => [folders, message];
+}
+
+class FoldersError extends FoldersState {
+  final String message;
+
+  FoldersError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class FoldersCubit extends Cubit<FoldersState> {
+  FoldersCubit() : super(FoldersInitial());
+
+  final _supabase = Supabase.instance.client;
+  StreamSubscription<List<Map<String, dynamic>>>? _subscription;
+  List<Map<String, dynamic>> _folders = [];
+
+  void watchFolders() {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) {
+      emit(FoldersError('Not signed in'));
+      return;
+    }
+
+    emit(FoldersLoading());
+    _subscription?.cancel();
+    _subscription = _supabase
+        .from('folders')
+        .stream(primaryKey: ['id'])
+        .eq('user_id', userId)
+        .order('created_at', ascending: false)
+        .listen(
+          (data) {
+            _folders = List<Map<String, dynamic>>.from(data);
+            emit(FoldersLoaded(_folders));
+          },
+          onError: (error) => emit(FoldersError(error.toString())),
+        );
+  }
+
+  Future<void> createFolder(String name) async {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) return;
+
+    try {
+      await _supabase.from('folders').insert({
+        'user_id': userId,
+        'name': name.trim(),
+      });
+      emit(FoldersActionSuccess(_folders, 'Folder "$name" created.'));
+    } catch (error) {
+      emit(FoldersError('Could not create folder: $error'));
+    }
+  }
+
+  Future<void> renameFolder(Map<String, dynamic> folder, String name) async {
+    try {
+      await _supabase
+          .from('folders')
+          .update({'name': name.trim()})
+          .eq('id', folder['id']);
+      emit(FoldersActionSuccess(_folders, 'Folder renamed.'));
+    } catch (error) {
+      emit(FoldersError('Could not rename folder: $error'));
+    }
+  }
+
+  Future<void> deleteFolder(Map<String, dynamic> folder) async {
+    try {
+      await _supabase.from('folders').delete().eq('id', folder['id']);
+      emit(FoldersActionSuccess(_folders, 'Folder deleted.'));
+    } catch (error) {
+      emit(FoldersError('Could not delete folder: $error'));
+    }
+  }
+
+  @override
+  Future<void> close() {
+    _subscription?.cancel();
+    return super.close();
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\logic\notes_cubit.dart -----
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:adaptivise_prototype/core/api_service.dart';
+import 'package:adaptivise_prototype/core/note_utils.dart';
+import 'package:adaptivise_prototype/core/pdf_export_service.dart';
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+enum NotesFilter { all, recent, favorite }
+
+sealed class NotesState extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
+
+class NotesInitial extends NotesState {}
+
+class NotesLoading extends NotesState {}
+
+class NotesLoaded extends NotesState {
+  final List<Map<String, dynamic>> notes;
+  final NotesFilter filter;
+  final bool isUploading;
+  final String? selectedFolderId;
+  final String? selectedFolderName;
+
+  NotesLoaded({
+    required this.notes,
+    this.filter = NotesFilter.all,
+    this.isUploading = false,
+    this.selectedFolderId,
+    this.selectedFolderName,
+  });
+
+  NotesLoaded copyWith({
+    List<Map<String, dynamic>>? notes,
+    NotesFilter? filter,
+    bool? isUploading,
+    String? selectedFolderId,
+    String? selectedFolderName,
+  }) {
+    return NotesLoaded(
+      notes: notes ?? this.notes,
+      filter: filter ?? this.filter,
+      isUploading: isUploading ?? this.isUploading,
+      selectedFolderId: selectedFolderId ?? this.selectedFolderId,
+      selectedFolderName: selectedFolderName ?? this.selectedFolderName,
+    );
+  }
+
+  @override
+  List<Object?> get props =>
+      [notes, filter, isUploading, selectedFolderId, selectedFolderName];
+}
+
+class NotesActionMessage extends NotesState {
+  final List<Map<String, dynamic>> notes;
+  final NotesFilter filter;
+  final String message;
+  final String? selectedFolderId;
+  final String? selectedFolderName;
+
+  NotesActionMessage(
+    this.notes,
+    this.filter,
+    this.message, {
+    this.selectedFolderId,
+    this.selectedFolderName,
+  });
+
+  @override
+  List<Object?> get props =>
+      [notes, filter, message, selectedFolderId, selectedFolderName];
+}
+
+class NotesError extends NotesState {
+  final String message;
+
+  NotesError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class NotesCubit extends Cubit<NotesState> {
+  NotesCubit() : super(NotesInitial());
+
+  final _supabase = Supabase.instance.client;
+  StreamSubscription<List<Map<String, dynamic>>>? _subscription;
+  List<Map<String, dynamic>> _allNotes = [];
+  NotesFilter _filter = NotesFilter.all;
+  String? _selectedFolderId;
+  String? _selectedFolderName;
+
+  void watchNotes() {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) {
+      emit(NotesError('Not signed in'));
+      return;
+    }
+
+    emit(NotesLoading());
+    _subscription?.cancel();
+    _subscription = _supabase
+        .from('lecture_notes')
+        .stream(primaryKey: ['id'])
+        .eq('user_id', userId)
+        .order('created_at', ascending: false)
+        .listen(
+          (data) {
+            _allNotes = List<Map<String, dynamic>>.from(data);
+            _emitLoaded();
+          },
+          onError: (error) => emit(NotesError(error.toString())),
+        );
+  }
+
+  void selectSubject({String? folderId, String? folderName}) {
+    _selectedFolderId = folderId;
+    _selectedFolderName = folderName;
+    _emitLoaded();
+  }
+
+  void setFilter(NotesFilter filter) {
+    _filter = filter;
+    _emitLoaded();
+  }
+
+  void _emitLoaded({bool isUploading = false}) {
+    emit(
+      NotesLoaded(
+        notes: _applyFilter(_allNotes),
+        filter: _filter,
+        isUploading: isUploading,
+        selectedFolderId: _selectedFolderId,
+        selectedFolderName: _selectedFolderName,
+      ),
+    );
+  }
+
+  List<Map<String, dynamic>> _applyFilter(List<Map<String, dynamic>> notes) {
+    var filtered = notes;
+    if (_selectedFolderId != null) {
+      filtered = filtered
+          .where((n) => n['folder_id']?.toString() == _selectedFolderId)
+          .toList();
+    }
+
+    switch (_filter) {
+      case NotesFilter.favorite:
+        return filtered.where((n) => n['is_starred'] == true).toList();
+      case NotesFilter.recent:
+      case NotesFilter.all:
+        return filtered;
+    }
+  }
+
+  Future<void> toggleStar(Map<String, dynamic> note) async {
+    final noteId = note['id'];
+    if (noteId == null) throw Exception('Note id is missing');
+
+    final next = note['is_starred'] != true;
+    await _supabase
+        .from('lecture_notes')
+        .update({'is_starred': next})
+        .eq('id', noteId);
+
+    final label = note['file_name'] ?? 'Note';
+    emit(
+      NotesActionMessage(
+        _applyFilter(_allNotes),
+        _filter,
+        next ? '$label added to favorites.' : '$label removed from favorites.',
+        selectedFolderId: _selectedFolderId,
+        selectedFolderName: _selectedFolderName,
+      ),
+    );
+  }
+
+  Future<String> downloadNote(Map<String, dynamic> note) async {
+    final path = await PdfExportService.saveStudyPackPdf(
+      fileName: (note['file_name'] ?? 'note').toString(),
+      summary: note['summary']?.toString() ?? 'No summary available.',
+      quizContent: parseQuizContent(note['quiz_content']),
+    );
+
+    emit(
+      NotesActionMessage(
+        _applyFilter(_allNotes),
+        _filter,
+        'Saved to $path',
+        selectedFolderId: _selectedFolderId,
+        selectedFolderName: _selectedFolderName,
+      ),
+    );
+    return path;
+  }
+
+  Future<void> deleteNote(Map<String, dynamic> note) async {
+    final noteId = note['id'];
+    if (noteId == null) throw Exception('Note id is missing');
+
+    await _supabase.from('lecture_notes').delete().eq('id', noteId);
+    emit(
+      NotesActionMessage(
+        _applyFilter(_allNotes),
+        _filter,
+        '${note['file_name'] ?? 'Note'} deleted.',
+        selectedFolderId: _selectedFolderId,
+        selectedFolderName: _selectedFolderName,
+      ),
+    );
+  }
+
+  Future<void> uploadFromFile(File file, String fileName, String folderId) async {
+    final request = http.MultipartRequest(
+      'POST',
+      Uri.parse(ApiService.processNoteUrl),
+    )
+      ..fields['user_id'] = _supabase.auth.currentUser!.id
+      ..fields['folder_id'] = folderId
+      ..fields['storage_path'] = 'uploads/$fileName'
+      ..files.add(await http.MultipartFile.fromPath('file', file.path));
+
+    await _processAndSave(request, fileName, folderId);
+  }
+
+  Future<void> uploadFromUrl(String url, String folderId) async {
+    final request = http.MultipartRequest(
+      'POST',
+      Uri.parse(ApiService.processUrlUrl),
+    )
+      ..fields['user_id'] = _supabase.auth.currentUser!.id
+      ..fields['folder_id'] = folderId
+      ..fields['url'] = url.trim()
+      ..fields['storage_path'] = 'uploads/web-${DateTime.now().millisecondsSinceEpoch}.html';
+
+    final fileName = _fileNameFromUrl(url);
+    await _processAndSave(request, fileName, folderId);
+  }
+
+  String _fileNameFromUrl(String url) {
+    final uri = Uri.tryParse(url.trim());
+    if (uri == null || uri.host.isEmpty) return 'web-page.html';
+    final host = uri.host.replaceAll('.', '-');
+    return '$host-page.html';
+  }
+
+  Future<void> _processAndSave(
+    http.MultipartRequest request,
+    String fileName,
+    String folderId,
+  ) async {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) return;
+
+    _emitLoaded(isUploading: true);
+
+    try {
+      final response = await request.send();
+      final respBody = await response.stream.bytesToString();
+
+      if (response.statusCode != 200) {
+        throw Exception('Server Error: ${response.statusCode} - $respBody');
+      }
+
+      final decodedData = jsonDecode(respBody) as Map<String, dynamic>;
+      final rawText = decodedData['raw_text']?.toString() ?? '';
+      var rawSummary = decodedData['summary']?.toString() ?? '';
+      var quizContent = parseQuizContent(decodedData['quiz_content']);
+
+      if (quizContent.isEmpty && rawText.isNotEmpty) {
+        quizContent = parseQuizContent(await ApiService.generateQuiz(rawText));
+      }
+
+      if (rawSummary.isNotEmpty) {
+        try {
+          rawSummary = await ApiService.formatWithGemini(rawSummary);
+        } catch (_) {}
+      }
+
+      await _supabase.from('lecture_notes').insert({
+        'user_id': userId,
+        'file_name': fileName,
+        'folder_id': folderId,
+        'storage_path': 'uploads/$fileName',
+        'raw_text': rawText,
+        'summary': rawSummary,
+        'quiz_content': quizContent,
+        'is_starred': false,
+      });
+
+      emit(
+        NotesActionMessage(
+          _applyFilter(_allNotes),
+          _filter,
+          'AI processing complete!',
+          selectedFolderId: _selectedFolderId,
+          selectedFolderName: _selectedFolderName,
+        ),
+      );
+    } catch (error) {
+      emit(NotesError('Upload failed: $error'));
+      _emitLoaded(isUploading: false);
+    }
+  }
+
+  @override
+  Future<void> close() {
+    _subscription?.cancel();
+    return super.close();
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\logic\profile_cubit.dart -----
+import 'dart:async';
+
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+sealed class ProfileState extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
+
+class ProfileInitial extends ProfileState {}
+
+class ProfileLoading extends ProfileState {}
+
+class ProfileLoaded extends ProfileState {
+  final Map<String, dynamic> profile;
+
+  ProfileLoaded(this.profile);
+
+  String get primaryStyle =>
+      profile['primary_vark_style']?.toString() ?? 'Not Determined';
+
+  Map<String, dynamic> get varkScores =>
+      Map<String, dynamic>.from(profile['vark_scores'] ?? {});
+
+  @override
+  List<Object?> get props => [profile];
+}
+
+class ProfileError extends ProfileState {
+  final String message;
+
+  ProfileError(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class ProfileCubit extends Cubit<ProfileState> {
+  ProfileCubit() : super(ProfileInitial());
+
+  final _supabase = Supabase.instance.client;
+  StreamSubscription<List<Map<String, dynamic>>>? _subscription;
+
+  void watchProfile() {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) {
+      emit(ProfileError('Not signed in'));
+      return;
+    }
+
+    emit(ProfileLoading());
+    _subscription?.cancel();
+    _subscription = _supabase
+        .from('profiles')
+        .stream(primaryKey: ['id'])
+        .eq('id', userId)
+        .listen(
+          (data) {
+            if (data.isEmpty) {
+              emit(ProfileError('Profile not found'));
+              return;
+            }
+            emit(ProfileLoaded(data.first));
+          },
+          onError: (error) => emit(ProfileError(error.toString())),
+        );
+  }
+
+  /// Returns allowed learning-mode keys for the current profile.
+  List<String> allowedModes() {
+    final current = state;
+    if (current is! ProfileLoaded) return ['readwrite'];
+
+    final style = current.primaryStyle.toLowerCase();
+    if (style.contains('&') || style.contains('multimodal')) {
+      final modes = <String>{};
+      if (style.contains('visual') || style.contains('read')) {
+        modes.add('readwrite');
+      }
+      if (style.contains('auditory')) modes.add('auditory');
+      if (style.contains('kinesthetic')) modes.add('kinesthetic');
+      return modes.isEmpty ? ['readwrite'] : modes.toList();
+    }
+
+    if (style.contains('kinesthetic') || style == 'k') return ['kinesthetic'];
+    if (style.contains('auditory') || style == 'a') return ['auditory'];
+    if (style.contains('visual') || style.contains('read') || style == 'r') {
+      return ['readwrite'];
+    }
+    return ['readwrite'];
+  }
+
+  String defaultMode() {
+    final modes = allowedModes();
+    final style = (state is ProfileLoaded)
+        ? (state as ProfileLoaded).primaryStyle.toLowerCase()
+        : '';
+
+    if (style.contains('kinesthetic')) return 'kinesthetic';
+    if (style.contains('auditory')) return 'auditory';
+    return modes.first;
+  }
+
+  @override
+  Future<void> close() {
+    _subscription?.cancel();
+    return super.close();
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\logic\study_cubit.dart -----
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../core/api_service.dart';
+
+abstract class StudyState {}
+class StudyInitial extends StudyState {}
+class StudyLoading extends StudyState {}
+class StudyReady extends StudyState {
+  final String summary;
+  final List<String> keywords;
+  StudyReady(this.summary, this.keywords);
+}
+class StudyError extends StudyState {
+  final String message;
+  StudyError(this.message);
+}
+
+class StudyCubit extends Cubit<StudyState> {
+  StudyCubit() : super(StudyInitial());
+
+  Future<void> processPdfContent(String extractedText) async {
+    emit(StudyLoading());
+    try {
+      // 1. Send text to Python AI
+      final result = await ApiService.summarizeText(extractedText);
+      
+      // 2. Extract Data
+      final summary = result['summary'] as String;
+      final keywords = List<String>.from(result['keywords']);
+      
+      // 3. Emit Ready State to update UI
+      emit(StudyReady(summary, keywords));
+      
+      // Note: In production, you would also save this to Supabase here
+      
+    } catch (e) {
+      emit(StudyError("AI Processing failed: ${e.toString()}"));
+    }
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\logic\vark_cubit.dart -----
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../core/api_service.dart';
+import '../data/supabase_repo.dart';
+
+abstract class VarkState {}
+class VarkInitial extends VarkState {}
+class VarkLoading extends VarkState {}
+class VarkSuccess extends VarkState { final String style; VarkSuccess(this.style); }
+class VarkError extends VarkState { final String message; VarkError(this.message); }
+
+class VarkCubit extends Cubit<VarkState> {
+  final SupabaseRepo _repo = SupabaseRepo();
+
+  VarkCubit() : super(VarkInitial());
+
+  Future<void> processVarkScores(Map<String, int> scores) async {
+    emit(VarkLoading());
+    try {
+      // 1. Format scores for Python API [Visual, Auditory, Read/Write, Kinesthetic]
+      final scoreList = [scores['Visual'] ?? 0, scores['Auditory'] ?? 0, scores['Read/Write'] ?? 0, scores['Kinesthetic'] ?? 0];
+      
+      // 2. Call Python Backend (Hybrid Weighted K-Means)
+      final result = await ApiService.classifyVark(scoreList);
+      final dominantStyle = result['learning_style'][0]; // Gets 'Visual', 'Auditory', 'Read/Write', or 'Kinesthetic'
+
+      // 3. Save to Supabase
+      final userId = Supabase.instance.client.auth.currentUser?.id;
+      if (userId != null) {
+        await _repo.updateVarkProfile(userId, dominantStyle, scores);
+      }
+
+      emit(VarkSuccess(dominantStyle));
+    } catch (e) {
+      emit(VarkError("Failed to process profile: $e"));
+    }
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\presentation\analytics_screen.dart -----
+import 'package:adaptivise_prototype/core/app_theme.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+class AnalyticsScreen extends StatelessWidget {
+  const AnalyticsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final userId = Supabase.instance.client.auth.currentUser!.id;
+
+    return Scaffold(
+      body: StreamBuilder<List<Map<String, dynamic>>>(
+        stream: Supabase.instance.client
+            .from('profiles')
+            .stream(primaryKey: ['id'])
+            .eq('id', userId),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+          if (snapshot.data!.isEmpty) {
+            return const Center(child: Text('No profile data found.'));
+          }
+
+          final profile = snapshot.data!.first;
+          final scores = Map<String, dynamic>.from(profile['vark_scores'] ?? {});
+          final String style = profile['primary_vark_style'] ?? "Unknown";
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                // 1. Brief Explanation Header
+                _buildAnalysisCard(style),
+                const SizedBox(height: 25),
+                
+                // 2. The Pie Chart Card
+                _buildPieChartCard(scores),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildAnalysisCard(String style) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text("Your Primary Style: $style", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 10),
+          const Text("This is your personalized learning analysis based on the VARK assessment.", style: TextStyle(color: Colors.grey)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPieChartCard(Map<String, dynamic> scores) {
+    double score(String key) {
+      final raw = scores[key];
+      if (raw is num) return raw.toDouble();
+      return double.tryParse(raw?.toString() ?? '') ?? 0;
+    }
+
+    final visual = score('Visual');
+    final auditory = score('Auditory');
+    final readWrite = score('Read/Write');
+    final kinesthetic = score('Kinesthetic');
+    final total = visual + auditory + readWrite + kinesthetic;
+
+    List<PieChartSectionData> sections = [
+      _section('Visual', visual, AppColors.Visual, total),
+      _section('Auditory', auditory, AppColors.Auditory, total),
+      _section('Read/Write', readWrite, AppColors.ReadWrite, total),
+      _section('Kinesthetic', kinesthetic, AppColors.Kinesthetic, total),
+    ].where((s) => s.value > 0).toList();
+
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20)),
+      child: Column(
+        children: [
+          const Text("Your VARK Analysis", style: TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 200,
+            child: total > 0
+                ? PieChart(PieChartData(sections: sections, sectionsSpace: 2, centerSpaceRadius: 30))
+                : const Center(
+                    child: Text(
+                      'Retake the VARK questionnaire to see your chart.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  PieChartSectionData _section(String label, double value, Color color, double total) {
+    final pct = total > 0 ? (value / total) * 100 : 0;
+    return PieChartSectionData(
+      value: value,
+      color: color,
+      title: '$label\n${pct.toStringAsFixed(0)}%',
+      radius: 60,
+      titleStyle: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.white),
+    );
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\presentation\dashboard_screen.dart -----
+import 'package:adaptivise_prototype/core/app_theme.dart';
+import 'package:adaptivise_prototype/logic/folders_cubit.dart';
+import 'package:adaptivise_prototype/logic/notes_cubit.dart';
+import 'package:adaptivise_prototype/logic/profile_cubit.dart';
+import 'package:adaptivise_prototype/presentation/widgets/adapt_notes_sheet.dart';
+import 'package:adaptivise_prototype/core/note_actions.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fl_chart/fl_chart.dart';
+
+class DashboardScreen extends StatefulWidget {
+  const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProfileCubit>().watchProfile();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      appBar: AppBar(
+        title: const Text(
+          'Learning Analytics',
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
+      ),
+      body: BlocBuilder<ProfileCubit, ProfileState>(
+        builder: (context, state) {
+          if (state is ProfileLoading || state is ProfileInitial) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state is ProfileError) {
+            return Center(child: Text(state.message));
+          }
+          if (state is! ProfileLoaded) {
+            return const Center(child: Text('Error loading profile.'));
+          }
+
+          final profile = state.profile;
+          final style = state.primaryStyle;
+          final rawScores = state.varkScores;
+          final visual = _scoreFor(rawScores, 'Visual');
+          final auditory = _scoreFor(rawScores, 'Auditory');
+          final readWrite = _scoreFor(rawScores, 'Read/Write');
+          final kinesthetic = _scoreFor(rawScores, 'Kinesthetic');
+          final scoreTotal = visual + auditory + readWrite + kinesthetic;
+
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.blue[50],
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Text(
+                          'AI ANALYSIS COMPLETE',
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'You’re a $style Learner',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        _getStyleDescription(style),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14,
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 30),
+                const Text(
+                  'Your VARK Analysis',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  height: 350,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 10,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _legendItem('Visual', AppColors.Visual),
+                          const SizedBox(width: 15),
+                          _legendItem('Auditory', AppColors.Auditory),
+                          const SizedBox(width: 15),
+                          _legendItem('Read/Write', AppColors.ReadWrite),
+                          const SizedBox(width: 15),
+                          _legendItem('Kinesthetic', AppColors.Kinesthetic),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Expanded(
+                        child: scoreTotal > 0
+                            ? PieChart(
+                                PieChartData(
+                                  sectionsSpace: 2,
+                                  centerSpaceRadius: 40,
+                                  sections: [
+                                    _pieSection(
+                                      'Visual',
+                                      visual,
+                                      AppColors.Visual,
+                                      scoreTotal,
+                                    ),
+                                    _pieSection(
+                                      'Auditory',
+                                      auditory,
+                                      AppColors.Auditory,
+                                      scoreTotal,
+                                    ),
+                                    _pieSection(
+                                      'Read/Write',
+                                      readWrite,
+                                      AppColors.ReadWrite,
+                                      scoreTotal,
+                                    ),
+                                    _pieSection(
+                                      'Kinesthetic',
+                                      kinesthetic,
+                                      AppColors.Kinesthetic,
+                                      scoreTotal,
+                                    ),
+                                  ].where((s) => s.value > 0).toList(),
+                                ),
+                              )
+                            : const Center(
+                                child: Text(
+                                  'Retake the VARK questionnaire to see your chart.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  String _getStyleDescription(String style) {
+    final lower = style.toLowerCase();
+    if (lower.contains('&') || lower.contains('multimodal')) {
+      return 'Your profile shows a balanced preference for multiple learning channels.';
+    }
+    if (lower.contains('kinesthetic')) {
+      return 'You learn best through experience and practice.';
+    }
+    if (lower.contains('auditory')) {
+      return 'You learn best by listening, discussing, and hearing information explained aloud.';
+    }
+    if (lower.contains('read') || lower.contains('visual')) {
+      return 'You learn best through written notes, summaries, and structured reading.';
+    }
+    return 'Complete the VARK questionnaire to receive a detailed analysis.';
+  }
+
+  Widget _legendItem(String label, Color color) {
+    return Row(
+      children: [
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
+        const SizedBox(width: 4),
+        Text(label, style: const TextStyle(fontSize: 11, color: Colors.grey)),
+      ],
+    );
+  }
+
+  double _scoreFor(Map<String, dynamic> scores, String key) {
+    final raw = scores[key];
+    if (raw is num) return raw.toDouble();
+    return double.tryParse(raw?.toString() ?? '') ?? 0;
+  }
+
+  PieChartSectionData _pieSection(
+    String title,
+    double value,
+    Color color,
+    double total,
+  ) {
+    final percentage = total > 0 ? (value / total) * 100 : 0;
+    return PieChartSectionData(
+      color: color,
+      value: value,
+      title: '$title\n${percentage.toStringAsFixed(0)}%',
+      radius: 80,
+      titleStyle: const TextStyle(
+        fontSize: 11,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+      ),
+    );
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\presentation\main_navigation_screen.dart -----
+import 'package:adaptivise_prototype/presentation/smart_note_view.dart';
+import 'package:flutter/material.dart';
+import 'dashboard_screen.dart';
+import 'profile_screen.dart';
+
+class MainNavigationScreen extends StatefulWidget {
+  const MainNavigationScreen({super.key});
+
+  @override
+  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
+}
+
+class _MainNavigationScreenState extends State<MainNavigationScreen> {
+  int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    const DashboardScreen(),
+    const NotesLibraryScreen(),
+    const ProfileScreen(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _screens,
+      ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentIndex,
+        onDestinationSelected: (index) {
+          setState(() => _currentIndex = index);
+        },
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.analytics_outlined),
+            selectedIcon: Icon(Icons.analytics),
+            label: 'Analytics',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.folder_copy_outlined),
+            selectedIcon: Icon(Icons.folder_copy),
+            label: 'My Files',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\presentation\profile_screen.dart -----
+import 'package:adaptivise_prototype/logic/profile_cubit.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'vark_questionnaire_screen.dart';
+
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProfileCubit>().watchProfile();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final user = Supabase.instance.client.auth.currentUser;
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('My Profile')),
+      body: BlocBuilder<ProfileCubit, ProfileState>(
+        builder: (context, state) {
+          final style = state is ProfileLoaded ? state.primaryStyle : 'Not set';
+
+          return ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              const CircleAvatar(radius: 40, child: Icon(Icons.person, size: 40)),
+              const SizedBox(height: 16),
+              Center(
+                child: Text(
+                  user?.email ?? 'Student',
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Center(
+                child: Text(
+                  'Learning style: $style',
+                  style: const TextStyle(color: Colors.grey),
+                ),
+              ),
+              const Divider(height: 40),
+              ListTile(
+                leading: const Icon(Icons.psychology),
+                title: const Text('Retake VARK Assessment'),
+                subtitle: const Text('Update your dominant learning style'),
+                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const VarkQuestionnaireScreen(isRetest: true),
+                    ),
+                  );
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.logout, color: Colors.red),
+                title: const Text('Sign Out', style: TextStyle(color: Colors.red)),
+                onTap: () async {
+                  await Supabase.instance.client.auth.signOut();
+                },
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\presentation\signup_screen.dart -----
+import 'package:adaptivise_prototype/presentation/auth/auth_gate.dart';
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  // 1. You must have these controllers defined at the top of your state!
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  
+  bool _isLoading = false; // Optional: To show a loading spinner
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Create Account")),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // --- Email Field ---
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(labelText: 'Email'),
+              keyboardType: TextInputType.emailAddress,
+            ),
+            const SizedBox(height: 16),
+            
+            // --- Password Field ---
+            TextField(
+              controller: passwordController,
+              decoration: const InputDecoration(labelText: 'Password'),
+              obscureText: true,
+            ),
+            const SizedBox(height: 24),
+
+            // --- SIGN UP BUTTON ---
+            _isLoading 
+              ? const CircularProgressIndicator()
+              : ElevatedButton(
+                  // 2. THIS IS WHERE YOUR CODE GOES
+                  onPressed: () async {
+                    setState(() => _isLoading = true);
+                    
+                    try {
+                      // Tell Supabase to create the user
+                      final AuthResponse res = await Supabase.instance.client.auth.signUp(
+                        email: emailController.text.trim(),
+                        password: passwordController.text.trim(),
+                      );
+                      
+                      // 3. Navigate to the Gatekeeper!
+                      if (mounted && res.user != null) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const AuthGate()),
+                        );
+                      }
+                    } on AuthException catch (e) {
+                      // Show Supabase errors (like "password too short") to the user
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(e.message)),
+                      );
+                    } catch (e) {
+                      // Catch any other weird errors
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Error: $e")),
+                      );
+                    } finally {
+                      if (mounted) setState(() => _isLoading = false);
+                    }
+                  },
+                  child: const Text('Sign Up'),
+                ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\presentation\smart_note_view.dart -----
+import 'package:adaptivise_prototype/core/note_actions.dart';
+import 'package:adaptivise_prototype/logic/folders_cubit.dart';
+import 'package:adaptivise_prototype/logic/notes_cubit.dart';
+import 'package:adaptivise_prototype/presentation/widgets/adapt_notes_sheet.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+
+class NotesLibraryScreen extends StatefulWidget {
+  const NotesLibraryScreen({super.key});
+
+  @override
+  State<NotesLibraryScreen> createState() => _NotesLibraryScreenState();
+}
+
+class _NotesLibraryScreenState extends State<NotesLibraryScreen> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<FoldersCubit>().watchFolders();
+    context.read<NotesCubit>().watchNotes();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<FoldersCubit, FoldersState>(
+      listener: (context, state) {
+        if (state is FoldersActionSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        } else if (state is FoldersError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      child: BlocConsumer<NotesCubit, NotesState>(
+      listener: (context, state) {
+        if (state is NotesActionMessage) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        } else if (state is NotesError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      builder: (context, notesState) {
+        final isUploading =
+            notesState is NotesLoaded ? notesState.isUploading : false;
+        final filter =
+            notesState is NotesLoaded ? notesState.filter : NotesFilter.all;
+        final selectedFolderName = notesState is NotesLoaded
+            ? notesState.selectedFolderName
+            : notesState is NotesActionMessage
+                ? notesState.selectedFolderName
+                : null;
+        final notes = switch (notesState) {
+          NotesLoaded(:final notes) => notes,
+          NotesActionMessage(:final notes) => notes,
+          _ => <Map<String, dynamic>>[],
+        };
+
+        final folders = switch (context.watch<FoldersCubit>().state) {
+          FoldersLoaded(:final folders) => folders,
+          FoldersActionSuccess(:final folders) => folders,
+          _ => <Map<String, dynamic>>[],
+        };
+
+        final folderNames = {
+          for (final f in folders) f['id'].toString(): f['name']?.toString() ?? 'Subject',
+        };
+
+        return Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: Colors.white,
+          endDrawer: _SubjectDrawer(folders: folders),
+          appBar: AppBar(
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'My Files',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    fontSize: 20,
+                  ),
+                ),
+                if (selectedFolderName != null)
+                  Text(
+                    selectedFolderName,
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+              ],
+            ),
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            actions: [
+              IconButton(
+                tooltip: 'Filter by subject',
+                onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
+                icon: const Icon(Icons.filter_list, color: Colors.teal),
+              ),
+            ],
+          ),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: isUploading ? null : () => showAdaptNotesFlow(context),
+            backgroundColor: const Color(0xFF00695C),
+            icon: isUploading
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : const Icon(Icons.add_circle_outline, color: Colors.white),
+            label: Text(
+              isUploading ? 'Processing...' : 'Adapt Notes',
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          body: Column(
+            children: [
+              _FilterChips(selected: filter),
+              Expanded(
+                child: switch (notesState) {
+                  NotesLoading() || NotesInitial() =>
+                    const Center(child: CircularProgressIndicator()),
+                  NotesError(:final message) => Center(child: Text(message)),
+                  _ when notes.isEmpty => Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(32),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.folder_open,
+                                size: 72, color: Colors.grey[300]),
+                            const SizedBox(height: 16),
+                            Text(
+                              selectedFolderName == null
+                                  ? 'No notes yet'
+                                  : 'No notes in $selectedFolderName',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'Tap Adapt Notes to upload PDF, Word, PowerPoint, or a web link.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  _ => SlidableAutoCloseBehavior(
+                      child: ListView.builder(
+                        padding: const EdgeInsets.all(16),
+                        itemCount: notes.length,
+                        itemBuilder: (context, index) {
+                          final note = notes[index];
+                          final subject = folderNames[note['folder_id']?.toString()] ??
+                              'Unsorted';
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (selectedFolderName == null)
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 4,
+                                    bottom: 6,
+                                  ),
+                                  child: Text(
+                                    subject,
+                                    style: const TextStyle(
+                                      fontSize: 11,
+                                      color: Colors.teal,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              NoteSlidableTile(note: note),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                },
+              ),
+            ],
+          ),
+        );
+      },
+      ),
+    );
+  }
+}
+
+class _SubjectDrawer extends StatelessWidget {
+  final List<Map<String, dynamic>> folders;
+
+  const _SubjectDrawer({required this.folders});
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                'Subjects',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.all_inbox, color: Colors.teal),
+              title: const Text('All subjects'),
+              onTap: () {
+                context.read<NotesCubit>().selectSubject();
+                Navigator.pop(context);
+              },
+            ),
+            const Divider(),
+            Expanded(
+              child: folders.isEmpty
+                  ? const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text('Create your first subject below.'),
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: folders.length,
+                      itemBuilder: (context, index) {
+                        final folder = folders[index];
+                        return ListTile(
+                          leading: const Icon(Icons.folder, color: Colors.teal),
+                          title: Text(folder['name']?.toString() ?? 'Subject'),
+                          onTap: () {
+                            context.read<NotesCubit>().selectSubject(
+                                  folderId: folder['id'].toString(),
+                                  folderName:
+                                      folder['name']?.toString() ?? 'Subject',
+                                );
+                            Navigator.pop(context);
+                          },
+                        );
+                      },
+                    ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: () async {
+                    final name = await _promptFolderName(context);
+                    if (name != null && name.trim().isNotEmpty && context.mounted) {
+                      await context.read<FoldersCubit>().createFolder(name.trim());
+                    }
+                  },
+                  icon: const Icon(Icons.create_new_folder),
+                  label: const Text('New Subject'),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<String?> _promptFolderName(BuildContext context) async {
+    final controller = TextEditingController();
+    return showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('New Subject'),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          decoration: const InputDecoration(
+            hintText: 'e.g. Biology, History',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, controller.text),
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FilterChips extends StatelessWidget {
+  final NotesFilter selected;
+
+  const _FilterChips({required this.selected});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _chip(context, 'Recently', Icons.history, NotesFilter.recent),
+          _chip(context, 'All', Icons.trending_up, NotesFilter.all),
+          _chip(context, 'Favorite', Icons.favorite, NotesFilter.favorite),
+        ],
+      ),
+    );
+  }
+
+  Widget _chip(
+    BuildContext context,
+    String label,
+    IconData icon,
+    NotesFilter filter,
+  ) {
+    final isSelected = selected == filter;
+    return GestureDetector(
+      onTap: () => context.read<NotesCubit>().setFilter(filter),
+      child: Column(
+        children: [
+          CircleAvatar(
+            backgroundColor: isSelected ? Colors.teal[50] : Colors.grey[100],
+            child: Icon(icon, color: Colors.teal, size: 20),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              color: isSelected ? Colors.teal : Colors.grey,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\presentation\vark_questionnaire_screen.dart -----
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../core/api_service.dart';
+import 'dashboard_screen.dart';
+
+class VarkQuestion {
+  final String question;
+  final Map<String, String> answers;
+  VarkQuestion({required this.question, required this.answers});
+}
+
+class VarkQuestionnaireScreen extends StatefulWidget {
+  final bool isRetest;
+  const VarkQuestionnaireScreen({super.key, this.isRetest = false});
+
+  @override
+  State<VarkQuestionnaireScreen> createState() => _VarkQuestionnaireScreenState();
+}
+
+class _VarkQuestionnaireScreenState extends State<VarkQuestionnaireScreen> {
+  final List<VarkQuestion> _questions = [
+    VarkQuestion(
+      question: "I need to find the way to a shop that a friend has recommended. I would:",
+      answers: {'Visual': "use a map.", 'Auditory': "ask my friend to tell me the directions.", 'Read/Write': "write down the street directions.", 'Kinesthetic': "find the shop by walking or riding there."}
+    ),
+    VarkQuestion(
+      question: "A website has a video showing how to make a special graph or chart. I would learn most from:",
+      answers: {'Visual': "seeing the diagrams.", 'Auditory': "listening to the speaker.", 'Read/Write': "reading the words.", 'Kinesthetic': "watching the actions."}
+    ),
+    VarkQuestion(
+      question: "I want to find out more about a new tour that I am going on. I would:",
+      answers: {'Visual': "look at details about the highlights on the map.", 'Auditory': "talk with the person who planned the tour.", 'Read/Write': "read about the tour on the itinerary.", 'Kinesthetic': "look at pictures and real-life experiences."}
+    ),
+    VarkQuestion(
+      question: "When choosing a career or area of study, these are important for me:",
+      answers: {'Visual': "Working with designs, maps or charts.", 'Auditory': "Communicating with others through discussion.", 'Read/Write': "Using words well in written reports.", 'Kinesthetic': "Applying my knowledge in real situations."}
+    ),
+    VarkQuestion(
+      question: "When I am learning I:",
+      answers: {'Visual': "see patterns in things.", 'Auditory': "listen to experts.", 'Read/Write': "read books, articles and handouts.", 'Kinesthetic': "use examples and applications."}
+    ),
+    VarkQuestion(
+      question: "I want to learn how to play a new board game or card game. I would:",
+      answers: {'Visual': "use the diagrams that explain the moves.", 'Auditory': "listen to someone explaining it.", 'Read/Write': "read the instructions.", 'Kinesthetic': "play it to learn it."}
+    ),
+    VarkQuestion(
+      question: "I have a problem with my heart. I would prefer that the doctor:",
+      answers: {'Visual': "showed me a diagram.", 'Auditory': "described what was wrong.", 'Read/Write': "gave me a pamphlet.", 'Kinesthetic': "used a plastic model to show me."}
+    ),
+    VarkQuestion(
+      question: "I want to learn to do something new on a computer. I would:",
+      answers: {'Visual': "follow the diagrams in a book.", 'Auditory': "talk with people who know the program.", 'Read/Write': "read the written instructions.", 'Kinesthetic': "start using it and learn by trial and error."}
+    ),
+    VarkQuestion(
+      question: "When I learn from a website I like:",
+      answers: {'Visual': "designs and points that I can see.", 'Auditory': "audio channels where I can hear music or speakers.", 'Read/Write': "interesting written descriptions.", 'Kinesthetic': "videos showing how to do things."}
+    ),
+    VarkQuestion(
+      question: "I prefer a presenter or a teacher who uses:",
+      answers: {'Visual': "diagrams, charts or graphs.", 'Auditory': "question and answer or group discussion.", 'Read/Write': "handouts, books, or readings.", 'Kinesthetic': "demonstrations or models."}
+    ),
+    VarkQuestion(
+      question: "I remember more from a movie when I:",
+      answers: {'Visual': "see the scenery and costumes.", 'Auditory': "listen to the music and dialogue.", 'Read/Write': "read the reviews and subtitles.", 'Kinesthetic': "feel the emotions and actions."}
+    ),
+    VarkQuestion(
+      question: "I need to learn how to take a photo with my new digital camera. I would:",
+      answers: {'Visual': "look at diagrams showing how to use it.", 'Auditory': "ask someone questions about it.", 'Read/Write': "read the printed instructions.", 'Kinesthetic': "take photos and see how they look."}
+    ),
+    VarkQuestion(
+      question: "I prefer a website that has things I can:",
+      answers: {'Visual': "see.", 'Auditory': "hear.", 'Read/Write': "read.", 'Kinesthetic': "do."}
+    ),
+    VarkQuestion(
+      question: "I have to make a brilliant speech at a special occasion. I would:",
+      answers: {'Visual': "make diagrams or models.", 'Auditory': "practice saying the words over and over.", 'Read/Write': "write out my speech and learn it by reading.", 'Kinesthetic': "gather many examples and stories."}
+    ),
+    VarkQuestion(
+      question: "I am going to buy a digital camera or mobile phone. I would be influenced by:",
+      answers: {'Visual': "it looks modern and has a good design.", 'Auditory': "the salesperson telling me about it.", 'Read/Write': "reading the details about its features.", 'Kinesthetic': "trying or testing it."}
+    ),
+    VarkQuestion(
+      question: "I want to save more money and to decide between a range of options. I would:",
+      answers: {'Visual': "use graphs showing different options.", 'Auditory': "talk with an expert about the options.", 'Read/Write': "read a print brochure describing the options.", 'Kinesthetic': "consider examples of each option."}
+    ),
+  ];
+
+  final Map<int, String> _selectedAnswers = {};
+  bool _isProcessing = false;
+
+  Future<void> _submitQuiz() async {
+    // Validate that all questions are answered
+    if (_selectedAnswers.length < _questions.length) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please answer all 16 questions before submitting.')),
+      );
+      return;
+    }
+
+    setState(() => _isProcessing = true);
+
+    try {
+      // 1. Tally the scores
+      int visual = 0, auditory = 0, readWrite = 0, kinesthetic = 0;
+      for (var answer in _selectedAnswers.values) {
+        switch (answer) {
+          case 'Visual':
+            visual++;
+          case 'Auditory':
+            auditory++;
+          case 'Read/Write':
+            readWrite++;
+          case 'Kinesthetic':
+            kinesthetic++;
+        }
+      }
+
+      final List<int> rawScores = [visual, auditory, readWrite, kinesthetic];
+
+      // 2. API Classification (Talking to your Python AI)
+      final Map<String, dynamic> aiResult = await ApiService.classifyVark(rawScores);
+      final String formattedStyle = aiResult['formatted_style'] ?? 'Unknown';
+
+      // 3. Save to Supabase Profiles Table
+      final user = Supabase.instance.client.auth.currentUser;
+      if (user == null) throw Exception("User not authenticated");
+
+      await Supabase.instance.client.from('profiles').upsert({
+        'id': user.id,
+        'vark_scores': {
+          'Visual': visual,
+          'Auditory': auditory,
+          'Read/Write': readWrite,
+          'Kinesthetic': kinesthetic,
+        },
+        'primary_vark_style': formattedStyle,
+      });
+
+      // 4. Navigation
+      if (mounted) {
+        if (widget.isRetest) {
+          Navigator.pop(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Profile updated to $formattedStyle!')),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const DashboardScreen()),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: $e')));
+      }
+    } finally {
+      if (mounted) setState(() => _isProcessing = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.isRetest ? 'Retest VARK Profile' : 'Discover Your Learning Style'),
+      ),
+      body: _isProcessing
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: _questions.length + 1,
+              itemBuilder: (context, index) {
+                if (index == _questions.length) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 24),
+                    child: ElevatedButton(
+                      onPressed: _submitQuiz,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 50),
+                      ),
+                      child: const Text('Submit & Generate Profile'),
+                    ),
+                  );
+                }
+
+                final q = _questions[index];
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("${index + 1}. ${q.question}", 
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 8),
+                        ...q.answers.entries.map((entry) {
+                          return RadioListTile<String>(
+                            title: Text(entry.value),
+                            value: entry.key,
+                            groupValue: _selectedAnswers[index],
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedAnswers[index] = value!;
+                              });
+                            },
+                          );
+                        }),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+    );
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\presentation\adaptive_content\adaptive_note_container.dart -----
+import 'package:adaptivise_prototype/core/api_service.dart';
+import 'package:adaptivise_prototype/core/note_utils.dart';
+import 'package:adaptivise_prototype/logic/profile_cubit.dart';
+import 'package:adaptivise_prototype/presentation/adaptive_content/auditory_player_screen.dart';
+import 'package:adaptivise_prototype/presentation/adaptive_content/kinesthetic_quiz_screen.dart';
+import 'package:adaptivise_prototype/presentation/adaptive_content/readwrite_summary_screen.dart';
+import 'package:adaptivise_prototype/presentation/profile_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class AdaptiveNoteContainer extends StatelessWidget {
+  final Map<String, dynamic> note;
+  final String initialStyle;
+
+  const AdaptiveNoteContainer({
+    super.key,
+    required this.note,
+    required this.initialStyle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, profileState) {
+        final allowed = profileState is ProfileLoaded
+            ? context.read<ProfileCubit>().allowedModes()
+            : _fallbackAllowed(initialStyle);
+        final activeMode = profileState is ProfileLoaded
+            ? context.read<ProfileCubit>().defaultMode()
+            : _fallbackMode(initialStyle);
+
+        final summary = formatSummaryForDisplay(
+          note['summary']?.toString() ?? 'No summary available.',
+        );
+        final title = note['file_name']?.toString() ?? 'Adaptive Note';
+        final quiz = parseQuizContent(note['quiz_content']);
+        final rawText = note['raw_text']?.toString() ?? '';
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+                fontSize: 18,
+              ),
+            ),
+            backgroundColor: Colors.white,
+            elevation: 0,
+            iconTheme: const IconThemeData(color: Colors.black),
+            actions: [
+              IconButton(
+                tooltip: 'Change learning style',
+                icon: const Icon(Icons.tune, color: Colors.black87),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                  );
+                },
+              ),
+            ],
+          ),
+          body: _LockedModeView(
+            activeMode: activeMode,
+            allowedModes: allowed,
+            readWrite: SummaryModeScreen(summary: summary),
+            auditory: AuditoryPlayerScreen(title: title, summary: summary),
+            kinesthetic: KinestheticQuizScreen(
+              quizData: quiz,
+              rawText: rawText,
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  List<String> _fallbackAllowed(String style) {
+    final lower = style.toLowerCase();
+    if (lower.contains('kinesthetic')) return ['kinesthetic'];
+    if (lower.contains('auditory')) return ['auditory'];
+    return ['readwrite'];
+  }
+
+  String _fallbackMode(String style) {
+    final lower = style.toLowerCase();
+    if (lower.contains('kinesthetic')) return 'kinesthetic';
+    if (lower.contains('auditory')) return 'auditory';
+    return 'readwrite';
+  }
+}
+
+class _LockedModeView extends StatelessWidget {
+  final String activeMode;
+  final List<String> allowedModes;
+  final Widget readWrite;
+  final Widget auditory;
+  final Widget kinesthetic;
+
+  const _LockedModeView({
+    required this.activeMode,
+    required this.allowedModes,
+    required this.readWrite,
+    required this.auditory,
+    required this.kinesthetic,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (!allowedModes.contains(activeMode)) {
+      return _LockedPanel(
+        message:
+            'Your current learning style does not include this mode. Retake the VARK assessment in Profile to change it.',
+      );
+    }
+
+    return Column(
+      children: [
+        _ModeBanner(mode: activeMode),
+        Expanded(
+          child: switch (activeMode) {
+            'auditory' => auditory,
+            'kinesthetic' => kinesthetic,
+            _ => readWrite,
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class _ModeBanner extends StatelessWidget {
+  final String mode;
+
+  const _ModeBanner({required this.mode});
+
+  @override
+  Widget build(BuildContext context) {
+    final label = switch (mode) {
+      'auditory' => 'Auditory Mode',
+      'kinesthetic' => 'Kinesthetic Mode',
+      _ => 'Read/Write Mode',
+    };
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      color: const Color(0xFF00695C).withValues(alpha: 0.08),
+      child: Row(
+        children: [
+          Icon(
+            switch (mode) {
+              'auditory' => Icons.headphones,
+              'kinesthetic' => Icons.gamepad,
+              _ => Icons.article,
+            },
+            color: const Color(0xFF00695C),
+          ),
+          const SizedBox(width: 10),
+          Text(
+            label,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF00695C),
+            ),
+          ),
+          const Spacer(),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const ProfileScreen()),
+              );
+            },
+            child: const Text('Change style'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LockedPanel extends StatelessWidget {
+  final String message;
+
+  const _LockedPanel({required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.lock_outline, size: 64, color: Colors.grey[400]),
+            const SizedBox(height: 16),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 16, height: 1.5),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ProfileScreen()),
+                );
+              },
+              child: const Text('Go to Profile'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\presentation\adaptive_content\auditory_player_screen.dart -----
+import 'package:adaptivise_prototype/core/app_theme.dart';
+import 'package:adaptivise_prototype/logic/auditory_cubit.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class AuditoryPlayerScreen extends StatelessWidget {
+  final String title;
+  final String summary;
+
+  const AuditoryPlayerScreen({
+    super.key,
+    required this.title,
+    required this.summary,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => AuditoryCubit()..init(title: title, text: summary),
+      child: const _AuditoryPlayerBody(),
+    );
+  }
+}
+
+class _AuditoryPlayerBody extends StatelessWidget {
+  const _AuditoryPlayerBody();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AuditoryCubit, AuditoryState>(
+      builder: (context, state) {
+        if (state is! AuditoryReady) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        final repeatLabel = switch (state.repeatMode) {
+          AuditoryRepeatMode.off => 'OFF',
+          AuditoryRepeatMode.one => 'ONE',
+          AuditoryRepeatMode.all => 'ALL',
+        };
+
+        return Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                AppColors.Auditory.withValues(alpha: 0.15),
+                Colors.white,
+              ],
+            ),
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                children: [
+                  const SizedBox(height: 12),
+                  Container(
+                    width: double.infinity,
+                    height: 220,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(24),
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.Auditory,
+                          AppColors.Auditory.withValues(alpha: 0.7),
+                        ],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.Auditory.withValues(alpha: 0.35),
+                          blurRadius: 24,
+                          offset: const Offset(0, 12),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.headphones, size: 72, color: Colors.white),
+                        const SizedBox(height: 16),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Text(
+                            state.title,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 28),
+                  Text(
+                    'Segment ${state.currentIndex + 1} of ${state.segments.length}',
+                    style: TextStyle(color: Colors.grey[600], fontSize: 13),
+                  ),
+                  const SizedBox(height: 8),
+                  Slider(
+                    value: state.progress.clamp(0.0, 1.0),
+                    onChanged: null,
+                    activeColor: AppColors.Auditory,
+                  ),
+                  const SizedBox(height: 12),
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.05),
+                            blurRadius: 12,
+                          ),
+                        ],
+                      ),
+                      child: SingleChildScrollView(
+                        child: Text(
+                          state.currentText,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            height: 1.6,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _ControlButton(
+                        icon: Icons.repeat,
+                        label: repeatLabel,
+                        active: state.repeatMode != AuditoryRepeatMode.off,
+                        onTap: () => context.read<AuditoryCubit>().toggleRepeat(),
+                      ),
+                      const SizedBox(width: 12),
+                      _ControlButton(
+                        icon: Icons.replay_10,
+                        label: 'Back',
+                        onTap: () => context.read<AuditoryCubit>().rewind(),
+                      ),
+                      const SizedBox(width: 12),
+                      _PlayButton(state: state),
+                      const SizedBox(width: 12),
+                      _ControlButton(
+                        icon: Icons.forward_10,
+                        label: 'Skip',
+                        onTap: () => context.read<AuditoryCubit>().fastForward(),
+                      ),
+                      const SizedBox(width: 12),
+                      _ControlButton(
+                        icon: Icons.stop_circle_outlined,
+                        label: 'Stop',
+                        onTap: () => context.read<AuditoryCubit>().stop(),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _PlayButton extends StatelessWidget {
+  final AuditoryReady state;
+
+  const _PlayButton({required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<AuditoryCubit>();
+    final isActive = state.isPlaying;
+
+    return GestureDetector(
+      onTap: () {
+        if (isActive) {
+          cubit.pause();
+        } else {
+          cubit.play();
+        }
+      },
+      child: Container(
+        width: 72,
+        height: 72,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppColors.Auditory,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.Auditory.withValues(alpha: 0.4),
+              blurRadius: 16,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Icon(
+          isActive ? Icons.pause : Icons.play_arrow,
+          color: Colors.white,
+          size: 40,
+        ),
+      ),
+    );
+  }
+}
+
+class _ControlButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final bool active;
+
+  const _ControlButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    this.active = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 22,
+            backgroundColor: active
+                ? AppColors.Auditory.withValues(alpha: 0.2)
+                : Colors.grey[100],
+            child: Icon(
+              icon,
+              color: active ? AppColors.Auditory : Colors.black87,
+              size: 22,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(label, style: const TextStyle(fontSize: 10, color: Colors.grey)),
+        ],
+      ),
+    );
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\presentation\adaptive_content\kinesthetic_quiz_screen.dart -----
+import 'package:adaptivise_prototype/core/api_service.dart';
+import 'package:adaptivise_prototype/core/note_utils.dart';
+import 'package:flutter/material.dart';
+
+class KinestheticQuizScreen extends StatefulWidget {
+  final List<Map<String, dynamic>> quizData;
+  final String rawText;
+
+  const KinestheticQuizScreen({
+    super.key,
+    required this.quizData,
+    this.rawText = '',
+  });
+
+  @override
+  State<KinestheticQuizScreen> createState() => _KinestheticQuizScreenState();
+}
+
+class _KinestheticQuizScreenState extends State<KinestheticQuizScreen> {
+  late List<Map<String, dynamic>> _quiz;
+  int currentIndex = 0;
+  String? selectedAnswer;
+  bool hasChecked = false;
+  bool _isRegenerating = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _quiz = List<Map<String, dynamic>>.from(widget.quizData);
+  }
+
+  Future<void> _regenerateQuiz() async {
+    if (widget.rawText.trim().isEmpty) return;
+    setState(() => _isRegenerating = true);
+    try {
+      final generated = await ApiService.generateQuiz(widget.rawText);
+      final parsed = parseQuizContent(generated);
+      if (parsed.isNotEmpty && mounted) {
+        setState(() {
+          _quiz = parsed;
+          currentIndex = 0;
+          selectedAnswer = null;
+          hasChecked = false;
+        });
+      }
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not regenerate quiz: $error')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isRegenerating = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_isRegenerating) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (_quiz.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.quiz_outlined, size: 64, color: Colors.grey),
+              const SizedBox(height: 16),
+              const Text(
+                'No quiz available yet.',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Generate practice questions from your note content.',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              if (widget.rawText.trim().isNotEmpty)
+                ElevatedButton.icon(
+                  onPressed: _regenerateQuiz,
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Generate Quiz'),
+                ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final currentQ = _quiz[currentIndex];
+    final options = (currentQ['options'] as List).map((o) => o.toString()).toList();
+    final correctAnswer = currentQ['answer'].toString().trim();
+
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            LinearProgressIndicator(
+              value: (currentIndex + 1) / _quiz.length,
+              backgroundColor: Colors.grey[200],
+              valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF00695C)),
+            ),
+            const SizedBox(height: 30),
+            Text(
+              currentQ['question'] ?? 'No Question Found',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 24),
+            ...options.map((optionText) {
+              final isCorrect = optionText.trim() == correctAnswer;
+              final isSelected = selectedAnswer == optionText;
+
+              Color tileColor = Colors.grey[100]!;
+              Color borderColor = Colors.transparent;
+
+              if (hasChecked) {
+                if (isCorrect) {
+                  tileColor = Colors.green[100]!;
+                  borderColor = Colors.green;
+                } else if (isSelected) {
+                  tileColor = Colors.red[100]!;
+                  borderColor = Colors.red;
+                }
+              }
+
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                margin: const EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  color: tileColor,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: isSelected && !hasChecked
+                        ? const Color(0xFF00695C)
+                        : borderColor,
+                    width: 2,
+                  ),
+                ),
+                child: RadioListTile<String>(
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  title: Text(
+                    optionText,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black87,
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.normal,
+                    ),
+                  ),
+                  value: optionText,
+                  groupValue: selectedAnswer,
+                  onChanged: hasChecked
+                      ? null
+                      : (val) => setState(() => selectedAnswer = val),
+                  activeColor: const Color(0xFF00695C),
+                ),
+              );
+            }),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 55),
+                backgroundColor: const Color(0xFF00695C),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              onPressed: selectedAnswer == null
+                  ? null
+                  : () {
+                      if (!hasChecked) {
+                        setState(() => hasChecked = true);
+                      } else if (currentIndex < _quiz.length - 1) {
+                        setState(() {
+                          currentIndex++;
+                          selectedAnswer = null;
+                          hasChecked = false;
+                        });
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Quiz complete!')),
+                        );
+                      }
+                    },
+              child: Text(
+                !hasChecked
+                    ? 'Check Answer'
+                    : (currentIndex < _quiz.length - 1
+                        ? 'Next Question'
+                        : 'Finish Quiz'),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\presentation\adaptive_content\readwrite_summary_screen.dart -----
+import 'package:adaptivise_prototype/core/app_theme.dart';
+import 'package:adaptivise_prototype/core/note_utils.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+
+class SummaryModeScreen extends StatelessWidget {
+  final String summary;
+
+  const SummaryModeScreen({super.key, required this.summary});
+
+  @override
+  Widget build(BuildContext context) {
+    final formatted = formatSummaryForDisplay(summary);
+
+    return Container(
+      color: AppColors.background,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 10,
+              ),
+            ],
+          ),
+          child: MarkdownBody(
+            data: formatted,
+            selectable: true,
+            styleSheet: MarkdownStyleSheet(
+              h1: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                height: 1.3,
+              ),
+              h2: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                height: 1.3,
+              ),
+              p: const TextStyle(
+                fontSize: 16,
+                height: 1.6,
+                color: Colors.black87,
+              ),
+              listBullet: const TextStyle(fontSize: 16, color: Colors.teal),
+              strong: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF00695C),
+              ),
+              blockSpacing: 12,
+              listIndent: 24,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\presentation\auth\auth_gate.dart -----
+import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import '../dashboard_screen.dart';
+import '../vark_questionnaire_screen.dart';
+
+class AuthGate extends StatefulWidget {
+  const AuthGate({super.key});
+
+  @override
+  State<AuthGate> createState() => _AuthGateState();
+}
+
+class _AuthGateState extends State<AuthGate> {
+  @override
+  void initState() {
+    super.initState();
+    _checkVarkProfile();
+  }
+
+  Future<void> _checkVarkProfile() async {
+    try {
+      final user = Supabase.instance.client.auth.currentUser;
+      if (user == null) {
+        // Not logged in? Go back to login screen.
+        return; 
+      }
+
+      // Fetch the user's profile row
+      final response = await Supabase.instance.client
+          .from('profiles')
+          .select('primary_vark_style')
+          .eq('id', user.id)
+          .single();
+
+      if (mounted) {
+        // If they don't have a VARK style yet, force them to take the quiz
+        if (response['primary_vark_style'] == null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const VarkQuestionnaireScreen()),
+          );
+        } else {
+          // They already took the quiz! Send them to the dashboard.
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const DashboardScreen()),
+          );
+        }
+      }
+    } catch (e) {
+      debugPrint("Error checking profile: $e");
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(), // Shows briefly while checking database
+      ),
+    );
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\presentation\auth\login_screen.dart -----
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../logic/auth_cubit.dart';
+
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _email = TextEditingController();
+  final _pass = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: BlocConsumer<AuthCubit, AuthState>(
+            listener: (context, state) {
+              if (state is AuthError) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+              }
+            },
+            builder: (context, state) {
+              if (state is AuthLoading) return const Center(child: CircularProgressIndicator());
+              
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Adaptivise", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 40),
+                  TextField(controller: _email, decoration: const InputDecoration(labelText: 'Email', border: OutlineInputBorder())),
+                  const SizedBox(height: 16),
+                  TextField(controller: _pass, obscureText: true, decoration: const InputDecoration(labelText: 'Password', border: OutlineInputBorder())),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () => context.read<AuthCubit>().login(_email.text.trim(), _pass.text.trim()),
+                    child: const Text('Login'),
+                  ),
+                  TextButton(
+                    onPressed: () => context.read<AuthCubit>().signUp(_email.text.trim(), _pass.text.trim()),
+                    child: const Text("Don't have an account? Sign Up"),
+                  )
+                ],
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\presentation\vark\vark_stepper_screen.dart -----
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../logic/vark_cubit.dart';
+import '../main_navigation_screen.dart';
+
+class VarkStepperScreen extends StatefulWidget {
+  const VarkStepperScreen({super.key});
+  @override
+  State<VarkStepperScreen> createState() => _VarkStepperScreenState();
+}
+
+class _VarkStepperScreenState extends State<VarkStepperScreen> {
+  int _currentStep = 0;
+  final Map<String, int> _scores = {'Visual': 0, 'A': 0, 'R': 0, 'K': 0};
+  
+  // Example data (expand to 16 in production)
+  final List<Map<String, dynamic>> _questions = [
+    {'q': 'You are planning a holiday...', 'opts': [{'t': 'Visual', 'x': 'Draw map'}, {'t': 'A', 'x': 'Discuss'}]}
+  ];
+
+  void _submit() {
+    context.read<VarkCubit>().processVarkScores(_scores);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Diagnostic Profiling')),
+      body: BlocConsumer<VarkCubit, VarkState>(
+        listener: (context, state) {
+          if (state is VarkSuccess) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const MainNavigationScreen()));
+            });
+          } else if (state is VarkError) {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+          }
+        },
+        builder: (context, state) {
+          if (state is VarkLoading) {
+            return const Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [CircularProgressIndicator(), SizedBox(height: 16), Text("AI Clustering in progress...")]));
+          }
+          return Stepper(
+            type: StepperType.horizontal,
+            currentStep: _currentStep,
+            onStepContinue: () {
+              if (_currentStep < _questions.length - 1) {
+                setState(() => _currentStep++);
+              } else {
+                _submit();
+              }
+            },
+            steps: _questions.map((q) => Step(
+              title: const Text(""),
+              content: Text(q['q'] as String), // Implement radio buttons here like in your prototype
+            )).toList(),
+          );
+        },
+      ),
+    );
+  }
+}
+
+----- C:\Users\syarif\project\adaptivise\adaptivise_app\lib\presentation\widgets\adapt_notes_sheet.dart -----
+import 'dart:io';
+
+import 'package:adaptivise_prototype/logic/folders_cubit.dart';
+import 'package:adaptivise_prototype/logic/notes_cubit.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+enum AdaptSource { pdf, docx, html, pptx }
+
+Future<void> showAdaptNotesFlow(BuildContext context) async {
+  final foldersState = context.read<FoldersCubit>().state;
+  final folders = switch (foldersState) {
+    FoldersLoaded(:final folders) => folders,
+    FoldersActionSuccess(:final folders) => folders,
+    _ => <Map<String, dynamic>>[],
+  };
+
+  if (folders.isEmpty) {
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Create a subject first using the drawer.')),
+    );
+    return;
+  }
+
+  final notesState = context.read<NotesCubit>().state;
+  String? folderId = notesState is NotesLoaded
+      ? notesState.selectedFolderId
+      : notesState is NotesActionMessage
+          ? notesState.selectedFolderId
+          : null;
+
+  if (folderId == null) {
+    folderId = await _pickSubject(context, folders);
+    if (folderId == null) return;
+  }
+
+  if (!context.mounted) return;
+  final source = await showModalBottomSheet<AdaptSource>(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (ctx) => SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Adapt Notes From',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            _sourceTile(ctx, AdaptSource.pdf, Icons.picture_as_pdf, 'PDF', 'Upload a .pdf file'),
+            _sourceTile(ctx, AdaptSource.docx, Icons.description, 'Word Document', 'Upload a .docx file'),
+            _sourceTile(ctx, AdaptSource.pptx, Icons.slideshow, 'PowerPoint', 'Upload a .pptx file'),
+            _sourceTile(ctx, AdaptSource.html, Icons.language, 'Web Page', 'Paste a web link (HTML)'),
+          ],
+        ),
+      ),
+    ),
+  );
+
+  if (source == null || !context.mounted) return;
+
+  switch (source) {
+    case AdaptSource.html:
+      final url = await _promptUrl(context);
+      if (url == null || url.trim().isEmpty) return;
+      if (!context.mounted) return;
+      await context.read<NotesCubit>().uploadFromUrl(url.trim(), folderId);
+    case AdaptSource.pdf:
+      await _pickFile(context, folderId, ['pdf']);
+    case AdaptSource.docx:
+      await _pickFile(context, folderId, ['docx']);
+    case AdaptSource.pptx:
+      await _pickFile(context, folderId, ['pptx']);
+  }
+}
+
+Widget _sourceTile(
+  BuildContext context,
+  AdaptSource source,
+  IconData icon,
+  String title,
+  String subtitle,
+) {
+  return ListTile(
+    leading: CircleAvatar(
+      backgroundColor: Colors.teal.withValues(alpha: 0.12),
+      child: Icon(icon, color: Colors.teal),
+    ),
+    title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
+    subtitle: Text(subtitle),
+    onTap: () => Navigator.pop(context, source),
+  );
+}
+
+Future<String?> _pickSubject(
+  BuildContext context,
+  List<Map<String, dynamic>> folders,
+) async {
+  return showDialog<String>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: const Text('Choose Subject'),
+      content: SizedBox(
+        width: double.maxFinite,
+        child: ListView(
+          shrinkWrap: true,
+          children: folders
+              .map(
+                (folder) => ListTile(
+                  leading: const Icon(Icons.folder, color: Colors.teal),
+                  title: Text(folder['name']?.toString() ?? 'Subject'),
+                  onTap: () => Navigator.pop(ctx, folder['id'].toString()),
+                ),
+              )
+              .toList(),
+        ),
+      ),
+    ),
+  );
+}
+
+Future<String?> _promptUrl(BuildContext context) async {
+  final controller = TextEditingController();
+  return showDialog<String>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: const Text('Paste Web Link'),
+      content: TextField(
+        controller: controller,
+        autofocus: true,
+        decoration: const InputDecoration(
+          hintText: 'https://example.com/article',
+          border: OutlineInputBorder(),
+        ),
+        keyboardType: TextInputType.url,
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+        TextButton(
+          onPressed: () => Navigator.pop(ctx, controller.text),
+          child: const Text('Adapt'),
+        ),
+      ],
+    ),
+  );
+}
+
+Future<void> _pickFile(
+  BuildContext context,
+  String folderId,
+  List<String> extensions,
+) async {
+  final result = await FilePicker.platform.pickFiles(
+    type: FileType.custom,
+    allowedExtensions: extensions,
+  );
+
+  if (result == null || result.files.single.path == null) return;
+  if (!context.mounted) return;
+
+  await context.read<NotesCubit>().uploadFromFile(
+        File(result.files.single.path!),
+        result.files.single.name,
+        folderId,
+      );
+}
+

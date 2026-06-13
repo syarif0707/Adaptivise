@@ -23,6 +23,9 @@ class _KinestheticQuizScreenState extends State<KinestheticQuizScreen> {
   bool hasChecked = false;
   bool _isRegenerating = false;
 
+  int score = 0;
+  bool isFinished = false;
+
   @override
   void initState() {
     super.initState();
@@ -91,6 +94,8 @@ class _KinestheticQuizScreenState extends State<KinestheticQuizScreen> {
       );
     }
 
+    if (isFinished) return _buildScoreScreen();
+
     final currentQ = _quiz[currentIndex];
     final options = (currentQ['options'] as List).map((o) => o.toString()).toList();
     final correctAnswer = currentQ['answer'].toString().trim();
@@ -101,16 +106,23 @@ class _KinestheticQuizScreenState extends State<KinestheticQuizScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            LinearProgressIndicator(
-              value: (currentIndex + 1) / _quiz.length,
-              backgroundColor: Colors.grey[200],
-              valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF00695C)),
+            Row(
+              children: [
+                Expanded(
+                  child: LinearProgressIndicator(
+                    value: (currentIndex + 1) / _quiz.length,
+                    backgroundColor: Colors.grey[200],
+                    valueColor: const AlwaysStoppedAnimation<Color>(Color(0xFF00695C)),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Text(
+                  '${currentIndex + 1} of ${_quiz.length}',
+                  style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
+                ),
+              ],
             ),
             const SizedBox(height: 30),
-            Text(
-              currentQ['question'] ?? 'No Question Found',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
             const SizedBox(height: 24),
             ...options.map((optionText) {
               final isCorrect = optionText.trim() == correctAnswer;
@@ -184,6 +196,7 @@ class _KinestheticQuizScreenState extends State<KinestheticQuizScreen> {
                           hasChecked = false;
                         });
                       } else {
+                        setState(() => isFinished = true);
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Quiz complete!')),
                         );
@@ -202,6 +215,62 @@ class _KinestheticQuizScreenState extends State<KinestheticQuizScreen> {
                 ),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget _buildScoreScreen() {
+    double pct = score / _quiz.length;
+    String message;
+    IconData icon;
+    Color color;
+
+    if (pct < 0.5) {
+      message = "You need to try harder!";
+      icon = Icons.sentiment_dissatisfied;
+      color = Colors.orange;
+    } else if (pct < 0.8) {
+      message = "Well done!";
+      icon = Icons.thumb_up;
+      color = Colors.blue;
+    } else {
+      message = "Excellent work!";
+      icon = Icons.emoji_events;
+      color = Colors.amber;
+    }
+
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 80, color: color),
+            const SizedBox(height: 16),
+            Text("Quiz Completed", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.grey[800])),
+            const SizedBox(height: 8),
+            Text(message, style: TextStyle(fontSize: 18, color: color, fontWeight: FontWeight.w600)),
+            const SizedBox(height: 24),
+            Text(
+              "$score / ${_quiz.length}",
+              style: const TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+            ),
+            const Text("Correct Answers", style: TextStyle(color: Colors.grey)),
+            const SizedBox(height: 40),
+            ElevatedButton.icon(
+              onPressed: () {
+                setState(() {
+                  currentIndex = 0;
+                  score = 0;
+                  selectedAnswer = null;
+                  hasChecked = false;
+                  isFinished = false;
+                });
+              },
+              icon: const Icon(Icons.refresh),
+              label: const Text("Retake Quiz"),
+            )
           ],
         ),
       ),

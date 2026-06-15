@@ -11,6 +11,7 @@ import 'logic/study_cubit.dart';
 import 'presentation/auth/login_screen.dart';
 import 'presentation/main_navigation_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'logic/vark_cubit.dart';  // Make sure this path is correct
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,6 +44,7 @@ class AdaptiviseApp extends StatelessWidget {
         BlocProvider(create: (_) => NotesCubit()),
         BlocProvider(create: (_) => ProfileCubit()),
         BlocProvider(create: (_) => SettingsCubit()),
+        BlocProvider(create: (_) => VarkCubit()),
       ],
       child: BlocBuilder<SettingsCubit, double>( // <-- Wrap MaterialApp
         builder: (context, textScale) {

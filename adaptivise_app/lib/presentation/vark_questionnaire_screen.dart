@@ -1,9 +1,9 @@
-import 'package:adaptivise_prototype/logic/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import '../core/api_service.dart';
-import 'dashboard_screen.dart';
+// Import your Cubits and Result Screen
+import '../../logic/profile_cubit.dart';
+import '../../logic/vark_cubit.dart'; // Ensure this path is correct!
+import 'vark_result_screen.dart';     // Ensure this path is correct!
 
 class VarkQuestion {
   final String question;
@@ -23,8 +23,7 @@ class VarkQuestionnaireScreen extends StatefulWidget {
 class _VarkQuestionnaireScreenState extends State<VarkQuestionnaireScreen> {
   final List<VarkQuestion> _questions = [
     VarkQuestion(
-      question:
-          "I need to find the way to a shop that a friend has recommended. I would:",
+      question: "I need to find the way to a shop that a friend has recommended. I would:",
       answers: {
         'Visual': "use a map.",
         'Auditory': "ask my friend to tell me the directions.",
@@ -33,8 +32,7 @@ class _VarkQuestionnaireScreenState extends State<VarkQuestionnaireScreen> {
       },
     ),
     VarkQuestion(
-      question:
-          "A website has a video showing how to make a special graph or chart. I would learn most from:",
+      question: "A website has a video showing how to make a special graph or chart. I would learn most from:",
       answers: {
         'Visual': "seeing the diagrams.",
         'Auditory': "listening to the speaker.",
@@ -43,8 +41,7 @@ class _VarkQuestionnaireScreenState extends State<VarkQuestionnaireScreen> {
       },
     ),
     VarkQuestion(
-      question:
-          "I want to find out more about a new tour that I am going on. I would:",
+      question: "I want to find out more about a new tour that I am going on. I would:",
       answers: {
         'Visual': "look at details about the highlights on the map.",
         'Auditory': "talk with the person who planned the tour.",
@@ -53,8 +50,7 @@ class _VarkQuestionnaireScreenState extends State<VarkQuestionnaireScreen> {
       },
     ),
     VarkQuestion(
-      question:
-          "When choosing a career or area of study, these are important for me:",
+      question: "When choosing a career or area of study, these are important for me:",
       answers: {
         'Visual': "Working with designs, maps or charts.",
         'Auditory': "Communicating with others through discussion.",
@@ -72,8 +68,7 @@ class _VarkQuestionnaireScreenState extends State<VarkQuestionnaireScreen> {
       },
     ),
     VarkQuestion(
-      question:
-          "I want to learn how to play a new board game or card game. I would:",
+      question: "I want to learn how to play a new board game or card game. I would:",
       answers: {
         'Visual': "use the diagrams that explain the moves.",
         'Auditory': "listen to someone explaining it.",
@@ -82,8 +77,7 @@ class _VarkQuestionnaireScreenState extends State<VarkQuestionnaireScreen> {
       },
     ),
     VarkQuestion(
-      question:
-          "I have a problem with my heart. I would prefer that the doctor:",
+      question: "I have a problem with my heart. I would prefer that the doctor:",
       answers: {
         'Visual': "showed me a diagram.",
         'Auditory': "described what was wrong.",
@@ -128,8 +122,7 @@ class _VarkQuestionnaireScreenState extends State<VarkQuestionnaireScreen> {
       },
     ),
     VarkQuestion(
-      question:
-          "I need to learn how to take a photo with my new digital camera. I would:",
+      question: "I need to learn how to take a photo with my new digital camera. I would:",
       answers: {
         'Visual': "look at diagrams showing how to use it.",
         'Auditory': "ask someone questions about it.",
@@ -147,8 +140,7 @@ class _VarkQuestionnaireScreenState extends State<VarkQuestionnaireScreen> {
       },
     ),
     VarkQuestion(
-      question:
-          "I have to make a brilliant speech at a special occasion. I would:",
+      question: "I have to make a brilliant speech at a special occasion. I would:",
       answers: {
         'Visual': "make diagrams or models.",
         'Auditory': "practice saying the words over and over.",
@@ -157,8 +149,7 @@ class _VarkQuestionnaireScreenState extends State<VarkQuestionnaireScreen> {
       },
     ),
     VarkQuestion(
-      question:
-          "I am going to buy a digital camera or mobile phone. I would be influenced by:",
+      question: "I am going to buy a digital camera or mobile phone. I would be influenced by:",
       answers: {
         'Visual': "it looks modern and has a good design.",
         'Auditory': "the salesperson telling me about it.",
@@ -167,8 +158,7 @@ class _VarkQuestionnaireScreenState extends State<VarkQuestionnaireScreen> {
       },
     ),
     VarkQuestion(
-      question:
-          "I want to save more money and to decide between a range of options. I would:",
+      question: "I want to save more money and to decide between a range of options. I would:",
       answers: {
         'Visual': "use graphs showing different options.",
         'Auditory': "talk with an expert about the options.",
@@ -179,85 +169,47 @@ class _VarkQuestionnaireScreenState extends State<VarkQuestionnaireScreen> {
   ];
 
   final Map<int, String> _selectedAnswers = {};
-  bool _isProcessing = false;
 
-  Future<void> _submitQuiz() async {
-    // Validate that all questions are answered
+  void _submitQuiz() {
+    // 1. Validate that all questions are answered
     if (_selectedAnswers.length < _questions.length) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Please answer all 16 questions before submitting.'),
+          backgroundColor: Colors.orange,
         ),
       );
       return;
     }
 
-    setState(() => _isProcessing = true);
-
-    try {
-      // 1. Tally the scores
-      int visual = 0, auditory = 0, readWrite = 0, kinesthetic = 0;
-      for (var answer in _selectedAnswers.values) {
-        switch (answer) {
-          case 'Visual':
-            visual++;
-          case 'Auditory':
-            auditory++;
-          case 'Read/Write':
-            readWrite++;
-          case 'Kinesthetic':
-            kinesthetic++;
-        }
+    // 2. Tally the scores
+    int visual = 0, auditory = 0, readWrite = 0, kinesthetic = 0;
+    for (var answer in _selectedAnswers.values) {
+      switch (answer) {
+        case 'Visual':
+          visual++;
+          break;
+        case 'Auditory':
+          auditory++;
+          break;
+        case 'Read/Write':
+          readWrite++;
+          break;
+        case 'Kinesthetic':
+          kinesthetic++;
+          break;
       }
-
-      final List<int> rawScores = [visual, auditory, readWrite, kinesthetic];
-
-      // 2. API Classification (Talking to your Python AI)
-      final Map<String, dynamic> aiResult = await ApiService.classifyVark(
-        rawScores,
-      );
-      final String formattedStyle = aiResult['formatted_style'] ?? 'Unknown';
-
-      // 3. Save to Supabase Profiles Table
-      final user = Supabase.instance.client.auth.currentUser;
-      if (user == null) throw Exception("User not authenticated");
-
-      await Supabase.instance.client.from('profiles').upsert({
-        'id': user.id,
-        'vark_scores': {
-          'Visual': visual,
-          'Auditory': auditory,
-          'Read/Write': readWrite,
-          'Kinesthetic': kinesthetic,
-        },
-        'primary_vark_style': formattedStyle,
-      });
-
-      // 4. Navigation
-      if (mounted) {
-        context.read<ProfileCubit>().watchProfile();
-
-        if (widget.isRetest) {
-          Navigator.pop(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Profile updated to $formattedStyle!')),
-          );
-        } else {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const DashboardScreen()),
-          );
-        }
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: $e')));
-      }
-    } finally {
-      if (mounted) setState(() => _isProcessing = false);
     }
+
+    // 3. Create the score map requested by VarkCubit
+    final Map<String, int> scores = {
+      'Visual': visual,
+      'Auditory': auditory,
+      'Read/Write': readWrite,
+      'Kinesthetic': kinesthetic,
+    };
+
+    context.read<VarkCubit>().processVarkScores(scores);
   }
 
   @override
@@ -293,59 +245,113 @@ class _VarkQuestionnaireScreenState extends State<VarkQuestionnaireScreen> {
           ),
         ),
       ),
-      body: _isProcessing
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: _questions.length + 1,
-              itemBuilder: (context, index) {
-                if (index == _questions.length) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 24),
-                    child: ElevatedButton(
-                      onPressed: _submitQuiz,
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50),
-                      ),
-                      child: const Text('Submit & Generate Profile'),
-                    ),
-                  );
-                }
+      
+      // Wrap the body in a BlocConsumer to listen to the VarkCubit
+      body: BlocConsumer<VarkCubit, VarkState>(
+        listener: (context, state) {
+          if (state is VarkSuccess) {
+            // Refresh the profile to reflect the new style globally
+            context.read<ProfileCubit>().watchProfile();
 
-                final q = _questions[index];
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${index + 1}. ${q.question}",
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        ...q.answers.entries.map((entry) {
-                          return RadioListTile<String>(
-                            title: Text(entry.value),
-                            value: entry.key,
-                            groupValue: _selectedAnswers[index],
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedAnswers[index] = value!;
-                              });
-                            },
-                          );
-                        }),
-                      ],
+            // Navigate to Result Screen
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => VarkResultScreen(learningStyleResult: state.style),
+              ),
+            );
+          } else if (state is VarkError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          // Show loading UI while Python API processes
+          if (state is VarkLoading) {
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(color: Colors.teal),
+                  SizedBox(height: 16),
+                  Text("Analyzing your learning style...", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                ],
+              ),
+            );
+          }
+
+          // Show Questionnaire
+          return ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: _questions.length + 1,
+            itemBuilder: (context, index) {
+              // The Submit Button at the bottom
+              if (index == _questions.length) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 24),
+                  child: FilledButton(
+                    onPressed: _submitQuiz,
+                    style: FilledButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 54),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
+                    child: const Text('Submit & Discover My Style', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   ),
                 );
-              },
-            ),
+              }
+
+              // The Questions
+              final q = _questions[index];
+              return Card(
+                elevation: 0,
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  side: BorderSide(color: Colors.grey.shade200),
+                ),
+                margin: const EdgeInsets.only(bottom: 16),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${index + 1}. ${q.question}",
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF1F2937)
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      ...q.answers.entries.map((entry) {
+                        return RadioListTile<String>(
+                          title: Text(entry.value, style: const TextStyle(fontSize: 15)),
+                          value: entry.key,
+                          groupValue: _selectedAnswers[index],
+                          activeColor: Colors.teal,
+                          contentPadding: EdgeInsets.zero,
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedAnswers[index] = value!;
+                            });
+                          },
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

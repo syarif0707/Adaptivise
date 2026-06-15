@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
@@ -6,36 +8,87 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 class ApiService {
   // Use a getter so it always checks the latest value from dotenv
   static String get baseUrl => dotenv.env['API_BASE_URL'] ?? 'https://adaptivise-engine-396176311722.us-central1.run.app';
-  static String get processNoteUrl => '$baseUrl/ai/process-note';
-  static String get processUrlUrl => '$baseUrl/ai/process-url';
-  /// Call function for the Python Hybrid Weighted K-Means algorithm
-  static Uri getUrl(String path) {
-  // Ensure the path starts with a / but baseUrl doesn't end with one
-  final cleanBase = baseUrl.replaceAll(RegExp(r'/$'), '');
-  final cleanPath = path.startsWith('/') ? path : '/$path';
-  return Uri.parse('$cleanBase$cleanPath');
-}
+  static Uri get processNoteUrl => getUrl('/ai/process-note');
+  static Uri get processUrlUrl => getUrl('/ai/process-url');
 
-// Then call it like this:
-static Future<Map<String, dynamic>> classifyVark(List<int> scores) async {
-  final response = await http.post(
-    getUrl('/ai/classify-vark'), // Safe concatenation
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'scores': scores}),
-  );
+  static Uri getUrl(String path) {
+    final cleanBase = baseUrl.replaceAll(RegExp(r'/$'), '');
+    final cleanPath = path.startsWith('/') ? path : '/$path';
+    return Uri.parse('$cleanBase$cleanPath');
+  }
+
+  static String _decodeBody(http.Response response) =>
+      utf8.decode(response.bodyBytes, allowMalformed: true);
+
+  static Never _throwApiError(String action, http.Response response) {
+    throw Exception(
+      'Failed to $action: ${response.statusCode} - ${_decodeBody(response)}',
+    );
+  }
+
+  /// Upload a file for text extraction, summarization, and quiz generation.
+  static Future<Map<String, dynamic>> processNote({
+    required File file,
+    required String userId,
+    required String storagePath,
+    required String folderId,
+  }) async {
+    final request = http.MultipartRequest('POST', processNoteUrl)
+      ..fields['user_id'] = userId
+      ..fields['folder_id'] = folderId
+      ..fields['storage_path'] = storagePath
+      ..files.add(await http.MultipartFile.fromPath('file', file.path));
+
+    final streamed = await request.send();
+    final response = await http.Response.fromStream(streamed);
 
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      return jsonDecode(_decodeBody(response)) as Map<String, dynamic>;
+    }
+    _throwApiError('process note', response);
+  }
+
+  /// Fetch and process a web page URL.
+  static Future<Map<String, dynamic>> processUrl({
+    required String url,
+    required String userId,
+    required String storagePath,
+    required String folderId,
+  }) async {
+    final request = http.MultipartRequest('POST', processUrlUrl)
+      ..fields['user_id'] = userId
+      ..fields['folder_id'] = folderId
+      ..fields['url'] = url.trim()
+      ..fields['storage_path'] = storagePath;
+
+    final streamed = await request.send();
+    final response = await http.Response.fromStream(streamed);
+
+    if (response.statusCode == 200) {
+      return jsonDecode(_decodeBody(response)) as Map<String, dynamic>;
+    }
+    _throwApiError('process URL', response);
+  }
+
+  /// Hybrid Weighted K-Means VARK classification.
+  static Future<Map<String, dynamic>> classifyVark(List<int> scores) async {
+    final response = await http.post(
+      getUrl('/ai/classify-vark'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'scores': scores}),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(_decodeBody(response)) as Map<String, dynamic>;
       final styles = data['learning_style'];
       final formatted = data['formatted_style'] ??
           (styles is List ? styles.join(' & ') : styles?.toString() ?? 'Read/Write');
       return {...data, 'formatted_style': formatted};
-    } else {
-      throw Exception('Failed to classify VARK: ${response.statusCode} - ${response.body}');
     }
+    _throwApiError('classify VARK', response);
   }
 
-  /// Call function for the Python TextRank algorithm
+  /// TextRank + BM25 hybrid summarization.
   static Future<Map<String, dynamic>> summarizeText(String extractedText) async {
     final response = await http.post(
       getUrl('/ai/summarize'),
@@ -44,37 +97,98 @@ static Future<Map<String, dynamic>> classifyVark(List<int> scores) async {
     );
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('Failed to generate summary');
+      return jsonDecode(_decodeBody(response)) as Map<String, dynamic>;
     }
+    _throwApiError('generate summary', response);
   }
 
-  /// Gemini is used only to format summaries (title, layout, bullets).
+  /// Formats a raw summary via the backend Gemini endpoint, with client fallbacks.
   static Future<String> formatWithGemini(String rawSummary) async {
-    final apiKey = dotenv.env['GEMINI_API_KEY'];
-    if (apiKey == null) throw Exception('Gemini API Key not found');
+    final trimmed = rawSummary.trim();
+    if (trimmed.isEmpty) return trimmed;
 
-    final modelName = dotenv.env['GEMINI_MODEL'] ?? 'gemini-2.5-flash';
-    final model = GenerativeModel(model: modelName, apiKey: apiKey);
+    try {
+      final response = await http.post(
+        getUrl('/ai/format-summary'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'text': trimmed}),
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(_decodeBody(response)) as Map<String, dynamic>;
+        final formatted = data['formatted_summary']?.toString().trim();
+        if (formatted != null && formatted.isNotEmpty) {
+          return formatted;
+        }
+      }
+    } catch (_) {}
+
+    return _formatWithGeminiClient(trimmed);
+  }
+
+  static Future<String> _formatWithGeminiClient(String rawSummary) async {
+    final apiKey = dotenv.env['GEMINI_API_KEY'];
+    if (apiKey == null || apiKey.isEmpty) {
+      return _localFormatSummary(rawSummary);
+    }
+
+    final models = {
+      dotenv.env['GEMINI_MODEL'],
+      'gemini-2.5-flash',
+      'gemini-2.0-flash-lite',
+      'gemini-2.0-flash',
+    }.whereType<String>().where((m) => m.isNotEmpty);
 
     final prompt = '''
-You are an expert educational editor. Reformat this raw summary for readability using Markdown only.
-Rules:
-1. Add a clear title at the top.
-2. Bold important keywords.
-3. Use justified-style structured for paragraphs, bullet points, or a table only when it genuinely helps.
-4. Do not invent facts beyond the source summary.
+You are an expert educational editor designing content for a mobile app.
+Reformat this raw summary for excellent mobile readability using clean Markdown.
+
+STRICT RULES:
+1. Start with a single # Heading for the main title.
+2. Convert the text into short, highly scannable bullet points.
+3. Add a blank line between every bullet point.
+4. **Bold** 1 or 2 critical keywords per bullet point.
+5. Do not add information that is not in the raw summary.
+6. Output valid Markdown only.
 
 Raw summary:
 $rawSummary
 ''';
 
-    final response = await model.generateContent([Content.text(prompt)]);
-    return response.text ?? rawSummary;
+    for (final modelName in models) {
+      try {
+        final model = GenerativeModel(model: modelName, apiKey: apiKey);
+        final response = await model.generateContent([Content.text(prompt)]);
+        final text = response.text?.trim();
+        if (text != null && text.isNotEmpty) {
+          return text;
+        }
+      } catch (_) {}
+    }
+
+    return _localFormatSummary(rawSummary);
   }
 
-  /// Semantic question generation runs on the Python server (not Gemini).
+  static String _localFormatSummary(String rawSummary) {
+    final sentences = rawSummary
+        .split(RegExp(r'(?<=[.!?])\s+'))
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
+
+    if (sentences.isEmpty) return rawSummary;
+
+    final title = sentences.first.length > 80
+        ? '${sentences.first.substring(0, 77)}...'
+        : sentences.first;
+
+    final buffer = StringBuffer('# $title\n\n');
+    for (final sentence in sentences) {
+      buffer.writeln('- $sentence\n');
+    }
+    return buffer.toString().trim();
+  }
+
+  /// BM25 semantic quiz generation.
   static Future<List<dynamic>> generateQuiz(String extractedText) async {
     final response = await http.post(
       getUrl('/ai/generate-quiz'),
@@ -83,25 +197,9 @@ $rawSummary
     );
 
     if (response.statusCode == 200) {
-      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      final data = jsonDecode(_decodeBody(response)) as Map<String, dynamic>;
       return data['quiz_content'] as List<dynamic>? ?? [];
     }
-    throw Exception('Failed to generate quiz: ${response.statusCode} - ${response.body}');
-  }
-
-  /// Sends the raw scores [Visual, A, R, K] to the AI to get the dominant style
-  static Future<String> classifyVarkDominantStyle(List<int> scores) async {
-    final response = await http.post(
-      getUrl('/ai/classify-vark'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'scores': scores}),
-    );
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return data['learning_style'][0]; // Returns 'Visual', 'A', 'R', or 'K'
-    } else {
-      throw Exception('Failed to classify VARK profile');
-    }
+    _throwApiError('generate quiz', response);
   }
 }

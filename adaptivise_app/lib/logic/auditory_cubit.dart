@@ -94,21 +94,22 @@ class AuditoryCubit extends Cubit<AuditoryState> {
   List<String> _splitIntoSegments(String text) {
     final cleaned = text
         .replaceAll(RegExp(r'https?://[^\s]+'), ' ') // Remove URLs
-        .replaceAll(RegExp(r'[^\w\s.,!?\'"-]'), ' ') // Remove special chars except basic punctuation
+        .replaceAll(RegExp(r'''[^\w\s.,!?'"-]'''), ' ') // Remove special chars except basic punctuation
         .replaceAll(RegExp(r'\s+'), ' ') // Normalize spaces
-        .trim(); 
+        .trim();
 
-    if (cleaned.isEmpty) return ['No content available to listen.'];
-
-    final parts = cleaned
-        .split(RegExp(r'(?<=[.!?])\s+'))
-        .map((s) => s.trim())
-        .where((s) => s.isNotEmpty)
-        .toList();
-
-    if (parts.isEmpty) return [cleaned];
-    return parts;
+  if (cleaned.isEmpty) {
+    return ['No content available to listen.'];
   }
+
+  final parts = cleaned
+      .split(RegExp(r'(?<=[.!?])\s+'))
+      .map((s) => s.trim())
+      .where((s) => s.isNotEmpty)
+      .toList();
+
+  return parts;
+}
 
   Future<void> play() async {
     final current = state;

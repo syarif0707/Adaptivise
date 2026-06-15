@@ -1,13 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:adaptivise_prototype/core/api_service.dart';
 import 'package:adaptivise_prototype/core/note_utils.dart';
 import 'package:adaptivise_prototype/core/pdf_export_service.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 enum NotesFilter { all, recent, favorite }
@@ -221,30 +220,30 @@ class NotesCubit extends Cubit<NotesState> {
   }
 
   Future<void> uploadFromFile(File file, String fileName, String folderId) async {
-    final request = http.MultipartRequest(
-      'POST',
-      Uri.parse(ApiService.processNoteUrl),
-    )
-      ..fields['user_id'] = _supabase.auth.currentUser!.id
-      ..fields['folder_id'] = folderId
-      ..fields['storage_path'] = 'uploads/$fileName'
-      ..files.add(await http.MultipartFile.fromPath('file', file.path));
-
-    await _processAndSave(request, fileName, folderId);
+    await _processAndSave(
+      () => ApiService.processNote(
+        file: file,
+        userId: _supabase.auth.currentUser!.id,
+        storagePath: 'uploads/$fileName',
+        folderId: folderId,
+      ),
+      fileName,
+      folderId,
+    );
   }
 
   Future<void> uploadFromUrl(String url, String folderId) async {
-    final request = http.MultipartRequest(
-      'POST',
-      Uri.parse(ApiService.processUrlUrl),
-    )
-      ..fields['user_id'] = _supabase.auth.currentUser!.id
-      ..fields['folder_id'] = folderId
-      ..fields['url'] = url.trim()
-      ..fields['storage_path'] = 'uploads/web-${DateTime.now().millisecondsSinceEpoch}.html';
-
     final fileName = _fileNameFromUrl(url);
-    await _processAndSave(request, fileName, folderId);
+    await _processAndSave(
+      () => ApiService.processUrl(
+        url: url,
+        userId: _supabase.auth.currentUser!.id,
+        storagePath: 'uploads/web-${DateTime.now().millisecondsSinceEpoch}.html',
+        folderId: folderId,
+      ),
+      fileName,
+      folderId,
+    );
   }
 
   String _fileNameFromUrl(String url) {
@@ -255,7 +254,7 @@ class NotesCubit extends Cubit<NotesState> {
   }
 
   Future<void> _processAndSave(
-    http.MultipartRequest request,
+    Future<Map<String, dynamic>> Function() processRequest,
     String fileName,
     String folderId,
   ) async {
@@ -265,14 +264,7 @@ class NotesCubit extends Cubit<NotesState> {
     _emitLoaded(isUploading: true);
 
     try {
-      final response = await request.send();
-      final respBody = await response.stream.bytesToString();
-
-      if (response.statusCode != 200) {
-        throw Exception('Server Error: ${response.statusCode} - $respBody');
-      }
-
-      final decodedData = jsonDecode(respBody) as Map<String, dynamic>;
+      final decodedData = await processRequest();
       final rawText = decodedData['raw_text']?.toString() ?? '';
       var rawSummary = decodedData['summary']?.toString() ?? '';
       var quizContent = parseQuizContent(decodedData['quiz_content']);
@@ -284,7 +276,9 @@ class NotesCubit extends Cubit<NotesState> {
       if (rawSummary.isNotEmpty) {
         try {
           rawSummary = await ApiService.formatWithGemini(rawSummary);
-        } catch (_) {}
+        } catch (error) {
+          debugPrint('Gemini formatting failed, using raw summary: $error');
+        }
       }
 
       await _supabase.from('lecture_notes').insert({

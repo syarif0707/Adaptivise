@@ -24,7 +24,12 @@ class AnalyticsScreen extends StatelessWidget {
 
           final profile = snapshot.data!.first;
           final scores = Map<String, dynamic>.from(profile['vark_scores'] ?? {});
-          final String style = profile['primary_vark_style'] ?? "Unknown";
+          final rawStyle = profile['primary_vark_style']?.toString() ?? "Unknown";
+          final String style = rawStyle
+              .replaceAll(RegExp(r'\bV\b'), 'Visual')
+              .replaceAll(RegExp(r'\bA\b'), 'Auditory')
+              .replaceAll(RegExp(r'\bR\b'), 'Read/Write')
+              .replaceAll(RegExp(r'\bK\b'), 'Kinesthetic');
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(20),

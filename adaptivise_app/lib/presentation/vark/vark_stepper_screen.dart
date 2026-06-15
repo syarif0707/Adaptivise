@@ -12,10 +12,16 @@ class VarkStepperScreen extends StatefulWidget {
 class _VarkStepperScreenState extends State<VarkStepperScreen> {
   int _currentStep = 0;
   final Map<String, int> _scores = {'Visual': 0, 'A': 0, 'R': 0, 'K': 0};
-  
+
   // Example data (expand to 16 in production)
   final List<Map<String, dynamic>> _questions = [
-    {'q': 'You are planning a holiday...', 'opts': [{'t': 'Visual', 'x': 'Draw map'}, {'t': 'A', 'x': 'Discuss'}]}
+    {
+      'q': 'You are planning a holiday...',
+      'opts': [
+        {'t': 'Visual', 'x': 'Draw map'},
+        {'t': 'A', 'x': 'Discuss'},
+      ],
+    },
   ];
 
   void _submit() {
@@ -30,15 +36,42 @@ class _VarkStepperScreenState extends State<VarkStepperScreen> {
         listener: (context, state) {
           if (state is VarkSuccess) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const MainNavigationScreen()));
+              try {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (_) => const MainNavigationScreen(),
+                  ),
+                );
+              } catch (e) {
+                // If it still errors, it won't crash the app, it will just log it!
+                debugPrint("Navigation Error: $e");
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      'Profile saved, but encountered a display error.',
+                    ),
+                  ),
+                );
+              }
             });
           } else if (state is VarkError) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         builder: (context, state) {
           if (state is VarkLoading) {
-            return const Center(child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [CircularProgressIndicator(), SizedBox(height: 16), Text("AI Clustering in progress...")]));
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 16),
+                  Text("AI Clustering in progress..."),
+                ],
+              ),
+            );
           }
           return Stepper(
             type: StepperType.horizontal,
@@ -50,10 +83,16 @@ class _VarkStepperScreenState extends State<VarkStepperScreen> {
                 _submit();
               }
             },
-            steps: _questions.map((q) => Step(
-              title: const Text(""),
-              content: Text(q['q'] as String), // Implement radio buttons here like in your prototype
-            )).toList(),
+            steps: _questions
+                .map(
+                  (q) => Step(
+                    title: const Text(""),
+                    content: Text(
+                      q['q'] as String,
+                    ), // Implement radio buttons here like in your prototype
+                  ),
+                )
+                .toList(),
           );
         },
       ),

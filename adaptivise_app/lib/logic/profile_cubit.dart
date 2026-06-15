@@ -18,8 +18,28 @@ class ProfileLoaded extends ProfileState {
 
   ProfileLoaded(this.profile);
 
-  String get primaryStyle =>
-      profile['primary_vark_style']?.toString() ?? 'Not Determined';
+  // FIX: Properly expand abbreviations like "A & K" to "Auditory & Kinesthetic"
+  String get primaryStyle {
+    final rawStyle = profile['primary_vark_style']?.toString() ?? 'Not Determined';
+    
+    // Create a translation map
+    const map = {
+      'V': 'Visual',
+      'A': 'Auditory',
+      'R': 'Read/Write',
+      'K': 'Kinesthetic',
+    };
+
+    // If it's a multimodal result like "A & K"
+    if (rawStyle.contains('&')) {
+      final parts = rawStyle.split('&').map((e) => e.trim()).toList();
+      final expandedParts = parts.map((p) => map[p] ?? p).toList();
+      return expandedParts.join(' & ');
+    }
+
+    // If it's a single result like "V"
+    return map[rawStyle] ?? rawStyle;
+  }
 
   Map<String, dynamic> get varkScores =>
       Map<String, dynamic>.from(profile['vark_scores'] ?? {});

@@ -1,0 +1,1 @@
+Machine learning is a subset of artificial intelligence. It enables computers to learn from data without explicit programming. Neural networks are widely used in deep learning applications. Supervised learning uses labeled datasets to train predictive models. Unsupervised learning finds hidden patterns in unlabeled data.

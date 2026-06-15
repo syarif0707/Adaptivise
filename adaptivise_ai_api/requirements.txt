@@ -14,3 +14,4 @@ python-pptx
 nltk
 python-dotenv
 httpx
+transformers

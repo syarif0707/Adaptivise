@@ -22,8 +22,15 @@ class AuditoryPlayerScreen extends StatelessWidget {
   }
 }
 
-class _AuditoryPlayerBody extends StatelessWidget {
+class _AuditoryPlayerBody extends StatefulWidget {
   const _AuditoryPlayerBody();
+
+  @override
+  State<_AuditoryPlayerBody> createState() => _AuditoryPlayerBodyState();
+}
+
+class _AuditoryPlayerBodyState extends State<_AuditoryPlayerBody> {
+  double _currentRate = 0.48;
 
   @override
   Widget build(BuildContext context) {
@@ -111,12 +118,15 @@ class _AuditoryPlayerBody extends StatelessWidget {
                       const Text("Speed", style: TextStyle(color: Colors.grey)),
                       Expanded(
                         child: Slider(
-                          value: context.read<AuditoryCubit>()._currentRate, // Quick access
+                          value: _currentRate,
                           min: 0.2,
                           max: 1.0,
                           divisions: 8,
                           activeColor: AppColors.Auditory,
                           onChanged: (val) {
+                            setState(() {
+                              _currentRate = val;
+                            });
                             context.read<AuditoryCubit>().setSpeechRate(val);
                           },
                         ),

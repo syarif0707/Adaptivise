@@ -1,9 +1,9 @@
+import 'package:adaptivise_prototype/presentation/main_navigation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// Import your Cubits and Result Screen
 import '../../logic/profile_cubit.dart';
-import '../../logic/vark_cubit.dart'; // Ensure this path is correct!
-import 'vark_result_screen.dart';     // Ensure this path is correct!
+import '../../logic/vark_cubit.dart';
+import 'vark_result_screen.dart';
 
 class VarkQuestion {
   final String question;
@@ -250,15 +250,16 @@ class _VarkQuestionnaireScreenState extends State<VarkQuestionnaireScreen> {
       body: BlocConsumer<VarkCubit, VarkState>(
         listener: (context, state) {
           if (state is VarkSuccess) {
-            // Refresh the profile to reflect the new style globally
             context.read<ProfileCubit>().watchProfile();
 
-            // Navigate to Result Screen
-            Navigator.pushReplacement(
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
-                builder: (context) => VarkResultScreen(learningStyleResult: state.style),
+                builder: (context) => VarkResultScreen(
+                  learningStyleResult: state.style,
+                ),
               ),
+              (route) => false,
             );
           } else if (state is VarkError) {
             ScaffoldMessenger.of(context).showSnackBar(

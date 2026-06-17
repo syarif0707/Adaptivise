@@ -18,7 +18,10 @@ List<Map<String, dynamic>> parseQuizContent(dynamic raw) {
   return decoded
       .whereType<Map>()
       .map((item) => Map<String, dynamic>.from(item))
-      .where((item) => (item['question'] ?? '').toString().isNotEmpty)
+      .where(
+        (item) =>
+            (item['question'] ?? item['prompt'] ?? '').toString().isNotEmpty,
+      )
       .map(_normalizeQuizItem)
       .where((item) => (item['options'] as List).isNotEmpty)
       .toList();

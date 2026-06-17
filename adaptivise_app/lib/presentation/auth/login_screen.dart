@@ -1,4 +1,5 @@
-import 'package:adaptivise_prototype/presentation/signup_screen.dart';
+import 'package:adaptivise_prototype/presentation/auth/auth_gate.dart';
+import 'package:adaptivise_prototype/presentation/auth/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../logic/auth_cubit.dart';
@@ -13,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool _googleLoading = false;
 
   @override
   void dispose() {
@@ -27,9 +29,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFB), // Soft, non-glare canvas background
+
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
-          if (state is AuthError) {
+          // 1. ADD THIS IF BLOCK:
+          if (state is Authenticated) { 
+            // SUCCESS! Send them to the Gatekeeper.
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const AuthGate()),
+            );
+          } 
+          // 2. KEEP YOUR EXISTING ERROR BLOCK:
+          else if (state is AuthError) {
+            if (mounted) setState(() => _googleLoading = false);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.message),
@@ -41,6 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         builder: (context, state) {
           final isLoading = state is AuthLoading;
+          final isGoogleBusy = _googleLoading;
 
           return SafeArea(
             child: Center(
@@ -168,9 +182,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     // --- Secondary Action: Google Identity Provider ---
                     if (!isLoading)
                       OutlinedButton(
-                        onPressed: () {
-                          context.read<AuthCubit>().signInWithGoogle();
-                        },
+                        onPressed: isGoogleBusy
+                            ? null
+                            : () async {
+                                setState(() => _googleLoading = true);
+                                await context.read<AuthCubit>().signInWithGoogle();
+                                if (mounted) {
+                                  setState(() => _googleLoading = false);
+                                }
+                              },
                         style: OutlinedButton.styleFrom(
                           backgroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(vertical: 15),
@@ -178,14 +198,21 @@ class _LoginScreenState extends State<LoginScreen> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                           elevation: 0,
                         ),
-                        child: const Row(
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.g_mobiledata_rounded, size: 30, color: Color(0xFF1F2937)),
-                            SizedBox(width: 4),
+                            if (isGoogleBusy)
+                              const SizedBox(
+                                width: 22,
+                                height: 22,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            else
+                              const Icon(Icons.g_mobiledata_rounded, size: 30, color: Color(0xFF1F2937)),
+                            const SizedBox(width: 4),
                             Text(
-                              'Google',
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
+                              isGoogleBusy ? 'Opening Google...' : 'Google',
+                              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600, color: Color(0xFF1F2937)),
                             ),
                           ],
                         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:adaptivise_prototype/presentation/main_navigation_screen.dart';
 
 class VarkResultScreen extends StatelessWidget {
   final String learningStyleResult;
@@ -121,12 +122,13 @@ class VarkResultScreen extends StatelessWidget {
                 // 5. Call to Action to enter the app
                 FilledButton(
                   onPressed: () {
-                    // Navigate the user into the main app dashboard
-                    // Navigator.pushReplacement(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => const MainNavigationScreen()),
-                    // );
-                    Navigator.pop(context); // Adjust based on your routing setup
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MainNavigationScreen(),
+                      ),
+                      (route) => false,
+                    );
                   },
                   style: FilledButton.styleFrom(
                     backgroundColor: theme.colorScheme.primary,

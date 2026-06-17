@@ -1,3 +1,4 @@
+import 'package:adaptivise_prototype/core/note_actions.dart';
 import 'package:adaptivise_prototype/core/app_theme.dart';
 import 'package:adaptivise_prototype/logic/auditory_cubit.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +16,10 @@ class AuditoryPlayerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formattedSummary = formatSummaryForDisplay(summary);
+
     return BlocProvider(
-      create: (_) => AuditoryCubit()..init(title: title, text: summary),
+      create: (_) => AuditoryCubit()..init(title: title, text: formattedSummary),
       child: const _AuditoryPlayerBody(),
     );
   }

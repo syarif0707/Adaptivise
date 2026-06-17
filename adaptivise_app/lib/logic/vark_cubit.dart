@@ -17,10 +17,18 @@ class VarkCubit extends Cubit<VarkState> {
   Future<void> processVarkScores(Map<String, int> scores) async {
     emit(VarkLoading());
     try {
-      // 1. Format scores for Python API [Visual, Auditory, Read/Write, Kinesthetic]
-      final scoreList = [scores['Visual'] ?? 0, scores['Auditory'] ?? 0, scores['Read/Write'] ?? 0, scores['Kinesthetic'] ?? 0];
-      
-      // 2. Call Python Backend (Hybrid Weighted K-Means)
+      final scoreList = [
+        scores['Visual'] ?? scores['V'] ?? 0,
+        scores['Auditory'] ?? scores['A'] ?? 0,
+        scores['Read/Write'] ?? scores['R'] ?? 0,
+        scores['Kinesthetic'] ?? scores['K'] ?? 0,
+      ];
+
+      if (scoreList.every((score) => score == 0)) {
+        emit(VarkError('Please answer the questions before submitting.'));
+        return;
+      }
+
       final result = await ApiService.classifyVark(scoreList);
       final dominantStyle = result['learning_style'][0]; // Gets 'Visual', 'Auditory', 'Read/Write', or 'Kinesthetic'
 

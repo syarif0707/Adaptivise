@@ -66,6 +66,13 @@ Future<void> showAdaptNotesFlow(BuildContext context) async {
 
   if (source == null || !context.mounted) return;
 
+  if (folderId == null || folderId.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Please select a subject before adapting notes.')),
+    );
+    return;
+  }
+
   switch (source) {
     case AdaptSource.html:
       final url = await _promptUrl(context);

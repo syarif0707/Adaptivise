@@ -1,7 +1,8 @@
+import 'package:adaptivise_prototype/presentation/main_navigation_screen.dart';
+import 'package:adaptivise_prototype/presentation/vark_questionnaire_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../dashboard_screen.dart';
-import '../vark_questionnaire_screen.dart';
+import 'login_screen.dart';
 
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
@@ -11,6 +12,8 @@ class AuthGate extends StatefulWidget {
 }
 
 class _AuthGateState extends State<AuthGate> {
+  bool _hasError = false;
+
   @override
   void initState() {
     super.initState();
@@ -20,43 +23,60 @@ class _AuthGateState extends State<AuthGate> {
   Future<void> _checkVarkProfile() async {
     try {
       final user = Supabase.instance.client.auth.currentUser;
+
       if (user == null) {
-        // Not logged in? Go back to login screen.
-        return; 
+        if (mounted) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+            (route) => false,
+          );
+        }
+        return;
       }
 
-      // Fetch the user's profile row
       final response = await Supabase.instance.client
           .from('profiles')
           .select('primary_vark_style')
           .eq('id', user.id)
-          .single();
+          .maybeSingle();
 
-      if (mounted) {
-        // If they don't have a VARK style yet, force them to take the quiz
-        if (response['primary_vark_style'] == null) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const VarkQuestionnaireScreen()),
-          );
-        } else {
-          // They already took the quiz! Send them to the dashboard.
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const DashboardScreen()),
-          );
-        }
+      if (!mounted) return;
+
+      if (response == null || response['primary_vark_style'] == null) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const VarkQuestionnaireScreen(),
+          ),
+          (route) => false,
+        );
+      } else {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MainNavigationScreen(),
+          ),
+          (route) => false,
+        );
       }
     } catch (e) {
-      debugPrint("Error checking profile: $e");
+      debugPrint('Error routing user: $e');
+      if (mounted) {
+        setState(() => _hasError = true);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: CircularProgressIndicator(), // Shows briefly while checking database
+        child: _hasError
+            ? const Text(
+                'Error connecting to database. Please restart the app.',
+              )
+            : const CircularProgressIndicator(),
       ),
     );
   }

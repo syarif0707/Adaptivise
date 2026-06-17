@@ -11,7 +11,12 @@ class VarkStepperScreen extends StatefulWidget {
 
 class _VarkStepperScreenState extends State<VarkStepperScreen> {
   int _currentStep = 0;
-  final Map<String, int> _scores = {'Visual': 0, 'A': 0, 'R': 0, 'K': 0};
+  final Map<String, int> _scores = {
+    'Visual': 0,
+    'Auditory': 0,
+    'Read/Write': 0,
+    'Kinesthetic': 0,
+  };
 
   // Example data (expand to 16 in production)
   final List<Map<String, dynamic>> _questions = [

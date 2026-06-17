@@ -1,29 +1,66 @@
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide AuthState;
 
 abstract class AuthState {}
+
 class AuthInitial extends AuthState {}
+
 class AuthLoading extends AuthState {}
-class Authenticated extends AuthState { 
+
+class Authenticated extends AuthState {
   final User user;
-  Authenticated(this.user); 
+  Authenticated(this.user);
 }
-class AuthError extends AuthState { 
-  final String message; 
-  AuthError(this.message); 
+
+class AuthError extends AuthState {
+  final String message;
+  AuthError(this.message);
 }
 
 class AuthCubit extends Cubit<AuthState> {
-  final _supabase = Supabase.instance.client;
+  AuthCubit() : super(_initialState()) {
+    _authSubscription = _supabase.auth.onAuthStateChange.listen((change) {
+      final user = change.session?.user;
+      if (user != null) {
+        emit(Authenticated(user));
+        return;
+      }
 
-  AuthCubit() : super(AuthInitial());
+      if (change.event == AuthChangeEvent.signedOut ||
+          (change.event == AuthChangeEvent.userUpdated && user == null)) {
+        if (state is AuthLoading) {
+          emit(AuthInitial());
+        }
+      }
+    });
+  }
+
+  final _supabase = Supabase.instance.client;
+  StreamSubscription<dynamic>? _authSubscription;
+
+  static AuthState _initialState() {
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user != null) return Authenticated(user);
+    return AuthInitial();
+  }
+
+  User? _resolveUser(AuthResponse response) =>
+      response.user ?? _supabase.auth.currentUser;
 
   Future<void> login(String email, String password) async {
     emit(AuthLoading());
     try {
-      final response = await _supabase.auth.signInWithPassword(email: email, password: password);
-      if (response.user != null) emit(Authenticated(response.user!));
+      final response = await _supabase.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+      final user = _resolveUser(response);
+      if (user != null) {
+        emit(Authenticated(user));
+      } else {
+        emit(AuthError('Sign in failed. Please check your credentials.'));
+      }
     } catch (e) {
       emit(AuthError(e.toString()));
     }
@@ -32,51 +69,41 @@ class AuthCubit extends Cubit<AuthState> {
   Future<void> signUp(String email, String password) async {
     emit(AuthLoading());
     try {
-      final response = await _supabase.auth.signUp(email: email, password: password);
-      if (response.user != null) emit(Authenticated(response.user!));
+      final response = await _supabase.auth.signUp(
+        email: email,
+        password: password,
+      );
+      final user = _resolveUser(response);
+      if (user != null) {
+        emit(Authenticated(user));
+      } else {
+        emit(AuthError(
+          'Account created. Check your email to confirm before signing in.',
+        ));
+      }
     } catch (e) {
       emit(AuthError(e.toString()));
     }
   }
 
   Future<void> signInWithGoogle() async {
-    emit(AuthLoading());
     try {
-      final googleSignIn = GoogleSignIn.instance;
-
-      await googleSignIn.initialize(
-        serverClientId:
-            '396176311722-bianpt071tfghhnmfgcbe0t96r88sj6a.apps.googleusercontent.com',
+      await _supabase.auth.signInWithOAuth(
+        OAuthProvider.google,
+        redirectTo: 'io.supabase.adaptivise://login-callback/',
       );
-
-      final googleUser = await googleSignIn.authenticate();
-      final idToken = googleUser.authentication.idToken;
-
-      if (idToken == null) {
-        throw 'Missing Google ID Token';
-      }
-
-      final authorization =
-          await googleUser.authorizationClient.authorizationForScopes([]);
-      final accessToken = authorization?.accessToken;
-
-      final AuthResponse response = await _supabase.auth.signInWithIdToken(
-        provider: OAuthProvider.google,
-        idToken: idToken,
-        accessToken: accessToken,
-      );
-
-      if (response.user != null) {
-        emit(Authenticated(response.user!));
-      }
-    } on GoogleSignInException catch (e) {
-      if (e.code == GoogleSignInExceptionCode.canceled) {
-        emit(AuthInitial());
-        return;
-      }
-      emit(AuthError(e.description ?? e.code.name));
     } catch (error) {
       emit(AuthError(error.toString()));
+    } finally {
+      if (state is AuthLoading) {
+        emit(AuthInitial());
+      }
     }
+  }
+
+  @override
+  Future<void> close() {
+    _authSubscription?.cancel();
+    return super.close();
   }
 }

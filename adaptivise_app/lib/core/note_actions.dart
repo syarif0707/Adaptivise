@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:adaptivise_prototype/core/note_utils.dart';
 import 'package:adaptivise_prototype/logic/notes_cubit.dart';
 import 'package:adaptivise_prototype/presentation/adaptive_content/adaptive_note_container.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+export 'note_utils.dart' show parseQuizContent, formatSummaryForDisplay;
 
 class NoteSlidableTile extends StatelessWidget {
   final Map<String, dynamic> note;

@@ -1,5 +1,6 @@
 import 'package:adaptivise_prototype/logic/settings_cubit.dart';
 import 'package:adaptivise_prototype/presentation/analytics_screen.dart';
+import 'package:adaptivise_prototype/presentation/auth/auth_gate.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -89,8 +90,7 @@ class AuthWrapper extends StatelessWidget {
         
         final session = snapshot.data?.session;
         if (session != null) {
-          // User is logged in, go to the Main Shell
-          return const MainNavigationScreen();
+          return AuthGate();
         } else {
           // User needs to log in
           return const LoginScreen();

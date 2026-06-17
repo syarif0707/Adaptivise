@@ -136,17 +136,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _legendItem('Visual', AppColors.Visual),
-                          const SizedBox(width: 15),
-                          _legendItem('Auditory', AppColors.Auditory),
-                          const SizedBox(width: 15),
-                          _legendItem('Read/Write', AppColors.ReadWrite),
-                          const SizedBox(width: 15),
-                          _legendItem('Kinesthetic', AppColors.Kinesthetic),
-                        ],
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _legendItem(
+                              context,
+                              'Visual',
+                              AppColors.Visual,
+                              onTap: () {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Visual content is not supported yet',
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(width: 15),
+                            _legendItem(context, 'Auditory', AppColors.Auditory),
+                            const SizedBox(width: 15),
+                            _legendItem(context, 'Read/Write', AppColors.ReadWrite),
+                            const SizedBox(width: 15),
+                            _legendItem(context, 'Kinesthetic', AppColors.Kinesthetic),
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 20),
                       Expanded(
@@ -219,8 +235,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return 'Complete the VARK questionnaire to receive a detailed analysis.';
   }
 
-  Widget _legendItem(String label, Color color) {
-    return Row(
+  Widget _legendItem(
+    BuildContext context,
+    String label,
+    Color color, {
+    VoidCallback? onTap,
+  }) {
+    final item = Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           width: 12,
@@ -230,6 +252,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
         const SizedBox(width: 4),
         Text(label, style: const TextStyle(fontSize: 11, color: Colors.grey)),
       ],
+    );
+
+    if (onTap == null) return item;
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+        child: item,
+      ),
     );
   }
 

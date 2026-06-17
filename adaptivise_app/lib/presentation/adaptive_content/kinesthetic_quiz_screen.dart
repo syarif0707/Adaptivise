@@ -23,6 +23,16 @@ class _KinestheticQuizScreenState extends State<KinestheticQuizScreen> {
   bool hasChecked = false;
   bool _isRegenerating = false;
 
+  bool _answersMatch(String a, String b) =>
+      a.trim().toLowerCase() == b.trim().toLowerCase();
+
+  void _checkAnswer(String correctAnswer) {
+    if (selectedAnswer != null &&
+        _answersMatch(selectedAnswer!, correctAnswer)) {
+      score++;
+    }
+  }
+
   int score = 0;
   bool isFinished = false;
 
@@ -125,7 +135,7 @@ class _KinestheticQuizScreenState extends State<KinestheticQuizScreen> {
             const SizedBox(height: 30),
             const SizedBox(height: 24),
             ...options.map((optionText) {
-              final isCorrect = optionText.trim() == correctAnswer;
+              final isCorrect = _answersMatch(optionText, correctAnswer);
               final isSelected = selectedAnswer == optionText;
 
               Color tileColor = Colors.grey[100]!;
@@ -188,6 +198,7 @@ class _KinestheticQuizScreenState extends State<KinestheticQuizScreen> {
                   ? null
                   : () {
                       if (!hasChecked) {
+                        _checkAnswer(correctAnswer);
                         setState(() => hasChecked = true);
                       } else if (currentIndex < _quiz.length - 1) {
                         setState(() {
